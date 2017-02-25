@@ -1,0 +1,59 @@
+---
+layout: page
+title: "About"
+description: "Hey, this is PengZhen."
+header-img: "img/OnePiece.jpg"
+---
+
+<!-- Language Selector -->
+<select onchange= "onLanChange(this.options[this.options.selectedIndex].value)">
+    <option value="0" selected> 中文 </option>
+    <option value="1"> English </option>
+</select>
+
+<!-- Chinese Version -->
+<div class="zh post-container">
+    <blockquote>
+        我爱学习，学习使我快乐。
+    </blockquote>
+    很多人不能明白未来对自己的意义和机会，
+    也很难理解坚持对自己未来的意义，
+    但我们必须明白未来一定会有人因为你的想法而成功。 
+    很多人只是想了一想而已，而有的人却是在真正的坚持的做。
+
+    <p style="text-align:right;">
+    -- 马云
+    </p>
+</div>
+
+<!-- English Version -->
+<div class="en post-container">
+    <blockquote>
+        Designer or Engineer, things in between.
+    </blockquote>
+
+    <p>
+        Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program.
+    </p>
+
+    <p style="text-align:right;">
+    -- Linus Torvalds
+    </p>
+
+</div>
+
+<!-- Handle Language Change -->
+<script type="text/javascript">
+    var $zh = document.querySelector(".zh");
+    var $en = document.querySelector(".en");
+    function onLanChange(index){
+        if(index == 0){
+            $zh.style.display = "block";
+            $en.style.display = "none";
+        }else{
+            $en.style.display = "block";
+            $zh.style.display = "none";
+        }
+    }
+    onLanChange(0);
+</script>
