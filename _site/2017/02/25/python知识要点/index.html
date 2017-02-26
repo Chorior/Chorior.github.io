@@ -130,10 +130,14 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
+        position: relative;
         background-image: url('/img/python-logo.png')
     }
+
+    
 </style>
 <header class="intro-header" >
+    <div class="header-mask"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -856,6 +860,23 @@ print<span class="o">(</span><span class="s2">"你好！Python!"</span><span cla
 
             </div>
 
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
     <!-- Sidebar Container -->
             <div class="
                 col-lg-8 col-lg-offset-2
@@ -912,40 +933,6 @@ print<span class="o">(</span><span class="s2">"你好！Python!"</span><span cla
 
 
 
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
-        anchors.options = {
-          visible: 'always',
-          placement: 'right',
-          icon: '#'
-        };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
 
 
     <!-- Footer -->
@@ -970,7 +957,7 @@ print<span class="o">(</span><span class="s2">"你好！Python!"</span><span cla
                     
                     
                     <li>
-                        <a target="_blank" href="http://weibo.com/侦可爱">
+                        <a target="_blank" href="http://weibo.com/Chorior">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
@@ -1095,8 +1082,58 @@ print<span class="o">(</span><span class="s2">"你好！Python!"</span><span cla
 
 
 
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+
 <!-- Image to hack wechat -->
-<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- <img src="/img/icon_wechat.png" width="0" height="0" /> -->
 <!-- Migrate from head to bottom, no longer block render and still work -->
 
 </body>
