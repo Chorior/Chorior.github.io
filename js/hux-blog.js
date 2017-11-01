@@ -4,10 +4,17 @@
  * Licensed under Apache 2.0 (https://github.com/IronSummitMedia/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+ /*!
+ * Hux Blog v1.6.0 (http://startbootstrap.com)
+ * Copyright 2016 @huxpro
+ * Licensed under Apache 2.0 
+ */
+
 // Tooltip Init
-$(function() {
-    $("[data-toggle='tooltip']").tooltip();
-});
+// Unuse by Hux since V1.6: Titles now display by default so there is no need for tooltip
+// $(function() {
+//     $("[data-toggle='tooltip']").tooltip();
+// });
 
 
 // make all images responsive
@@ -17,21 +24,21 @@ $(function() {
  * so I modify the _layout/post and CSS to make post-img responsive!
  */
 // $(function() {
-// 	$("img").addClass("img-responsive");
+//  $("img").addClass("img-responsive");
 // });
 
 // responsive tables
 $(document).ready(function() {
-	$("table").wrap("<div class='table-responsive'></div>");
-	$("table").addClass("table");
+    $("table").wrap("<div class='table-responsive'></div>");
+    $("table").addClass("table");
 });
 
 // responsive embed videos
-$(document).ready(function () { 
+$(document).ready(function() {
     $('iframe[src*="youtube.com"]').wrap('<div class="embed-responsive embed-responsive-16by9"></div>');
-	$('iframe[src*="youtube.com"]').addClass('embed-responsive-item');
+    $('iframe[src*="youtube.com"]').addClass('embed-responsive-item');
     $('iframe[src*="vimeo.com"]').wrap('<div class="embed-responsive embed-responsive-16by9"></div>');
-	$('iframe[src*="vimeo.com"]').addClass('embed-responsive-item');
+    $('iframe[src*="vimeo.com"]').addClass('embed-responsive-item');
 });
 
 // Navigation Scripts to Show Header on Scroll-Up
@@ -67,7 +74,7 @@ jQuery(document).ready(function($) {
 
                 //adjust the appearance of side-catalog
                 $catalog.show()
-                if (currentTop > bannerHeight) {
+                if (currentTop > (bannerHeight + 41)) {
                     $catalog.addClass('fixed')
                 } else {
                     $catalog.removeClass('fixed')
