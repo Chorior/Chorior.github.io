@@ -12,7 +12,7 @@
 
     <title>C++ 释疑（四） - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/04/20/C++-%E9%87%8A%E7%96%91-%E5%9B%9B/">
+    <link rel="canonical" href="https://chorior.github.io/2017/04/20/C++-basis-4/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 				<p>本文是我重温《C++ Primer 5》第四部分高级主题时，摘录的一些要点，适合初级程序员食用。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#tuple">tuple</a></li>
@@ -261,19 +261,20 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">test</span><span class="p">{</span> <span class="mi">1</span><span class="p">,{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span><span class="nb">true</span> <span class="p">};</span>
-<span class="k">typedef</span> <span class="k">decltype</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="n">trans</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bool</span><span class="o">&gt;</span> <span class="n">test</span><span class="p">{</span> <span class="mi">1</span><span class="p">,{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span><span class="nb">true</span> <span class="p">};</span>
+<span class="k">typedef</span> <span class="n">decltype</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="n">trans</span><span class="p">;</span>
 <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="n">tuple_size</span><span class="o">&lt;</span><span class="n">trans</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">;</span>         <span class="c1">// size = 3
 </span><span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">trans</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">iv</span> <span class="o">=</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">test</span><span class="p">);</span><span class="c1">// v1 = {1,2,3}
 </span><span class="k">auto</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">test</span><span class="p">);</span>                       <span class="c1">// flag = true
 </span>
 <span class="k">auto</span> <span class="n">test2</span> <span class="o">=</span> <span class="n">make_tuple</span><span class="p">(</span><span class="s">"hahah"</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mf">20.00</span><span class="p">);</span>   <span class="c1">// const char*, int, double
-</span><span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">x</span><span class="p">;</span>
-<span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">y</span><span class="p">;</span>
-<span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">z</span><span class="p">;</span>
+</span><span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">x</span><span class="p">;</span>
+<span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">y</span><span class="p">;</span>
+<span class="n">tuple_element</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span> <span class="n">decltype</span><span class="p">(</span><span class="n">test2</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">z</span><span class="p">;</span>
 <span class="n">tie</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">test2</span><span class="p">;</span>                             <span class="c1">// 适用于pair或tuple，创建一个参数的左值引用的tuple
 </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">z</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="regular_expression">正则表达式</h2>
 
@@ -452,12 +453,13 @@
 
 <p>随机数发生器是指分布对象与引擎对象的组合。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">uniform_int_distribution</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="o">&gt;</span> <span class="n">u</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">uniform_int_distribution</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="o">&gt;</span> <span class="n">u</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
 <span class="n">default_random_engine</span> <span class="n">e</span><span class="p">;</span>
 <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">u</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="exception">异常处理</h2>
 
@@ -488,14 +490,15 @@
 
 <p><strong>构造函数体内的catch语句无法处理构造函数初始值列表抛出的异常</strong>，但可以通过函数try语句块来处理。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">Solution</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">b</span><span class="p">)</span> <span class="k">try</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Solution</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">bool</span> <span class="n">b</span><span class="p">)</span> <span class="n">try</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// do some initialize
 </span><span class="p">}</span>
 <span class="k">catch</span> <span class="p">(...)</span> <span class="p">{</span>
     <span class="c1">// handle exception
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>C++11 允许提供noexcept说明(早期使用throw())指定某个函数不会抛出异常。<strong>知道不会抛出异常将有助于编译器进行优化</strong>。</p>
 
@@ -530,8 +533,8 @@
   <li>一旦某个enum成员超出该类型所能容纳的范围将引发程序错误，但<strong>控制enum类型可以使得不同环境生成的代码一致</strong>；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 限定作用域的枚举类型
-</span><span class="k">enum</span> <span class="k">class</span> <span class="nc">open_modes</span> <span class="p">{</span> <span class="n">input</span><span class="p">,</span> <span class="n">ouput</span><span class="p">,</span> <span class="n">append</span> <span class="p">};</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 限定作用域的枚举类型
+</span><span class="k">enum</span> <span class="k">class</span> <span class="nc">open</span><span class="n">_modes</span> <span class="p">{</span> <span class="n">input</span><span class="p">,</span> <span class="n">ouput</span><span class="p">,</span> <span class="n">append</span> <span class="p">};</span>
 <span class="c1">// 不限定作用域的枚举类型
 </span><span class="k">enum</span> <span class="n">color</span> <span class="p">{</span> <span class="n">red</span><span class="p">,</span> <span class="n">yellow</span><span class="p">,</span> <span class="n">green</span> <span class="p">};</span>
 <span class="k">enum</span> <span class="n">custom</span> <span class="o">:</span> <span class="kt">unsigned</span> <span class="p">{</span> <span class="n">white</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">black</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">blue</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">};</span>
@@ -541,7 +544,8 @@
 <span class="n">color</span> <span class="n">g</span> <span class="o">=</span> <span class="n">green</span><span class="p">;</span>
 <span class="n">open_modes</span> <span class="n">in</span> <span class="o">=</span> <span class="n">open_modes</span><span class="o">::</span><span class="n">input</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="others">其它</h2>
 
@@ -565,7 +569,7 @@
   <li>链接指示不仅对函数有效，而且对返回类型或形参类型的函数指针也有效；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">extern</span> <span class="s">"C"</span> <span class="kt">size_t</span> <span class="n">strlen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">extern</span> <span class="s">"C"</span> <span class="kt">size_t</span> <span class="n">strlen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
 <span class="k">extern</span> <span class="s">"C"</span> <span class="kt">void</span> <span class="n">f1</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)(</span><span class="kt">int</span><span class="p">));</span> <span class="c1">// p: C pointer
 </span><span class="k">extern</span> <span class="s">"C"</span><span class="p">{</span>
     <span class="kt">int</span> <span class="n">strcmp</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
@@ -576,16 +580,18 @@
 </span><span class="k">extern</span> <span class="s">"C"</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">pf2</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span> <span class="c1">// C pointer
 </span><span class="n">pf1</span> <span class="o">=</span> <span class="n">pf2</span><span class="p">;</span>                   <span class="c1">// error
 </span><span class="n">pf2</span> <span class="o">=</span> <span class="n">pf1</span><span class="p">;</span>                   <span class="c1">// error
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p>有时需要在C和C++中编译同一个源文件，可以使用如下方法：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#ifdef __cplusplus
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#ifdef __cplusplus
 </span><span class="c1">// compile C++ program
 </span><span class="k">extern</span> <span class="s">"C"</span>
 <span class="cp">#endif
 </span><span class="c1">// compile C program
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 
                 <hr>
@@ -595,7 +601,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/04/03/C++-%E9%87%8A%E7%96%91-%E4%B8%89/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（三）">
+                        <a href="/2017/04/03/C++-basis-3/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（三）">
                         Previous<br>
                         <span>C++ 释疑（三）</span>
                         </a>
@@ -603,7 +609,7 @@
                     
                     
                     <li class="next">
-                        <a href="/2017/04/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%AF%87/" data-toggle="tooltip" data-placement="top" title="C++ 多线程基础篇">
+                        <a href="/2017/04/24/C++-thread-basis/" data-toggle="tooltip" data-placement="top" title="C++ 多线程基础篇">
                         Next<br>
                         <span>C++ 多线程基础篇</span>
                         </a>
@@ -715,13 +721,12 @@
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/04/20/C++ 释疑（四）";
-    var disqus_url = "/2017/04/20/C++-%E9%87%8A%E7%96%91-%E5%9B%9B/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/04/20/C++-basis-4";
+    var disqus_url = "https://chorior.github.io/2017/04/20/C++-basis-4/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

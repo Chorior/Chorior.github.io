@@ -12,7 +12,7 @@
 
     <title>C++ 多线程基础篇 - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/04/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%AF%87/">
+    <link rel="canonical" href="https://chorior.github.io/2017/04/24/C++-thread-basis/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 				<p>本文知识来自<a href="https://chenxiaowei.gitbooks.io/cpp_concurrency_in_action/content/">C++ Concurrency In Action</a>，介绍有关C++11多线程(multithreading)相关的知识。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#multithreading_overview">多线程概述</a>
@@ -346,7 +346,7 @@
 
 <h3 id="hello_world">Hello, world</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;thread&gt;
 </span>
 <span class="kt">void</span> <span class="nf">hello</span><span class="p">()</span> <span class="p">{</span> 
@@ -358,7 +358,8 @@
     <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">hello</span><span class="p">);</span>
     <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <ul>
   <li>g++编译时须加上<code class="highlighter-rouge">-pthread -std=c++11</code>；</li>
@@ -375,7 +376,7 @@
 
 <p><strong>每个程序至少有一个线程：执行main()函数的线程</strong>，其余线程有其各自的入口函数。线程与原始线程(以main()为入口函数的线程)同时运行。如同main()函数执行完会退出一样，当线程执行完入口函数后，线程也会退出。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 标准库thread类
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 标准库thread类
 </span><span class="k">class</span> <span class="nc">thread</span>
 <span class="p">{</span>	<span class="c1">// class for observing and managing threads
 </span><span class="nl">public:</span>
@@ -426,7 +427,7 @@
 </span>		<span class="n">_STD</span> <span class="n">swap</span><span class="p">(</span><span class="n">_Thr</span><span class="p">,</span> <span class="n">_Other</span><span class="p">.</span><span class="n">_Thr</span><span class="p">);</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">joinable</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
+	<span class="n">bool</span> <span class="n">joinable</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if this thread can be joined
 </span>		<span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="n">_Thr_is_null</span><span class="p">(</span><span class="n">_Thr</span><span class="p">));</span>
 	<span class="p">}</span>
@@ -437,7 +438,7 @@
 			<span class="n">_Throw_Cpp_error</span><span class="p">(</span><span class="n">_INVALID_ARGUMENT</span><span class="p">);</span>
 
 		<span class="c1">// Avoid Clang -Wparentheses-equality
-</span>		<span class="k">const</span> <span class="kt">bool</span> <span class="n">_Is_null</span> <span class="o">=</span> <span class="n">_Thr_is_null</span><span class="p">(</span><span class="n">_Thr</span><span class="p">);</span>
+</span>		<span class="k">const</span> <span class="n">bool</span> <span class="n">_Is_null</span> <span class="o">=</span> <span class="n">_Thr_is_null</span><span class="p">(</span><span class="n">_Thr</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">_Is_null</span><span class="p">)</span>
 			<span class="n">_Throw_Cpp_error</span><span class="p">(</span><span class="n">_INVALID_ARGUMENT</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">get_id</span><span class="p">()</span> <span class="o">==</span> <span class="n">_STD</span> <span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">())</span>
@@ -469,7 +470,8 @@
 	<span class="p">{</span>	<span class="c1">// return Win32 HANDLE as void *
 </span>		<span class="k">return</span> <span class="p">(</span><span class="n">_Thr</span><span class="p">.</span><span class="n">_Hnd</span><span class="p">);</span>
 	<span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>通过查看thread类的公有成员，我们得知：</p>
 
@@ -511,7 +513,7 @@
 
 <p><strong>detach的线程通常将要用的数据全部复制到自己的线程中</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 线程启动示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 线程启动示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
@@ -569,11 +571,12 @@
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于<code class="highlighter-rouge">std::cout</code>是共用的标准输出，所以会造成竞争，结果打印出来的结果可能会很乱：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>4/lambda: 123hahaha
+<div class="highlighter-rouge"><pre class="highlight"><code>4/lambda: 123hahaha
 voidreturn() called.
 add: 7
  = 1
@@ -582,7 +585,8 @@ add: 7
 mod: 1
 
 
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="deal_thread_exception">异常处理</h3>
 
@@ -593,9 +597,9 @@ mod: 1
   <li>构造一个类，在析构函数里调用join或detach(<strong>推荐</strong>)。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 异常处理
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 异常处理
 </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">my_func</span><span class="p">);</span>
-<span class="k">try</span>
+<span class="n">try</span>
 <span class="p">{</span>
     <span class="n">do_something_in_current_thread</span><span class="p">();</span>
 <span class="p">}</span>
@@ -607,7 +611,7 @@ mod: 1
 <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 
 <span class="c1">// 构造类
-</span><span class="k">class</span> <span class="nc">scoped_thread</span>
+</span><span class="k">class</span> <span class="nc">scoped</span><span class="kr">_thread</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">;</span>
 <span class="k">public</span><span class="o">:</span>
@@ -631,7 +635,8 @@ mod: 1
     <span class="n">scoped_thread</span> <span class="n">g</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
     <span class="n">do_something_in_current_thread</span><span class="p">();</span>
 <span class="p">}</span> 
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="thread_identification">多线程识别</h3>
 
@@ -644,33 +649,33 @@ mod: 1
 
 <p><strong>如果两个对象的<code class="highlighter-rouge">std::thread::id</code>相等，那它们就是同一个线程，或者都“没有线程”。如果不等，那么就代表了两个不同线程，或者一个有线程，另一没有</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::thread::id 支持的各种操作
-</span><span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::thread::id 支持的各种操作
+</span><span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left and _Right identify the same thread
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Left</span><span class="p">.</span><span class="n">_Id</span> <span class="o">==</span> <span class="n">_Right</span><span class="p">.</span><span class="n">_Id</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left and _Right do not identify the same thread
 </span>	<span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">_Left</span> <span class="o">==</span> <span class="n">_Right</span><span class="p">));</span>
 	<span class="p">}</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left precedes _Right
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Left</span><span class="p">.</span><span class="n">_Id</span> <span class="o">&lt;</span> <span class="n">_Right</span><span class="p">.</span><span class="n">_Id</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">&lt;=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left precedes or equals _Right
 </span>	<span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">_Right</span> <span class="o">&lt;</span> <span class="n">_Left</span><span class="p">));</span>
 	<span class="p">}</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left follows _Right
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Right</span> <span class="o">&lt;</span> <span class="n">_Left</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="k">operator</span><span class="o">&gt;=</span><span class="p">(</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Left</span><span class="p">,</span> <span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if _Left follows or equals _Right
 </span>	<span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">_Left</span> <span class="o">&lt;</span> <span class="n">_Right</span><span class="p">));</span>
 	<span class="p">}</span>
@@ -696,7 +701,8 @@ mod: 1
 </span>		<span class="k">return</span> <span class="p">(</span><span class="n">_Keyval</span><span class="p">.</span><span class="n">_Hash_id</span><span class="p">());</span>
 		<span class="p">}</span>
 	<span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>查看<code class="highlighter-rouge">std::thread::id</code>源代码，发现其支持<code class="highlighter-rouge">==,!=,&lt;,&lt;=,&gt;,&gt;=,&lt;&lt;</code>运算符，还定义了hash模板的特例化版本，所以<strong><code class="highlighter-rouge">std::thread::id</code>支持各种算法和无序容器，甚至可以用来作为键值</strong>。</p>
 
@@ -723,7 +729,7 @@ mod: 1
 
 <p><code class="highlighter-rouge">std::mutex</code>和<code class="highlighter-rouge">std::lock_guard</code>定义于头文件<code class="highlighter-rouge">&lt;mutex&gt;</code>中。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::mutex 使用示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::mutex 使用示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
@@ -747,7 +753,7 @@ mod: 1
 		<span class="n">mySet</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="nf">set_contains</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">bool</span> <span class="nf">set_contains</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
 		<span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lg</span><span class="p">(</span><span class="n">myMutex</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">mySet</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">!=</span> <span class="n">mySet</span><span class="p">.</span><span class="n">cend</span><span class="p">();</span>
 	<span class="p">}</span>
@@ -787,19 +793,21 @@ mod: 1
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果如下：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1111111111
+<div class="highlighter-rouge"><pre class="highlight"><code>1111111111
 0 1 2 3 4 5 6 7 8 9
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>具有访问能力的指针或引用可以访问(并可能修改)被保护的数据，而不会被互斥锁限制</strong>，所以接口的设计一定要确保互斥量能锁住任何对保护数据的访问，并且不留后门。</p>
 
 <p><strong>切勿将受保护数据的指针或引用传递到互斥锁作用域之外，无论是函数返回值，还是存储在外部可见内存，亦或是以参数的形式传递到用户提供的函数中去</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 错误示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 错误示例
 // 假设Example定义了set&lt;int&gt;* get_set(){return &amp;mySet;} 
 </span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">is</span> <span class="o">=</span> <span class="n">e</span><span class="p">.</span><span class="n">get_set</span><span class="p">();</span>
 <span class="k">auto</span> <span class="n">t1</span> <span class="o">=</span> <span class="kr">thread</span><span class="p">(</span><span class="n">thread1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">e</span><span class="p">));</span>
@@ -807,25 +815,28 @@ mod: 1
 <span class="n">is</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
 <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果可能跟最初的意图不太一样：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1101111111
+<div class="highlighter-rouge"><pre class="highlight"><code>1101111111
 0 1 3 4 5 6 7 8 9
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="api_design_with_mutex">与mutex相关的接口设计</h3>
 
 <p>假设有一个stack，它的所有操作(push,top,pop等)都使用了mutex进行保护，但是下面的代码在并发的情况下依然会出现错误：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
 <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
 	<span class="kt">int</span> <span class="k">const</span> <span class="n">value</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> 
 	<span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 	<span class="n">do_something</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>在调用<code class="highlighter-rouge">empty()</code>和<code class="highlighter-rouge">top()</code>之间，或者调用<code class="highlighter-rouge">top()</code>与<code class="highlighter-rouge">pop()</code>之间，可能有来自另一个线程的<code class="highlighter-rouge">pop()</code>调用并删除了最后一个元素。这是接口设计造成的条件竞争(race condition)。</p>
 
@@ -833,7 +844,7 @@ mod: 1
 
 <p>解决这个问题的方案就是将<code class="highlighter-rouge">top()</code>和<code class="highlighter-rouge">pop()</code>合成一个函数，并在pop之前就将数据传递出去(参数引用或指针返回)，这时就算top发生异常也不会造成数据丢失：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个线程安全的栈的简单设计
 </span><span class="cp">#include &lt;exception&gt;
@@ -844,13 +855,13 @@ mod: 1
 <span class="k">struct</span> <span class="n">empty_stack</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span>
 <span class="p">{</span>
 	<span class="c1">// 老版本使用throw()代替noexcept
-</span>	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span>	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">()</span> <span class="k">const</span> <span class="n">noexcept</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="s">"empty stack!"</span><span class="p">;</span>
 	<span class="p">};</span>
 <span class="p">};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_stack</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_stack</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
@@ -897,13 +908,14 @@ mod: 1
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">data</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>互斥量保护的粒度不能太小，那样保护不完全；也不能太大，那样会降低性能；对于非共享数据的操作，就不需要互斥量保护；但是要确保一个操作的结果是正确的</strong>。</p>
 
@@ -917,8 +929,8 @@ mod: 1
 
 <p>避免死锁的一般方法是：<strong>避免使用多个互斥量，如果一定要的话，让互斥量总是以相同的顺序上锁</strong>。<strong>标准库函数<code class="highlighter-rouge">std::lock(mutexs)</code>可以一次性锁住两个或更多互斥量，且不会有死锁的危险</strong>，所以<strong>如果一个操作确实需要两个或更多互斥量，建议使用<code class="highlighter-rouge">std::lock(mutexs)</code></strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::lock(mutexs) 示例
-</span><span class="k">class</span> <span class="nc">some_big_object</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::lock(mutexs) 示例
+</span><span class="k">class</span> <span class="nc">some</span><span class="n">_big_object</span><span class="p">;</span>
 <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">some_big_object</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">some_big_object</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">);</span>
 <span class="k">class</span> <span class="nc">X</span>
 <span class="p">{</span>
@@ -951,13 +963,14 @@ mod: 1
 		<span class="n">swap</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">some_detail</span><span class="p">,</span> <span class="n">rhs</span><span class="p">.</span><span class="n">some_detail</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="advanced_guide_of_dead_lock">避免死锁的进阶指导</h3>
 
 <p>死锁不仅存在于有锁的情况，当两个线程调用join相互等待时也能发生死锁。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个无mutex的死锁示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个无mutex的死锁示例
 </span><span class="kt">void</span> <span class="n">t2</span><span class="p">();</span>
 <span class="kt">void</span> <span class="nf">t1</span><span class="p">()</span> <span class="p">{</span>
 	<span class="k">auto</span> <span class="n">t</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">t2</span><span class="p">);</span>
@@ -967,7 +980,8 @@ mod: 1
 	<span class="k">auto</span> <span class="n">t</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
 	<span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <ul>
   <li><strong>尽量不要使用嵌套锁</strong>，因为这是造成死锁最常见的原因；如果一定要的话，使用<code class="highlighter-rouge">std::lock(mutexs)</code>；</li>
@@ -978,8 +992,8 @@ mod: 1
 
 <p>由于标准库并没有定义层次锁，所以需要自己定义<code class="highlighter-rouge">hierarchical_mutex</code>，为使其能够使用<code class="highlighter-rouge">std::lock_guard</code>模板，我们查看<code class="highlighter-rouge">std::lock_guard</code>的公有成员：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Mutex</span><span class="o">&gt;</span>
-	<span class="k">class</span> <span class="nc">lock_guard</span><span class="o">&lt;</span><span class="n">_Mutex</span><span class="o">&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Mutex</span><span class="o">&gt;</span>
+	<span class="k">class</span> <span class="nc">lock</span><span class="n">_guard</span><span class="o">&lt;</span><span class="n">_Mutex</span><span class="o">&gt;</span>
 	<span class="p">{</span>	<span class="c1">// specialization for a single mutex
 </span><span class="nl">public:</span>
 	<span class="k">typedef</span> <span class="n">_Mutex</span> <span class="n">mutex_type</span><span class="p">;</span>
@@ -1002,12 +1016,13 @@ mod: 1
 
 	<span class="n">lock_guard</span><span class="p">(</span><span class="k">const</span> <span class="n">lock_guard</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 	<span class="n">lock_guard</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">lock_guard</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>发现<strong>要想使用<code class="highlighter-rouge">std::lock_guard</code>模板，必须为模板参数提供<code class="highlighter-rouge">lock()</code>和<code class="highlighter-rouge">unlock()</code>成员，貌似并没有书中提到的<code class="highlighter-rouge">try_lock()</code>成员</strong>，下面是一个简单的层次锁实现：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个简单的层次锁实现
-</span><span class="k">class</span> <span class="nc">hierarchical_mutex</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个简单的层次锁实现
+</span><span class="k">class</span> <span class="nc">hierarchical</span><span class="n">_mutex</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">internal_mutex</span><span class="p">;</span>
 
@@ -1019,7 +1034,7 @@ mod: 1
 
 	<span class="c1">// 当前线程的层级值
 </span>	<span class="c1">// thread_local 使得每个线程都有其独立的实例
-</span>	<span class="k">static</span> <span class="k">thread_local</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">this_thread_hierarchy_value</span><span class="p">;</span>
+</span>	<span class="k">static</span> <span class="n">thread_local</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">this_thread_hierarchy_value</span><span class="p">;</span>
 
 	<span class="kt">void</span> <span class="nf">check_for_hierarchy_violation</span><span class="p">()</span>
 	<span class="p">{</span>
@@ -1061,7 +1076,7 @@ mod: 1
 		<span class="n">internal_mutex</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="nf">try_lock</span><span class="p">()</span>
+	<span class="n">bool</span> <span class="nf">try_lock</span><span class="p">()</span>
 	<span class="p">{</span>
 		<span class="n">check_for_hierarchy_violation</span><span class="p">();</span>
 		<span class="c1">// try_lock: 尝试lock互斥量，并立即返回，成功lock返回true
@@ -1074,11 +1089,12 @@ mod: 1
 	<span class="p">}</span>
 <span class="p">};</span>
 <span class="c1">// 初始化为最大值是为了一开始任何层次锁都能被lock
-</span><span class="k">thread_local</span> <span class="kt">unsigned</span> <span class="kt">long</span>
+</span><span class="n">thread_local</span> <span class="kt">unsigned</span> <span class="kt">long</span>
 <span class="n">hierarchical_mutex</span><span class="o">::</span><span class="n">this_thread_hierarchy_value</span><span class="p">(</span><span class="n">ULONG_MAX</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// hierarchical_mutex的简单使用
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// hierarchical_mutex的简单使用
 </span><span class="n">hierarchical_mutex</span> <span class="n">high_level_mutex</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
 <span class="n">hierarchical_mutex</span> <span class="n">low_level_mutex</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
 
@@ -1119,13 +1135,14 @@ mod: 1
 	<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">hierarchical_mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">other_mutex</span><span class="p">);</span>	
 	<span class="n">other_stuff</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="std_unique_lock">std::unique_lock</h3>
 
 <p><code class="highlighter-rouge">std::unique_lock</code>比<code class="highlighter-rouge">std::lock_guard</code>更加灵活，查看几个常见的<code class="highlighter-rouge">std::unique_lock</code>公有成员：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 默认构造函数，不持有mutex
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 默认构造函数，不持有mutex
 </span><span class="n">unique_lock</span><span class="p">()</span> <span class="n">_NOEXCEPT</span>
 	<span class="o">:</span> <span class="n">_Pmtx</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">_Owns</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
 	<span class="p">{</span>	<span class="c1">// default construct
@@ -1190,7 +1207,7 @@ mod: 1
 	<span class="n">_Owns</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 	<span class="p">}</span>
 
-<span class="kt">bool</span> <span class="nf">try_lock</span><span class="p">()</span>
+<span class="n">bool</span> <span class="nf">try_lock</span><span class="p">()</span>
 	<span class="p">{</span>	<span class="c1">// try to lock the mutex
 </span>	<span class="n">_Validate</span><span class="p">();</span>
 	<span class="n">_Owns</span> <span class="o">=</span> <span class="n">_Pmtx</span><span class="o">-&gt;</span><span class="n">try_lock</span><span class="p">();</span>
@@ -1221,21 +1238,22 @@ mod: 1
 	<span class="k">return</span> <span class="p">(</span><span class="n">_Res</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="kt">bool</span> <span class="n">owns_lock</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
+<span class="n">bool</span> <span class="n">owns_lock</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if this object owns the lock
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Owns</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="c1">// 类型转换运算符
-</span><span class="k">explicit</span> <span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
+</span><span class="k">explicit</span> <span class="k">operator</span> <span class="n">bool</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// return true if this object owns the lock
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Owns</span><span class="p">);</span>
 	<span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>为了对<code class="highlighter-rouge">std::unique_lock</code>进行示例，修改<a href="#dead_lock">使用std::lock(mutex)的程序</a>如下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 相比而言，std::unique_lock会占用比较多的空间，并且比std::lock_guard稍慢一些
-</span><span class="k">class</span> <span class="nc">some_big_object</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 相比而言，std::unique_lock会占用比较多的空间，并且比std::lock_guard稍慢一些
+</span><span class="k">class</span> <span class="nc">some</span><span class="n">_big_object</span><span class="p">;</span>
 <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">some_big_object</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">some_big_object</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">);</span>
 <span class="k">class</span> <span class="nc">X</span>
 <span class="p">{</span>
@@ -1266,7 +1284,8 @@ mod: 1
 		<span class="n">swap</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">some_detail</span><span class="p">,</span> <span class="n">rhs</span><span class="p">.</span><span class="n">some_detail</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="std_onceflag_and_callonce">std::once_flag,std::call_once</h3>
 
@@ -1274,7 +1293,7 @@ mod: 1
 
 <p>很多单线程代码有类似下面的代码块，该代码块称为延迟初始化(Lazy initialization)：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
 <span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">resource_ptr</span><span class="p">)</span>
@@ -1284,11 +1303,12 @@ mod: 1
 	<span class="p">}</span>
 	<span class="n">resource_ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这种代码转到多线程时，可能会变成：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">resource_mutex</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
@@ -1303,11 +1323,12 @@ mod: 1
 	<span class="n">lk</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
 	<span class="n">resource_ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>解决方案是使用C++标准库<code class="highlighter-rouge">std::once_flag</code>结构体和<code class="highlighter-rouge">std::call_once</code>模板：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">some_resource</span><span class="o">&gt;</span> <span class="n">resource_ptr</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">once_flag</span> <span class="n">resource_flag</span><span class="p">;</span> <span class="c1">// 和mutex一样，不可复制，也不可移动，只能默认初始化
 </span>
 <span class="kt">void</span> <span class="nf">init_resource</span><span class="p">()</span>
@@ -1322,11 +1343,12 @@ mod: 1
 </span>	<span class="n">std</span><span class="o">::</span><span class="n">call_once</span><span class="p">(</span><span class="n">resource_flag</span><span class="p">,</span> <span class="n">init_resource</span><span class="p">);</span>
 	<span class="n">resource_ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>静态局部变量的初始化过程在多线程中可能会出现条件竞争(多个线程同时尝试对其进行初始化)，但C++11解决了这个问题：<strong>初始化及定义完全在一个线程中发生，并且没有其他线程可在初始化完成前对其进行处理，条件竞争终止于哪个线程来做这个初始化</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">my_class</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">my</span><span class="n">_class</span><span class="p">;</span>
 
 <span class="c1">// 多线程可以安全的调用get_my_class_instance()
 </span><span class="n">my_class</span><span class="o">&amp;</span> <span class="n">get_my_class_instance</span><span class="p">()</span>
@@ -1334,19 +1356,20 @@ mod: 1
 	<span class="k">static</span> <span class="n">my_class</span> <span class="n">instance</span><span class="p">;</span>  <span class="c1">// 线程安全的初始化过程
 </span>	<span class="k">return</span> <span class="n">instance</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="boost_shared_mutex">boost::shared_mutex</h3>
 
 <p><strong>如果数据很长时间才更新一次的话，使用mutex会降低性能</strong>，因为大部分情况下都只是读取数据而非修改数据，这时<strong>可以使用<code class="highlighter-rouge">boost::shared_mutex</code>来优化同步性能</strong>。当数据进行更新操作时,可以使用<code class="highlighter-rouge">std::lock_guard&lt;boost::shared_mutex&gt;</code>或<code class="highlighter-rouge">std::unique_lock&lt;boost::shared_mutex&gt;</code>进行锁定,这能保证单独访问。这样做的唯一限制是：当一个线程尝试获取独占锁时，它需要等待其它拥有共享锁的线程解锁；当一个线程拥有独占锁时，其它线程不能获取独占锁或共享锁。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用boost::shared_mutex的示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用boost::shared_mutex的示例
 </span><span class="cp">#include &lt;map&gt;
 #include &lt;string&gt;
 #include &lt;mutex&gt;
 #include &lt;boost/thread/shared_mutex.hpp&gt;
-</span><span class="k">class</span> <span class="nc">dns_entry</span><span class="p">;</span>
-<span class="k">class</span> <span class="nc">dns_cache</span>
+</span><span class="k">class</span> <span class="nc">dns</span><span class="n">_entry</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">dns</span><span class="n">_cache</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">dns_entry</span><span class="o">&gt;</span> <span class="n">entries</span><span class="p">;</span>
 	<span class="k">mutable</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_mutex</span> <span class="n">entry_mutex</span><span class="p">;</span>
@@ -1367,7 +1390,8 @@ mod: 1
 		<span class="n">entries</span><span class="p">[</span><span class="n">domain</span><span class="p">]</span> <span class="o">=</span> <span class="n">dns_details</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="synchronizing_thread">多线程同步</h2>
 
@@ -1381,8 +1405,8 @@ mod: 1
   <li><strong>(最佳选择)使用C++标准库提供的工具去等待事件发生</strong>。等待一个事件被另一个线程触发最基本的工具是使用条件变量(condition variable)。从概念上讲，一个条件变量与某个条件相关联，并且一个或更多线程会等待那个条件的达成，当那个条件达成时，它会通知一个或多个在那个条件变量上等待的线程，唤醒它们，然后继续工作。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 周期间歇
-</span><span class="kt">bool</span> <span class="n">flag</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 周期间歇
+</span><span class="n">bool</span> <span class="n">flag</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m</span><span class="p">;</span>
 <span class="kt">void</span> <span class="nf">wait_for_flag</span><span class="p">()</span>
 <span class="p">{</span>
@@ -1394,7 +1418,8 @@ mod: 1
 		<span class="n">lk</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="condition_variable">条件变量(condition variable)</h3>
 
@@ -1407,7 +1432,7 @@ mod: 1
 
 <p>为了进行合适的同步，它们都需要与一个mutex一起工作。但是<code class="highlighter-rouge">std::condition_variable</code>只能与<code class="highlighter-rouge">std::unique_lock&lt;std::mutex&gt;</code>一起使用，而<code class="highlighter-rouge">std::condition_variable_any</code>可以和任何满足最低标准(拥有lock和unlock成员函数)的锁一起工作，但是会有一些额外的开销。<strong>一般情况下，首选<code class="highlighter-rouge">std::condition_variable</code>，当对灵活性有需求时，才会使用<code class="highlighter-rouge">std::condition_variable_any</code></strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// condition_variable的简单使用
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// condition_variable的简单使用
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
@@ -1427,7 +1452,7 @@ mod: 1
 </span><span class="kt">void</span> <span class="nf">process</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">str</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>
 
 <span class="c1">// 当输入字符串为quit时，结束线程
-</span><span class="kt">bool</span> <span class="nf">is_last_chunk</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">str</span> <span class="o">==</span> <span class="s">"quit"</span><span class="p">;</span> <span class="p">}</span>
+</span><span class="n">bool</span> <span class="nf">is_last_chunk</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">str</span> <span class="o">==</span> <span class="s">"quit"</span><span class="p">;</span> <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">data_preparation_thread</span><span class="p">()</span> 
 <span class="p">{</span>
@@ -1484,26 +1509,28 @@ mod: 1
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>kdjfa
+<div class="highlighter-rouge"><pre class="highlight"><code>kdjfa
 kdjfa
 quit
 quit
-</code></pre></div>
+</code></pre>
+</div>
 
-<h3 id="一个使用条件变量的简单线程安全队列">一个使用条件变量的简单线程安全队列</h3>
+<h3 id="section-1">一个使用条件变量的简单线程安全队列</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用条件变量的简单线程安全队列
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用条件变量的简单线程安全队列
 </span><span class="cp">#include &lt;queue&gt;
 #include &lt;memory&gt;
 #include &lt;mutex&gt;
 #include &lt;condition_variable&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_queue</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_queue</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="c1">// mutable：不管函数是否有const限定符，都可以对其进行修改
@@ -1543,7 +1570,7 @@ quit
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+	<span class="n">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
@@ -1563,13 +1590,14 @@ quit
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="future">期望(future)</h3>
 
@@ -1590,7 +1618,7 @@ quit
 
 <p>查看<code class="highlighter-rouge">std::future&lt;&gt;</code>的源代码：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 模板参数是关联数据的类型，void表示事件无关联数据。
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 模板参数是关联数据的类型，void表示事件无关联数据。
 </span><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Ty</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">future</span><span class="o">&lt;</span><span class="n">_Ty</span><span class="o">&amp;&gt;</span>
 	<span class="o">:</span> <span class="k">public</span> <span class="n">_State_manager</span><span class="o">&lt;</span><span class="n">_Ty</span> <span class="o">*&gt;</span>
@@ -1637,7 +1665,8 @@ quit
 </span>	<span class="n">future</span><span class="p">(</span><span class="k">const</span> <span class="n">future</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 	<span class="n">future</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">future</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <ul>
   <li>发现future的父类是<code class="highlighter-rouge">_State_manager</code>模板，<code class="highlighter-rouge">_State_manager</code>模板包含一些状态管理的操作；</li>
@@ -1656,7 +1685,7 @@ quit
 
 <p><strong>最基本的一次性(one-off)事件是有返回值的后台线程</strong>，但是<code class="highlighter-rouge">std::thread</code>并不提供直接接收返回值的机制，这里可以使用<code class="highlighter-rouge">std::async</code>函数模板(定义于<code class="highlighter-rouge">&lt;future&gt;</code>)。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::async的简单示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::async的简单示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;string&gt;
@@ -1675,7 +1704,7 @@ quit
 	<span class="kt">double</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">double</span><span class="p">);</span>
 <span class="p">};</span>
 
-<span class="k">class</span> <span class="nc">move_only</span>
+<span class="k">class</span> <span class="nc">move</span><span class="n">_only</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="n">move_only</span><span class="p">();</span>
@@ -1716,7 +1745,8 @@ quit
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你可以在调用<code class="highlighter-rouge">std::async</code>前传入一些额外的参数：</p>
 
@@ -1726,14 +1756,15 @@ quit
   <li><code class="highlighter-rouge">std::launch::deferred | std::launch::async</code>：默认参数，编译器自己选择。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">f6</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">async</span><span class="p">,</span> <span class="n">Y</span><span class="p">(),</span> <span class="mf">1.2</span><span class="p">);</span>            <span class="c1">// Run in new thread
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">f6</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">async</span><span class="p">,</span> <span class="n">Y</span><span class="p">(),</span> <span class="mf">1.2</span><span class="p">);</span>            <span class="c1">// Run in new thread
 </span><span class="k">auto</span> <span class="n">f7</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">deferred</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">x</span><span class="p">));</span> <span class="c1">// Run in wait() or get()
 </span><span class="k">auto</span> <span class="n">f8</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">deferred</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">async</span><span class="p">,</span>
 	<span class="n">baz</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>                                         <span class="c1">// Implementation chooses
 </span><span class="k">auto</span> <span class="n">f9</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">baz</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>                        <span class="c1">// Implementation chooses
 </span><span class="n">f7</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>                                                     <span class="c1">// 阻塞，直到结果有效(valid)
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p><strong><code class="highlighter-rouge">std::async</code>使得算法可以被轻松的分成多个任务，然后同步执行(这在并行递归算法中非常有用)</strong>，但这不是任务关联到<code class="highlighter-rouge">std::future</code>的唯一方法。你还可以使用类模板<code class="highlighter-rouge">std::packaged_task</code>和<code class="highlighter-rouge">std::promise</code>。</p>
 
@@ -1745,9 +1776,9 @@ quit
 
 <p><strong>构造<code class="highlighter-rouge">std::packaged_task</code>实例时，必须传入一个函数或可调用对象，这个函数或可调用对象需要能接收指定的参数和返回可转换为指定返回类型的值</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个std::packaged_task特例化版本的局部定义
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个std::packaged_task特例化版本的局部定义
 </span><span class="k">template</span><span class="o">&lt;&gt;</span>
-<span class="k">class</span> <span class="nc">packaged_task</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;*</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">packaged</span><span class="n">_task</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;*</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="c1">// 模板构造函数
@@ -1760,9 +1791,10 @@ quit
 	<span class="c1">// 函数签名参数类型指定调用运算符的参数类型
 </span>	<span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::packaged_task的简单示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::packaged_task的简单示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;string&gt;
@@ -1803,21 +1835,23 @@ quit
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>void f1() called.
+<div class="highlighter-rouge"><pre class="highlight"><code>void f1() called.
 123
 hahahaha
 123
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="std_promise">std::promise</h3>
 
 <p><code class="highlighter-rouge">std::promise&lt;T&gt;</code>提供一种设置值(类型为T)的方法，这个值可以在设置之后被关联的<code class="highlighter-rouge">std::future&lt;T&gt;</code>对象读取。可以通过调用成员函数<code class="highlighter-rouge">get_future()</code>获取<code class="highlighter-rouge">std::promise&lt;T&gt;</code>关联的future。当promise通过成员函数<code class="highlighter-rouge">set_value()</code>设置完值后，关联的future状态变为ready，并可以通过其获取存储的值。如果promise没有设置值就被销毁了，那么关联的future会存储一个<code class="highlighter-rouge">std::future_errc::broken_promise</code>异常，该异常在调用get时会被重新抛出。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::promise的简单示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个使用std::promise的简单示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;string&gt;
@@ -1849,17 +1883,19 @@ hahahaha
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>123
+<div class="highlighter-rouge"><pre class="highlight"><code>123
 hahah
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="save_exception_for_future">future存储异常</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// future存储异常示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// future存储异常示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;exception&gt;
@@ -1873,7 +1909,7 @@ hahah
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-	<span class="k">try</span> <span class="p">{</span>
+	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">square_root</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 		<span class="c1">// future调用get时，会将存储的异常重新抛出，不调用不会抛出
 </span>		<span class="kt">double</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
@@ -1883,7 +1919,7 @@ hahah
 	<span class="p">}</span>
 
 	<span class="c1">// std::packaged_task打包的函数抛出的异常也会被存储在关联的future中
-</span>	<span class="k">try</span> <span class="p">{</span>
+</span>	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">packaged_task</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">task</span><span class="p">(</span><span class="n">square_root</span><span class="p">);</span>
 		<span class="n">task</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 		<span class="k">auto</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">task</span><span class="p">.</span><span class="n">get_future</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
@@ -1893,7 +1929,7 @@ hahah
 	<span class="p">}</span>
 
 	<span class="c1">// std::promise可以使用set_exception成员函数设置一个异常到关联的future中
-</span>	<span class="k">try</span> <span class="p">{</span>
+</span>	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pm</span><span class="p">;</span>
 		<span class="n">pm</span><span class="p">.</span><span class="n">set_exception</span><span class="p">(</span>
 			<span class="c1">// boost::copy_exception
@@ -1908,7 +1944,7 @@ hahah
 	<span class="c1">// std::promise.set_exception通常用于set_value发生异常时使用
 </span>	<span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pm</span><span class="p">;</span>
 	<span class="c1">// 一个线程设置值
-</span>	<span class="k">try</span> <span class="p">{</span>
+</span>	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">pm</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(...)</span> <span class="p">{</span>
@@ -1916,7 +1952,7 @@ hahah
 </span>		<span class="n">pm</span><span class="p">.</span><span class="n">set_exception</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">current_exception</span><span class="p">());</span>
 	<span class="p">}</span>
 	<span class="c1">// 一个线程获取值
-</span>	<span class="k">try</span> <span class="p">{</span>
+</span>	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">pm</span><span class="p">.</span><span class="n">get_future</span><span class="p">().</span><span class="n">get</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
@@ -1926,19 +1962,21 @@ hahah
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>x&lt;0
+<div class="highlighter-rouge"><pre class="highlight"><code>x&lt;0
 x&lt;0
 my exception
 123
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>future存储异常的方式除了上面正常的方式外，<strong>如果<code class="highlighter-rouge">std::packaged_task</code>实例被调用前，或<code class="highlighter-rouge">std::promise</code>实例没有调用set系列函数前，其对象就销毁了，那么析构函数就会存储一个<code class="highlighter-rouge">std::future_errc::broken_promise</code>异常到其关联的future中</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="o">~</span><span class="n">promise</span><span class="p">()</span> <span class="n">_NOEXCEPT</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">~</span><span class="n">promise</span><span class="p">()</span> <span class="n">_NOEXCEPT</span>
 	<span class="p">{</span>	<span class="c1">// destroy
 </span>	<span class="k">if</span> <span class="p">(</span><span class="n">_MyPromise</span><span class="p">.</span><span class="n">_Is_valid</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">_MyPromise</span><span class="p">.</span><span class="n">_Is_ready</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">_MyPromise</span><span class="p">.</span><span class="n">_Is_ready_at_thread_exit</span><span class="p">())</span>
 		<span class="p">{</span>	<span class="c1">// exception if destroyed before function object returns
@@ -1961,9 +1999,10 @@ my exception
 		<span class="n">_Set_exception_raw</span><span class="p">(</span><span class="n">_STD</span> <span class="n">make_exception_ptr</span><span class="p">(</span><span class="n">_Fut</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">_Lock</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// future存储exception
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// future存储exception
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;exception&gt;
@@ -1984,7 +2023,7 @@ my exception
 		<span class="n">std</span><span class="o">::</span><span class="n">packaged_task</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">task</span><span class="p">(</span><span class="n">square_root</span><span class="p">);</span>
 		<span class="n">f</span> <span class="o">=</span> <span class="n">task</span><span class="p">.</span><span class="n">get_future</span><span class="p">();</span>
 	<span class="p">}</span>
-	<span class="k">try</span> <span class="p">{</span>
+	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
@@ -1996,7 +2035,7 @@ my exception
 		<span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">pm</span><span class="p">;</span>
 		<span class="n">f</span> <span class="o">=</span> <span class="n">pm</span><span class="p">.</span><span class="n">get_future</span><span class="p">();</span>
 	<span class="p">}</span>
-	<span class="k">try</span> <span class="p">{</span>
+	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
@@ -2006,19 +2045,21 @@ my exception
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果(visual studio 2017):</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">broken</span> <span class="n">promise</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">broken</span> <span class="n">promise</span>
 <span class="n">broken</span> <span class="n">promise</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="std_shared_future">std::shared_future</h3>
 
 <p><strong><code class="highlighter-rouge">std::future</code>的局限性是只有一个线程能够获取等待结果，当有多个线程等待同一个事件时，可以使用<code class="highlighter-rouge">std::shared_future</code></strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::shared_future的简单示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// std::shared_future的简单示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;future&gt;
 #include &lt;exception&gt;
@@ -2032,7 +2073,7 @@ my exception
 
 <span class="kt">void</span> <span class="nf">set_data</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> 
 <span class="p">{</span>
-	<span class="k">try</span> <span class="p">{</span>
+	<span class="n">try</span> <span class="p">{</span>
 		<span class="n">pm</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
@@ -2076,13 +2117,15 @@ my exception
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>示例结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>process1 value = 123
+<div class="highlighter-rouge"><pre class="highlight"><code>process1 value = 123
 process2 value = 123
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="wait_with_time_limit">限定等待时间</h2>
 
@@ -2109,7 +2152,7 @@ process2 value = 123
 
 <p><code class="highlighter-rouge">system_clock</code>表示系统的真实时间，该类还提供了<code class="highlighter-rouge">time_point</code>向<code class="highlighter-rouge">time_t</code>的类型转换成员函数<code class="highlighter-rouge">to_time_t</code>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取当前时间的简单示例
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取当前时间的简单示例
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;chrono&gt;
@@ -2131,12 +2174,14 @@ process2 value = 123
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>Tue May 16 10:38:23 2017
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>Tue May 16 10:38:23 2017
+</code></pre>
+</div>
 
 <h3 id="duration">持续时间(duration)</h3>
 
@@ -2144,7 +2189,7 @@ process2 value = 123
 
 <p><code class="highlighter-rouge">&lt;chrono&gt;</code>头文件提供了一系列duration的预定义别名：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// SI TYPEDEFS
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// SI TYPEDEFS
 </span><span class="k">typedef</span> <span class="n">ratio</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000000000000000LL</span><span class="o">&gt;</span> <span class="n">atto</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">ratio</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000000000000LL</span><span class="o">&gt;</span> <span class="n">femto</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">ratio</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000000000LL</span><span class="o">&gt;</span> <span class="n">pico</span><span class="p">;</span>
@@ -2171,29 +2216,31 @@ process2 value = 123
 <span class="k">typedef</span> <span class="n">duration</span><span class="o">&lt;</span><span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">seconds</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">duration</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">ratio</span><span class="o">&lt;</span><span class="mi">60</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">minutes</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">duration</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">ratio</span><span class="o">&lt;</span><span class="mi">3600</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">hours</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>可以使用<code class="highlighter-rouge">std::chrono::duration_cast&lt;&gt;</code>显式转换不同类型的duration</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">ms</span><span class="p">(</span><span class="mi">54802</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">ms</span><span class="p">(</span><span class="mi">54802</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span> <span class="n">s</span> <span class="o">=</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span> <span class="c1">// 54
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p>duration支持各种算数运算：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取单位时间的数量
-</span><span class="k">constexpr</span> <span class="n">_Rep</span> <span class="n">count</span><span class="p">()</span> <span class="k">const</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取单位时间的数量
+</span><span class="n">constexpr</span> <span class="n">_Rep</span> <span class="n">count</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>	<span class="c1">// get stored rep
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_MyRep</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="k">constexpr</span> <span class="n">_Myt</span> <span class="k">operator</span><span class="o">+</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">constexpr</span> <span class="n">_Myt</span> <span class="k">operator</span><span class="o">+</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>	<span class="c1">// get value
 </span>	<span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
 	<span class="p">}</span>
 
-<span class="k">constexpr</span> <span class="n">_Myt</span> <span class="k">operator</span><span class="o">-</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">constexpr</span> <span class="n">_Myt</span> <span class="k">operator</span><span class="o">-</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>	<span class="c1">// get negated value
 </span>	<span class="k">return</span> <span class="p">(</span><span class="n">_Myt</span><span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="n">_MyRep</span><span class="p">));</span>
 	<span class="p">}</span>
@@ -2255,19 +2302,21 @@ process2 value = 123
 </span>	<span class="n">_MyRep</span> <span class="o">%=</span> <span class="n">_Right</span><span class="p">.</span><span class="n">count</span><span class="p">();</span>
 	<span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
 	<span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个基于持续时间的future等待
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个基于持续时间的future等待
 </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">some_task</span><span class="p">);</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">35</span><span class="p">))</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">future_status</span><span class="o">::</span><span class="n">ready</span><span class="p">)</span>
 	<span class="n">do_something_with</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="time_point">时间点(time point)</h3>
 
 <p>时间点(time point)用<code class="highlighter-rouge">std::chrono::time_point&lt;&gt;</code>模板来表示，该模板的第一个模板参数指定clock的类型(<code class="highlighter-rouge">system_clock</code>或<code class="highlighter-rouge">steady_clock</code>)，第二个模板参数指定计量单位(<code class="highlighter-rouge">std::chrono::duration&lt;&gt;</code>)。一个时间点的值是从某个特定时间点开始的时间长度(指定计量单位的倍数)，这个特定时间点一般是<code class="highlighter-rouge">1970/1/1 08:00:00</code>，clock间可以共享这个特定时间点，也可以独立拥有。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取system_clock的epoch
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取system_clock的epoch
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;chrono&gt;
@@ -2290,38 +2339,41 @@ process2 value = 123
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果(visual studio 2017):</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>Thu Jan  1 08:00:00 1970
+<div class="highlighter-rouge"><pre class="highlight"><code>Thu Jan  1 08:00:00 1970
 
 Thu Jan  1 08:00:00 1970
 
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><code class="highlighter-rouge">time_point</code>类可以进行各种算数操作，如<code class="highlighter-rouge">time_point - time_point</code>，<code class="highlighter-rouge">time_point - duration</code>等等。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个非常有用的计时操作
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个非常有用的计时操作
 </span><span class="k">auto</span> <span class="n">time_start</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
 <span class="c1">//do_something();
 </span><span class="k">auto</span> <span class="n">time_stop</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"took "</span> 
 	<span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="o">&gt;</span><span class="p">(</span><span class="n">time_stop</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">).</span><span class="n">count</span><span class="p">()</span> 
 	<span class="o">&lt;&lt;</span> <span class="s">" ms</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>推荐在写有时间限制的程序时，使用时间点进行等待</strong>，原因使用下列程序进行说明：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;condition_variable&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;condition_variable&gt;
 #include &lt;mutex&gt;
 #include &lt;chrono&gt;
 </span>
 <span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span> <span class="n">cv</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">done</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">done</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m</span><span class="p">;</span>
 
-<span class="kt">bool</span> <span class="nf">wait_loop</span><span class="p">()</span>
+<span class="n">bool</span> <span class="nf">wait_loop</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="c1">// 你也可以使用system_clock::from_time_t从time_t获取一个time_point
 </span>	<span class="k">auto</span> <span class="k">const</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span>
@@ -2339,7 +2391,8 @@ Thu Jan  1 08:00:00 1970
 	<span class="p">}</span>
 	<span class="k">return</span> <span class="n">done</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="function_accept_timeouts">具有超时功能的函数</h3>
 
@@ -2400,7 +2453,7 @@ Thu Jan  1 08:00:00 1970
 
 <p>future使得函数化编程模式在C++中变得可以并行运行，future可以在线程间传递，并且允许一个结果依赖于另一个结果，而不用显式访问共享数据。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个简单的例子
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个简单的例子
 </span><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;list&gt;
@@ -2504,15 +2557,17 @@ Thu Jan  1 08:00:00 1970
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>sequential_quick_sort took 1.08664ms.
+<div class="highlighter-rouge"><pre class="highlight"><code>sequential_quick_sort took 1.08664ms.
 1 2 3 4 5 6 7
 parallel_quick_sort took 1.57094ms.
 1 2 3 4 5 6 7
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="synchronize_operations_with_message_passing">状态机</h3>
 
@@ -2522,7 +2577,7 @@ parallel_quick_sort took 1.57094ms.
 
 <h4 id="header_atm_h">ATM.h</h4>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#ifndef _ATM_H_
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#ifndef _ATM_H_
 #define _ATM_H_
 </span>
 <span class="cp">#include &lt;mutex&gt;
@@ -2588,7 +2643,7 @@ parallel_quick_sort took 1.57094ms.
 	<span class="p">};</span>
 
 	<span class="c1">// 关闭的邮箱，如果你收到它里面的邮件，你会遇到鬼(发生异常)
-</span>	<span class="k">class</span> <span class="nc">close_queue</span>
+</span>	<span class="k">class</span> <span class="nc">close</span><span class="n">_queue</span>
 	<span class="p">{};</span>
 
 	<span class="c1">// 邮递员模板
@@ -2601,7 +2656,7 @@ parallel_quick_sort took 1.57094ms.
 		<span class="n">queue</span><span class="o">*</span> <span class="n">q</span><span class="p">;</span>                  <span class="c1">// 管理的邮箱地址
 </span>		<span class="n">PreviousDispatcher</span><span class="o">*</span> <span class="n">prev</span><span class="p">;</span>  <span class="c1">// 上一个邮递员的地址
 </span>		<span class="n">Func</span> <span class="n">f</span><span class="p">;</span>                    <span class="c1">// 该邮递员处理该邮件的方式
-</span>		<span class="kt">bool</span> <span class="n">chained</span><span class="p">;</span>              <span class="c1">// 该邮递员是否离职        
+</span>		<span class="n">bool</span> <span class="n">chained</span><span class="p">;</span>              <span class="c1">// 该邮递员是否离职        
 </span>
 								   <span class="c1">// 不需要拷贝操作
 </span>		<span class="n">TemplateDispatcher</span><span class="p">(</span><span class="n">TemplateDispatcher</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
@@ -2625,7 +2680,7 @@ parallel_quick_sort took 1.57094ms.
 		<span class="p">}</span>
 
 		<span class="c1">// 邮递员派件
-</span>		<span class="kt">bool</span> <span class="nf">dispatch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">message_base</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span>
+</span>		<span class="n">bool</span> <span class="nf">dispatch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">message_base</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span>
 		<span class="p">{</span>
 			<span class="c1">// 检查该邮件类型是否是自己能处理的邮件类型
 </span>			<span class="c1">// 若是，则按照往常的方式处理该邮件
@@ -2676,7 +2731,7 @@ parallel_quick_sort took 1.57094ms.
 		<span class="p">}</span>
 
 		<span class="c1">// noexcept(false)：可以抛出异常
-</span>		<span class="o">~</span><span class="n">TemplateDispatcher</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+</span>		<span class="o">~</span><span class="n">TemplateDispatcher</span><span class="p">()</span> <span class="n">noexcept</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
 		<span class="p">{</span>
 			<span class="c1">// 若未离职，则至少需要完成一次派件
 </span>			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">chained</span><span class="p">)</span>
@@ -2690,7 +2745,7 @@ parallel_quick_sort took 1.57094ms.
 </span>	<span class="k">class</span> <span class="nc">dispatcher</span>
 	<span class="p">{</span>
 		<span class="n">queue</span><span class="o">*</span> <span class="n">q</span><span class="p">;</span>
-		<span class="kt">bool</span> <span class="n">chained</span><span class="p">;</span>
+		<span class="n">bool</span> <span class="n">chained</span><span class="p">;</span>
 
 		<span class="c1">// 不需要拷贝操作
 </span>		<span class="n">dispatcher</span><span class="p">(</span><span class="n">dispatcher</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
@@ -2714,7 +2769,7 @@ parallel_quick_sort took 1.57094ms.
 
 		<span class="c1">// 邮件验收者确认邮件是不是属于已关闭的邮箱
 </span>		<span class="c1">// 该函数会在邮递员处理不了某一邮件时被调用
-</span>		<span class="kt">bool</span> <span class="nf">dispatch</span><span class="p">(</span>
+</span>		<span class="n">bool</span> <span class="nf">dispatch</span><span class="p">(</span>
 			<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">message_base</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span>
 		<span class="p">{</span>
 			<span class="k">if</span> <span class="p">(</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">wrapped_message</span><span class="o">&lt;</span><span class="n">close_queue</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">get</span><span class="p">()))</span>
@@ -2751,7 +2806,7 @@ parallel_quick_sort took 1.57094ms.
 		<span class="p">}</span>
 
 		<span class="c1">// 邮件验收者也需要至少验收一次派件
-</span>		<span class="o">~</span><span class="n">dispatcher</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+</span>		<span class="o">~</span><span class="n">dispatcher</span><span class="p">()</span> <span class="n">noexcept</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
 		<span class="p">{</span>
 			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">chained</span><span class="p">)</span>
 			<span class="p">{</span>
@@ -2768,7 +2823,7 @@ parallel_quick_sort took 1.57094ms.
 	<span class="k">public</span><span class="o">:</span>
 
 		<span class="c1">// 邮件发送者小白并不知道邮箱地址
-</span>		<span class="n">sender</span><span class="p">()</span> <span class="o">:</span> <span class="n">q</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">)</span>
+</span>		<span class="n">sender</span><span class="p">()</span> <span class="o">:</span> <span class="n">q</span><span class="p">(</span><span class="n">nullptr</span><span class="p">)</span>
 		<span class="p">{}</span>
 
 		<span class="c1">// 邮件发送者长者自带一个邮箱地址
@@ -3193,7 +3248,7 @@ parallel_quick_sort took 1.57094ms.
 	<span class="p">{</span>
 		<span class="c1">// 初始状态：等待用户插入卡片
 </span>		<span class="n">state</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">atm</span><span class="o">::</span><span class="n">waiting_for_card</span><span class="p">;</span>
-		<span class="k">try</span>
+		<span class="n">try</span>
 		<span class="p">{</span>
 			<span class="k">for</span> <span class="p">(;;)</span>
 			<span class="p">{</span>
@@ -3214,7 +3269,7 @@ parallel_quick_sort took 1.57094ms.
 <span class="p">};</span>
 
 <span class="c1">// 银行状态机，从run开始看
-</span><span class="k">class</span> <span class="nc">bank_machine</span>
+</span><span class="k">class</span> <span class="nc">bank</span><span class="n">_machine</span>
 <span class="p">{</span>
 	<span class="n">messaging</span><span class="o">::</span><span class="n">receiver</span> <span class="n">incoming</span><span class="p">;</span>
 	<span class="kt">unsigned</span> <span class="n">balance</span><span class="p">;</span>
@@ -3233,7 +3288,7 @@ parallel_quick_sort took 1.57094ms.
 
 	<span class="kt">void</span> <span class="n">run</span><span class="p">()</span>
 	<span class="p">{</span>
-		<span class="k">try</span>
+		<span class="n">try</span>
 		<span class="p">{</span>
 			<span class="k">for</span> <span class="p">(;;)</span>
 			<span class="p">{</span>
@@ -3295,7 +3350,7 @@ parallel_quick_sort took 1.57094ms.
 <span class="p">};</span>
 
 <span class="c1">// 人机交互状态机
-</span><span class="k">class</span> <span class="nc">interface_machine</span>
+</span><span class="k">class</span> <span class="nc">interface</span><span class="n">_machine</span>
 <span class="p">{</span>
 	<span class="n">messaging</span><span class="o">::</span><span class="n">receiver</span> <span class="n">incoming</span><span class="p">;</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">iom</span><span class="p">;</span> <span class="c1">// cout锁
@@ -3309,7 +3364,7 @@ parallel_quick_sort took 1.57094ms.
 
 	<span class="kt">void</span> <span class="n">run</span><span class="p">()</span>
 	<span class="p">{</span>
-		<span class="k">try</span>
+		<span class="n">try</span>
 		<span class="p">{</span>
 			<span class="k">for</span> <span class="p">(;;)</span>
 			<span class="p">{</span>
@@ -3421,11 +3476,12 @@ parallel_quick_sort took 1.57094ms.
 <span class="p">};</span>
 
 <span class="cp">#endif // _ATM_H_
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <h4 id="source_main_cpp">main.cpp</h4>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;
 #include "ATM.h"
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -3440,7 +3496,7 @@ parallel_quick_sort took 1.57094ms.
 
 	<span class="n">messaging</span><span class="o">::</span><span class="n">sender</span> <span class="n">atmqueue</span><span class="p">(</span><span class="n">machine</span><span class="p">.</span><span class="n">get_sender</span><span class="p">());</span>
 
-	<span class="kt">bool</span> <span class="n">quit_pressed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+	<span class="n">bool</span> <span class="n">quit_pressed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 	<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit_pressed</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
@@ -3484,11 +3540,12 @@ parallel_quick_sort took 1.57094ms.
 	<span class="n">bank_thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 	<span class="n">if_thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="atm_result">结果</h4>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>Please enter your card (I)
+<div class="highlighter-rouge"><pre class="highlight"><code>Please enter your card (I)
 i
 Please enter your PIN (0-9)
 1937
@@ -3514,7 +3571,8 @@ c
 Ejecting card
 Please enter your card (I)
 ^C
-</code></pre></div>
+</code></pre>
+</div>
 
 
                 <hr>
@@ -3524,7 +3582,7 @@ Please enter your card (I)
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/04/20/C++-%E9%87%8A%E7%96%91-%E5%9B%9B/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（四）">
+                        <a href="/2017/04/20/C++-basis-4/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（四）">
                         Previous<br>
                         <span>C++ 释疑（四）</span>
                         </a>
@@ -3532,7 +3590,7 @@ Please enter your card (I)
                     
                     
                     <li class="next">
-                        <a href="/2017/05/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BE%E8%AE%A1-%E4%B8%80/" data-toggle="tooltip" data-placement="top" title="C++ 多线程设计（一）">
+                        <a href="/2017/05/24/C++-thread-design-1/" data-toggle="tooltip" data-placement="top" title="C++ 多线程设计（一）">
                         Next<br>
                         <span>C++ 多线程设计（一）</span>
                         </a>
@@ -3644,13 +3702,12 @@ Please enter your card (I)
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/04/24/C++ 多线程基础篇";
-    var disqus_url = "/2017/04/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%AF%87/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/04/24/C++-thread-basis";
+    var disqus_url = "https://chorior.github.io/2017/04/24/C++-thread-basis/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

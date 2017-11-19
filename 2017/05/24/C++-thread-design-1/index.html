@@ -12,7 +12,7 @@
 
     <title>C++ 多线程设计（一） - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/05/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BE%E8%AE%A1-%E4%B8%80/">
+    <link rel="canonical" href="https://chorior.github.io/2017/05/24/C++-thread-design-1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 				<p>本篇内容从如何设计多线程数据结构开始，提供了一些设计规范，并实际操控了一些常用的数据结构(stack,queue,hash map,linked list)，它们的设计从简单到复杂，仿照它们从设计到完成的过程，你应该能够自行设计自己的并发数据结构，预测到可能发生的条件竞争并避免，并修改至最大可能的并发性能。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#overview">基于锁的并发数据结构设计概述</a></li>
@@ -240,7 +240,7 @@
 
 <h3 id="stack">stack</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个线程安全的简单stack模板
 </span><span class="cp">#include &lt;exception&gt;
@@ -256,7 +256,7 @@
 <span class="p">};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_stack</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_stack</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
@@ -297,15 +297,16 @@
 		<span class="n">data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">data</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
 </span>
@@ -331,7 +332,7 @@
 
 	<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 	<span class="p">{</span>
-		<span class="k">try</span> <span class="p">{</span>
+		<span class="n">try</span> <span class="p">{</span>
 			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">g_stack</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="k">catch</span><span class="p">(</span><span class="n">empty_stack</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">){</span>
@@ -349,11 +350,12 @@
 	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 	<span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>测试结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>9
+<div class="highlighter-rouge"><pre class="highlight"><code>9
 8
 7
 6
@@ -364,7 +366,8 @@
 1
 0
 empty stack.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>现在来分析上面的<code class="highlighter-rouge">threadsafe_stack</code>模板：</p>
 
@@ -385,14 +388,14 @@ empty stack.
 
 <h3 id="queue">queue</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个线程安全的简单queue模板
 </span><span class="cp">#include &lt;queue&gt;
 #include &lt;mutex&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_queue</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_queue</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="k">mutable</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mut</span><span class="p">;</span>
@@ -428,7 +431,7 @@ empty stack.
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+	<span class="n">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
@@ -449,15 +452,16 @@ empty stack.
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
 </span>
@@ -490,11 +494,12 @@ empty stack.
 	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 	<span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>测试结果(由于<code class="highlighter-rouge">print_data</code>线程永远不会自动结束，所以需要手动强制结束，应用篇里会学到线程中断的知识来解决这个问题)：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>0
+<div class="highlighter-rouge"><pre class="highlight"><code>0
 1
 2
 3
@@ -505,7 +510,8 @@ empty stack.
 8
 9
 ^C
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>现在来分析上面的<code class="highlighter-rouge">threadsafe_queue</code>模板：</p>
 
@@ -520,14 +526,14 @@ empty stack.
   </li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个改善了的线程安全的简单queue模板
 </span><span class="cp">#include &lt;queue&gt;
 #include &lt;mutex&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_queue</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_queue</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="k">mutable</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mut</span><span class="p">;</span>
@@ -557,7 +563,7 @@ empty stack.
 		<span class="n">data_queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+	<span class="n">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
@@ -586,13 +592,14 @@ empty stack.
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span>
 		<span class="k">return</span> <span class="n">data_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="a-thread-safe-queue-using-fine-grained-locks-and-condition-variables">A thread-safe queue using fine-grained locks and condition variables</h4>
 
@@ -602,7 +609,7 @@ empty stack.
 
 <p><img src="https://raw.githubusercontent.com/xiaoweiChen/Cpp_Concurrency_In_Action/master/images/chapter6/6-1.png" alt="singly linked list" /></p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个简单的单线程队列实现
 </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -656,7 +663,8 @@ empty stack.
 		<span class="n">tail</span> <span class="o">=</span> <span class="n">new_tail</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>上面的实现对单线程来说，没什么问题。但是如果你要使用细粒度的锁来对应多线程的话，就会出现一系列可能导致你出错的事情。该队列有两个数据成员head和tail，原则上你可以使用两个mutex分别对其进行保护，但这会造成一系列问题：</p>
 
@@ -670,7 +678,7 @@ empty stack.
   </li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个改善的简单的单线程队列实现
 </span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -717,17 +725,18 @@ empty stack.
 		<span class="n">tail</span> <span class="o">=</span> <span class="n">new_tail</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>现在push只访问tail了，<code class="highlighter-rouge">try_pop</code>虽然同时访问head和tail，但是tail只是被用作初始比较，因此只需要短暂的lock。最大的增益就是<code class="highlighter-rouge">try_pop</code>和push永远不会在同一个node上操作了，所以你可以大胆的使用一个mutex保护head，一个mutex保护tail。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个简单的使用细粒度锁的thread safe队列实现
 </span><span class="cp">#include &lt;mutex&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_queue</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_queue</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="k">struct</span> <span class="n">node</span>
@@ -752,7 +761,7 @@ empty stack.
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">head_lock</span><span class="p">(</span><span class="n">head_mutex</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="n">get_tail</span><span class="p">())</span>
 		<span class="p">{</span>
-			<span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+			<span class="k">return</span> <span class="n">nullptr</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">old_head</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
 		<span class="n">head</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">old_head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
@@ -785,33 +794,35 @@ empty stack.
 		<span class="n">tail</span> <span class="o">=</span> <span class="n">new_tail</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>将<code class="highlighter-rouge">get_tail</code>放在<code class="highlighter-rouge">head_mutex</code>的lock范围内是为了保证得到的tail一定指向假元素，head也一定是当前的head。设想一种情况：将<code class="highlighter-rouge">get_tail</code>放置在<code class="highlighter-rouge">head_mutex</code>的lock范围外，如下所示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">pop_head</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">pop_head</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="n">node</span><span class="o">*</span> <span class="k">const</span> <span class="n">old_tail</span> <span class="o">=</span> <span class="n">get_tail</span><span class="p">();</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">head_lock</span><span class="p">(</span><span class="n">head_mutex</span><span class="p">);</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="n">old_tail</span><span class="p">)</span>
 	<span class="p">{</span>
-		<span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">nullptr</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">old_head</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
 	<span class="n">head</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">old_head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
 	<span class="k">return</span> <span class="n">old_head</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>当<code class="highlighter-rouge">get_tail</code>返回时，此时head可能已经发生了改变，在head和tail做比较时，也许tail已经被重新附了值，这样head不是你想要的head，tail也不是你想要的tail，就会造成跟预想结果不同的行为发生，将<code class="highlighter-rouge">get_tail</code>放在<code class="highlighter-rouge">head_mutex</code>的lock范围内就能完美的避免这种情况。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个较完整的使用细粒度锁的thread safe队列
 </span><span class="cp">#include &lt;condition_variable&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_queue</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_queue</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="k">struct</span> <span class="n">node</span>
@@ -921,19 +932,20 @@ empty stack.
 		<span class="k">return</span> <span class="n">old_head</span> <span class="o">?</span> <span class="n">old_head</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+	<span class="n">bool</span> <span class="n">try_pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="k">const</span> <span class="n">old_head</span> <span class="o">=</span> <span class="n">try_pop_head</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
-		<span class="k">return</span> <span class="n">old_head</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">old_head</span> <span class="o">!=</span> <span class="n">nullptr</span><span class="p">;</span>
 	<span class="p">}</span>
 
-	<span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
+	<span class="n">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span>
 	<span class="p">{</span>
 		<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">head_lock</span><span class="p">(</span><span class="n">head_mutex</span><span class="p">);</span>
 		<span class="k">return</span> <span class="p">(</span><span class="n">head</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="n">get_tail</span><span class="p">());</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="complex_lock_based_concurrent_data_structures">基于锁的复杂并发数据结构设计</h2>
 
@@ -959,8 +971,9 @@ empty stack.
 
 <p>当要查找的键值不存在时，可以添加一个默认值。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">mapped_type</span> <span class="n">get_value</span><span class="p">(</span><span class="n">key_type</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">mapped_type</span> <span class="n">default_value</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">mapped_type</span> <span class="n">get_value</span><span class="p">(</span><span class="n">key_type</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">mapped_type</span> <span class="n">default_value</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>你也可以返回一个<code class="highlighter-rouge">std::pair&lt;mapped_type,bool&gt;</code>，其中bool值指示该键值是否存在；或者你也可以返回一个智能指针，当其为nullptr时，表示该键值不存在。</p>
 
@@ -980,7 +993,7 @@ empty stack.
 
 <p>剩下的就只有哈希表了。假设有一个固定数量的buckets(一个键值拥有一个bucket，其关联的所有值都放在该bucket中)，一个键值所属的bucket纯粹是该键值的一个属性及哈希函数(<strong>Assuming a fixed number of buckets, which bucket a key belongs to is purely a property of the key and its hash function</strong>)。这意味着你可以安全的对每个bucket使用不同的锁。如果你仍然使用类似<code class="highlighter-rouge">boost::shared_mutex</code>的mutex，你就能将并发的机会增加N倍，其中N是bucket的数量(显然原来只能有一个线程在写，现在可以有N个了)。缺点就是你需要为键值(key)设计一个好的哈希函数(对于一个给定值，任何时候调用此函数都应该返回相同的结果，对于不等的对象几乎总是产生不同的结果)，庆幸的是，C++标准库提供了<code class="highlighter-rouge">std::hash&lt;&gt;</code>模板，一些基本的类型如int，还有一些常用的标准库类型如<code class="highlighter-rouge">std::string</code>都提供了特例化，你可以直接拿来使用，对于自定义类型可以查看<a href="https://chorior.github.io/2017/04/04/C++-%E9%87%8A%E7%96%91-%E4%B8%89/#template_specialization">模板特例化</a>自行特例化。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个完成了基本功能的细粒度线程安全查找表
 </span><span class="cp">#include &lt;vector&gt;
@@ -990,10 +1003,10 @@ empty stack.
 #include &lt;boost\thread\locks.hpp&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Key</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Hash</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">&gt;&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_lookup_table</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_lookup_table</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
-	<span class="k">class</span> <span class="nc">bucket_type</span>
+	<span class="k">class</span> <span class="nc">bucket</span><span class="n">_type</span>
 	<span class="p">{</span>
 	<span class="k">public</span><span class="o">:</span>
 		<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">Value</span><span class="o">&gt;</span> <span class="n">bucket_value</span><span class="p">;</span>
@@ -1086,7 +1099,8 @@ empty stack.
 		<span class="n">get_bucket</span><span class="p">(</span><span class="n">key</span><span class="p">).</span><span class="n">remove_mapping</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>上面的示例函数不多，仔细看个十分钟左右应该能够看懂。仔细看完，你会发现，该代码其实是相当简单的，但是每个关键的地方都做了适当的数据保护。其中bucket数量的默认值是19，这个值是随便写的，但是<strong>哈希表在拥有质数个buckets的时候工作的最好</strong>；因为bucket的数量是固定的，所以<code class="highlighter-rouge">get_bucket</code>可以在无锁的状态下被调用，然后再通过<code class="highlighter-rouge">bucket_type</code>的成员函数进行适当的数据保护。</p>
 
@@ -1105,7 +1119,7 @@ empty stack.
 
 <p>在获取全部键值对快照的时候，需要锁住全部的buckets：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">Value</span><span class="o">&gt;</span> <span class="n">get_map</span><span class="p">()</span> <span class="k">const</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">Value</span><span class="o">&gt;</span> <span class="n">get_map</span><span class="p">()</span> <span class="k">const</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">boost</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">locks</span><span class="p">;</span>
 	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">buckets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
@@ -1146,11 +1160,12 @@ empty stack.
 	<span class="p">}</span>
 	<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>在测试编译时，<code class="highlighter-rouge">bucket_type</code>的<code class="highlighter-rouge">find_entry_for</code>一直提示不能将<code class="highlighter-rouge">const_iterator</code>转换成<code class="highlighter-rouge">iterator</code>，发现其是const限定的，所以data是const的，故而<code class="highlighter-rouge">data.begin()</code>、<code class="highlighter-rouge">data.end()</code>返回的都是<code class="highlighter-rouge">const_iterator</code>，而函数要求返回的是<code class="highlighter-rouge">iterator</code>，由于后面的<code class="highlighter-rouge">add_or_update_mapping</code>和<code class="highlighter-rouge">remove_mapping</code>也调用了该函数，并且修改了其指向的数据，所以不能直接将<code class="highlighter-rouge">bucket_iterator</code>改为<code class="highlighter-rouge">bucket_const_iterator</code>，解决方案是重载该函数，一个const限定返回<code class="highlighter-rouge">bucket_const_iterator</code>，一个没有const限定，返回<code class="highlighter-rouge">bucket_iterator</code>，如下所示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个改善了的完成了基本功能的细粒度线程安全查找表
 </span><span class="cp">#include &lt;vector&gt;
@@ -1161,10 +1176,10 @@ empty stack.
 #include &lt;boost\thread\locks.hpp&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Key</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Hash</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">&gt;&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_lookup_table</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_lookup_table</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
-	<span class="k">class</span> <span class="nc">bucket_type</span>
+	<span class="k">class</span> <span class="nc">bucket</span><span class="n">_type</span>
 	<span class="p">{</span>
 		<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">Key</span><span class="p">,</span> <span class="n">Value</span><span class="o">&gt;</span> <span class="n">bucket_value</span><span class="p">;</span>
 		<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">bucket_value</span><span class="o">&gt;</span> <span class="n">bucket_data</span><span class="p">;</span>
@@ -1303,11 +1318,12 @@ empty stack.
 		<span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>测试代码如下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
 </span>
@@ -1341,7 +1357,8 @@ empty stack.
 	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 	<span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><code class="highlighter-rouge">boost::thread</code>的库需要编译，步骤如下：</p>
 
@@ -1359,7 +1376,7 @@ empty stack.
 
 <p>测试结果(测试程序可能需要修改，用于确保print发生在add之后)：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>0
+<div class="highlighter-rouge"><pre class="highlight"><code>0
 1
 2
 3
@@ -1370,7 +1387,8 @@ empty stack.
 8
 9
 
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="linked_list">linked list</h3>
 
@@ -1390,13 +1408,13 @@ empty stack.
 
 <p>细粒度锁list的基本思想是：为每个node设置一个mutex，如果list太大，就会有好多好多mutex！这个方案的优点就是不同list部分的操作是真正并发的：每个操作持有它感兴趣的node的锁，然后离开时解锁。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 </span>
 <span class="c1">// 一个线程安全的细粒度锁链表的简单实现
 </span><span class="cp">#include &lt;mutex&gt;
 </span>
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">threadsafe_list</span>
+<span class="k">class</span> <span class="nc">threadsafe</span><span class="n">_list</span>
 <span class="p">{</span>
 	<span class="k">struct</span> <span class="n">node</span>
 	<span class="p">{</span>
@@ -1492,17 +1510,19 @@ empty stack.
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于所有锁都是从head开始，按顺序进行lock的，所以不会有deadlock的危险；在<code class="highlighter-rouge">remove_if</code>函数中，如果删除的node正在被其他线程使用，就会造成条件竞争，但是由于该函数在删除的时候并没有unlock上一个node，所以正在删除的node是不可能被访问的；还是在<code class="highlighter-rouge">remove_if</code>函数中，下面的删除操作不能被替换为<code class="highlighter-rouge">current-&gt;next.reset(next-&gt;next.release())</code>，因为<code class="highlighter-rouge">next = current-&gt;next.get()</code>，如果先将<code class="highlighter-rouge">current-&gt;next</code>释放，那么next就是被删除的指针，继续使用会造成未定义行为，先将其转移到一个局部变量，然后将下一个node的指向赋给上一个<code class="highlighter-rouge">node.next</code>，最后该局部变量在生命周期结束时会自动释放。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">old_next</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="n">old_next</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
 <span class="n">current</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>测试程序：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;thread&gt;
 </span>
@@ -1534,12 +1554,14 @@ empty stack.
 	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 	<span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>测试结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>9 8 7 6 5 4 3 2 1 0
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>9 8 7 6 5 4 3 2 1 0
+</code></pre>
+</div>
 
 
                 <hr>
@@ -1549,7 +1571,7 @@ empty stack.
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/04/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%AF%87/" data-toggle="tooltip" data-placement="top" title="C++ 多线程基础篇">
+                        <a href="/2017/04/24/C++-thread-basis/" data-toggle="tooltip" data-placement="top" title="C++ 多线程基础篇">
                         Previous<br>
                         <span>C++ 多线程基础篇</span>
                         </a>
@@ -1557,7 +1579,7 @@ empty stack.
                     
                     
                     <li class="next">
-                        <a href="/2017/06/08/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BE%E8%AE%A1-%E4%BA%8C/" data-toggle="tooltip" data-placement="top" title="C++ 多线程设计（二）">
+                        <a href="/2017/06/08/C++-thread-design-2/" data-toggle="tooltip" data-placement="top" title="C++ 多线程设计（二）">
                         Next<br>
                         <span>C++ 多线程设计（二）</span>
                         </a>
@@ -1669,13 +1691,12 @@ empty stack.
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/05/24/C++ 多线程设计（一）";
-    var disqus_url = "/2017/05/24/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BE%E8%AE%A1-%E4%B8%80/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/05/24/C++-thread-design-1";
+    var disqus_url = "https://chorior.github.io/2017/05/24/C++-thread-design-1/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

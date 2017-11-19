@@ -12,7 +12,7 @@
 
     <title>C++ 释疑（二） - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/03/08/C++-%E9%87%8A%E7%96%91-%E4%BA%8C/">
+    <link rel="canonical" href="https://chorior.github.io/2017/03/08/C++-basis-2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 				<p>本文是我重温《C++ Primer 5》第二部分 C++ 标准库时，摘录的一些要点，适合初级程序员食用。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#io_library">IO 库</a>
@@ -311,7 +311,7 @@
 
 <p>所以我们可以像使用<code class="highlighter-rouge">cin</code>和<code class="highlighter-rouge">cout</code>一样使用文件流和string流对象。</p>
 
-<h3 id="io-对象无拷贝或赋值">IO 对象无拷贝或赋值</h3>
+<h3 id="io-">IO 对象无拷贝或赋值</h3>
 
 <p>不能将形参或返回类型设置为流类型。</p>
 
@@ -390,49 +390,52 @@
 
 <p>确定一个流对象状态的最简单方法是将它当做一个条件来使用：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">while</span><span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">word</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">while</span><span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">word</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// do something
 </span>    <span class="c1">// badbit,failbit,eofbit任一个被置位，则检测流状态的条件会失败
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>将流当做条件使用不等于使用<code class="highlighter-rouge">!fail()</code></strong>，因为<code class="highlighter-rouge">fail()</code>只检查<code class="highlighter-rouge">failbit</code>位和<code class="highlighter-rouge">badbit</code>位，而流状态会检查三个错误位。因此，将流当做条件使用与使用<code class="highlighter-rouge">good()</code>是等效的。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">static</span> <span class="k">constexpr</span> <span class="n">_Iostate</span> <span class="n">goodbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x0</span><span class="p">;</span>
-<span class="k">static</span> <span class="k">constexpr</span> <span class="n">_Iostate</span> <span class="n">eofbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x1</span><span class="p">;</span>
-<span class="k">static</span> <span class="k">constexpr</span> <span class="n">_Iostate</span> <span class="n">failbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x2</span><span class="p">;</span>
-<span class="k">static</span> <span class="k">constexpr</span> <span class="n">_Iostate</span> <span class="n">badbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x4</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">static</span> <span class="n">constexpr</span> <span class="n">_Iostate</span> <span class="n">goodbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x0</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">constexpr</span> <span class="n">_Iostate</span> <span class="n">eofbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x1</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">constexpr</span> <span class="n">_Iostate</span> <span class="n">failbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x2</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">constexpr</span> <span class="n">_Iostate</span> <span class="n">badbit</span> <span class="o">=</span> <span class="p">(</span><span class="n">_Iostate</span><span class="p">)</span><span class="mh">0x4</span><span class="p">;</span>
 <span class="p">...</span>
-<span class="kt">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">good</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">good</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>	<span class="c1">// test if no state bits are set
 </span>    <span class="k">return</span> <span class="p">(</span><span class="n">rdstate</span><span class="p">()</span> <span class="o">==</span> <span class="n">goodbit</span><span class="p">);</span>
     <span class="p">}</span>
 
-<span class="kt">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">eof</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">eof</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>	<span class="c1">// test if eofbit is set in stream state
 </span>    <span class="k">return</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">rdstate</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">eofbit</span><span class="p">);</span>
     <span class="p">}</span>
 
-<span class="kt">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">fail</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">fail</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>	<span class="c1">// test if badbit or failbit is set in stream state
 </span>    <span class="k">return</span> <span class="p">(((</span><span class="kt">int</span><span class="p">)</span><span class="n">rdstate</span><span class="p">()</span>
         <span class="o">&amp;</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">badbit</span> <span class="o">|</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">failbit</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
 
-<span class="kt">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">bad</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">bool</span> <span class="n">__CLR_OR_THIS_CALL</span> <span class="n">bad</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>	<span class="c1">// test if badbit is set in stream state
 </span>    <span class="k">return</span> <span class="p">(((</span><span class="kt">int</span><span class="p">)</span><span class="n">rdstate</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">badbit</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="output_buffer">IO 输出缓冲</h3>
 
 <p>每个输出流都管理一个缓冲区，用来保存程序读写的数据。例如，当你使用如下代码时：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span><span class="p">;</span>
+</code></pre>
+</div>
 
 <p>文本串可能立即打印出来，也有可能被操作系统保存在缓冲区随后打印。</p>
 
@@ -440,22 +443,24 @@
 
 <p>缓冲机制可以将程序的多个输出操作组合成单一的系统级写操作，这样可以提升性能。</p>
 
-<h4 id="刷新输出缓冲区">刷新输出缓冲区</h4>
+<h4 id="section-1">刷新输出缓冲区</h4>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出hahah加一个换行，然后刷新缓冲区
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出hahah加一个换行，然后刷新缓冲区
 </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">ends</span><span class="p">;</span>  <span class="c1">// 输出hahah加一个空字符，然后刷新缓冲区
 </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">flush</span><span class="p">;</span> <span class="c1">// 输出hahaa不附加任何字符，然后刷新缓冲区
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
-<h4 id="unibuf-操纵符">unibuf 操纵符</h4>
+<h4 id="unibuf-">unibuf 操纵符</h4>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">unitbuf</span><span class="p">;</span>   <span class="c1">// 所有输出立即刷新，无缓冲
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">unitbuf</span><span class="p">;</span>   <span class="c1">// 所有输出立即刷新，无缓冲
 </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">nounitbuf</span><span class="p">;</span> <span class="c1">// 回归正常输出状态，有缓冲
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p><strong><code class="highlighter-rouge">std::cerr</code>默认是设置<code class="highlighter-rouge">unitbuf</code>的，所以log调试时，你可以使用<code class="highlighter-rouge">std::cerr</code>进行输出</strong>。当然你也可以手动设置一个流为<code class="highlighter-rouge">unitbuf</code>的。</p>
 
-<h4 id="输出流关联到另一个流">输出流关联到另一个流</h4>
+<h4 id="section-2">输出流关联到另一个流</h4>
 
 <p>若一个输出流被关联到另一个流，那么当读写另一个流时，该输出流会被刷新。</p>
 
@@ -469,19 +474,21 @@
   <li>不带参数的版本，返回关联的输出流的指针；若没有关联输出流，那么返回空指针。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">();</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">();</span>
 <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">*</span><span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="s">"hahah</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <ul>
   <li>带参数的版本，接受一个指向ostream的指针，将自己关联到该ostream，并返回旧的关联输出流。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="n">old_tie</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span> <span class="c1">// 解除关联
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="n">old_tie</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="n">nullptr</span><span class="p">);</span> <span class="c1">// 解除关联
 </span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">())</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"std::cin.tie() == nullptr</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="n">old_tie</span><span class="p">);</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">())</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"std::cin.tie() != nullptr</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="file_io">文件输入输出</h3>
 
@@ -577,10 +584,11 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="s">"file"</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="s">"file"</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out1</span><span class="p">(</span><span class="s">"file"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">::</span><span class="n">out</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out2</span><span class="p">(</span><span class="s">"file"</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">::</span><span class="n">out</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">::</span><span class="n">app</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="string_io">string 流</h3>
 
@@ -775,7 +783,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
 <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">noskipws</span><span class="p">;</span>
 <span class="k">while</span><span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">){</span>
 	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ch</span><span class="p">;</span>
@@ -789,7 +797,8 @@
 <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setw</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1234</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setfill</span><span class="p">(</span><span class="sc">'*'</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">internal</span> <span class="o">&lt;&lt;</span> <span class="n">setw</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">1234</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setfill</span><span class="p">(</span><span class="sc">' '</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="random_stream">流随机访问</h3>
 
@@ -820,7 +829,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">fstream</span> <span class="n">inOut</span><span class="p">(</span><span class="s">"example.txt"</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">fstream</span> <span class="n">inOut</span><span class="p">(</span><span class="s">"example.txt"</span><span class="p">);</span>
 <span class="k">auto</span> <span class="n">beg_mark</span> <span class="o">=</span> <span class="n">inOut</span><span class="p">.</span><span class="n">tellg</span><span class="p">();</span>
 <span class="n">inOut</span><span class="p">.</span><span class="n">seekg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fstream</span><span class="o">::</span><span class="n">end</span><span class="p">);</span>
 <span class="k">auto</span> <span class="n">end_mark</span> <span class="o">=</span> <span class="n">inOut</span><span class="p">.</span><span class="n">tellg</span><span class="p">();</span>
@@ -828,7 +837,8 @@
 <span class="c1">//inOut.seekg(0,fstream::beg);
 </span><span class="k">auto</span> <span class="n">length</span> <span class="o">=</span> <span class="n">end_mark</span> <span class="o">-</span> <span class="n">beg_mark</span><span class="p">;</span>
 <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">length</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="sequential_containers">顺序容器</h2>
 
@@ -1086,7 +1096,7 @@
 
 <p>除了为每个容器定义的迭代器之外，标准库在头文件iterator中还定义了<a href="#other_iterators">额外几种迭代器</a>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;iterator&gt;
 #include &lt;vector&gt;
 </span> 
@@ -1103,30 +1113,34 @@
     <span class="n">std</span><span class="o">::</span><span class="n">advance</span><span class="p">(</span><span class="n">vi</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>                                    <span class="c1">// C++ 17
 </span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">vi</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="array_container">array 容器</h4>
 
 <p>定义一个array时，除了指定元素类型，还要指定容器大小:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr</span><span class="p">;</span>
+</code></pre>
+</div>
 
 <p>array不初始化时使用默认初始化；列表初始化时，未被初始化得元素将使用值初始化，<strong>自定义类必须包含一个默认构造函数</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr0</span><span class="p">;</span>                 <span class="c1">// 默认初始化
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr0</span><span class="p">;</span>                 <span class="c1">// 默认初始化
 </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr1</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>      
 <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr2</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>array可以进行拷贝和赋值操作：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr0</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">};</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr0</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">};</span>
 <span class="c1">// 拷贝赋值时容器类型、元素类型、容器大小都必须相同
 </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr1</span><span class="p">(</span><span class="n">arr0</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">42</span><span class="o">&gt;</span> <span class="n">arr2</span> <span class="o">=</span> <span class="n">arr0</span><span class="p">;</span>
 <span class="n">arr2</span> <span class="o">=</span> <span class="n">arr1</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="sequential_container_operation">顺序容器操作</h3>
 
@@ -1206,9 +1220,10 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">b1</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>  <span class="c1">// b1是c中最后一个元素的拷贝
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">b1</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>  <span class="c1">// b1是c中最后一个元素的拷贝
 </span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">b2</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">back</span><span class="p">();</span> <span class="c1">// b2是c中最后一个元素的引用
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <h4 id="delete_elements">删除元素</h4>
 
@@ -1658,14 +1673,15 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">ListNode</span> <span class="p">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">ListNode</span> <span class="p">{</span>
 	<span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
 	<span class="n">ListNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 	<span class="n">ListNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="o">:</span> <span class="n">val</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">next</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span> <span class="p">{}</span>
 <span class="p">};</span>
-<span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">ListNode</span> <span class="o">*</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">ListNode</span> <span class="o">*&gt;</span><span class="p">,</span> <span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="p">,</span> <span class="n">ListNode</span> <span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span>
+<span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">ListNode</span> <span class="o">*</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">ListNode</span> <span class="o">*&gt;</span><span class="p">,</span> <span class="n">function</span><span class="o">&lt;</span><span class="n">bool</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="p">,</span> <span class="n">ListNode</span> <span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span>
 	<span class="n">pQueue</span><span class="p">([](</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">ListNode</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">b</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span> <span class="p">});</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="generic_algorithms">容器泛型算法</h2>
 
@@ -1820,8 +1836,9 @@
 
 <p>一个 lambda 表达式具有一个返回类型、一个参数列表和一个函数体:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>[capture list](parameter list) -&gt; return type { function body }
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>[capture list](parameter list) -&gt; return type { function body }
+</code></pre>
+</div>
 
 <ul>
   <li>capture list 表示该lambda表达式能够使用的非静态局部变量的列表，为空时代表该lambda表达式不使用任何非静态局部变量；</li>
@@ -1839,7 +1856,7 @@
   <li>忽略返回类型，<strong>如果lambda表达式包含任何单一return语句之外的内容，则返回void</strong>；否则从返回表达式的类型推断出返回类型；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">example</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">example</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span> <span class="p">};</span>
 	<span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -1858,14 +1875,16 @@
 	<span class="p">}</span>
 	<span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="bind_function">函数适配器 bind</h3>
 
 <p>C++11 在<code class="highlighter-rouge">&lt;functional&gt;</code>头文件中定义了一个名为bind的标准库函数，它接受一个可调用对象，生成一个新的可调用对象来“适应”原对象的参数列表。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">newCallable</span> <span class="o">=</span> <span class="n">bind</span><span class="p">(</span><span class="n">callable</span><span class="p">,</span> <span class="n">arg_list</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">auto</span> <span class="n">newCallable</span> <span class="o">=</span> <span class="n">bind</span><span class="p">(</span><span class="n">callable</span><span class="p">,</span> <span class="n">arg_list</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <ul>
   <li>newCallable 本身是一个可调用对象；</li>
@@ -1876,13 +1895,13 @@
   <li><code class="highlighter-rouge">arg_list</code> 中 <code class="highlighter-rouge">_n</code> 的最大值为生成的可调用对象参数的总个数；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp"># include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp"># include &lt;iostream&gt;
 # include &lt;string&gt;
 # include &lt;vector&gt;
 # include &lt;algorithm&gt;
 # include &lt;functional&gt;
 </span>
-<span class="kt">bool</span> <span class="n">isShorter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">);</span>
+<span class="n">bool</span> <span class="n">isShorter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">print</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">print</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">begin</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">end</span><span class="p">);</span>
 
@@ -1921,7 +1940,7 @@
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">bool</span> <span class="nf">isShorter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">)</span>
+<span class="n">bool</span> <span class="nf">isShorter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">return</span> <span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 <span class="p">}</span>
@@ -1935,7 +1954,8 @@
 <span class="p">{</span>
 	<span class="k">while</span> <span class="p">(</span><span class="n">begin</span> <span class="o">!=</span> <span class="n">end</span><span class="p">)</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">begin</span><span class="o">++</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="other_iterators">各种迭代器</h3>
 
@@ -1966,7 +1986,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">in_iter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">),</span> <span class="n">eof</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">in_iter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">),</span> <span class="n">eof</span><span class="p">;</span>
 <span class="c1">// 读取输入，并保存到一个vector
 </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">(</span><span class="n">in_iter</span><span class="p">,</span> <span class="n">eof</span><span class="p">);</span>
 <span class="c1">// 读取输入，并求和
@@ -1976,7 +1996,8 @@
 </span><span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">out</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">" "</span><span class="p">);</span>
 <span class="n">copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cbegin</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">cend</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span> <span class="n">out</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="associative_containers">关联容器</h2>
 
@@ -2029,12 +2050,12 @@
 
 <h3 id="associative_container_constructor">关联容器构造</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// 空容器
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 空容器
 </span><span class="n">map</span><span class="o">&lt;</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="o">&gt;</span> <span class="n">map_name1</span><span class="p">;</span>
 <span class="c1">// 列表初始化
 </span><span class="n">map</span><span class="o">&lt;</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="o">&gt;</span> <span class="n">map_name2</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="n">key1</span><span class="p">,</span> <span class="n">value1</span><span class="p">},</span> <span class="p">{</span><span class="n">key2</span><span class="p">,</span> <span class="n">value2</span><span class="p">},</span> <span class="p">...</span> <span class="p">};</span>
 <span class="c1">// 指定func_comp为map_name3关键字的排序算法
-</span><span class="n">map</span><span class="o">&lt;</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">func_comp</span><span class="p">)</span> <span class="o">*&gt;</span> <span class="n">map_name3</span><span class="p">(</span><span class="n">func_comp</span><span class="p">);</span>
+</span><span class="n">map</span><span class="o">&lt;</span><span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="p">,</span> <span class="n">decltype</span><span class="p">(</span><span class="n">func_comp</span><span class="p">)</span> <span class="o">*&gt;</span> <span class="n">map_name3</span><span class="p">(</span><span class="n">func_comp</span><span class="p">);</span>
 <span class="c1">// 空容器
 </span><span class="n">set</span><span class="o">&lt;</span><span class="n">type</span><span class="o">&gt;</span> <span class="n">set_name1</span><span class="p">;</span>
 <span class="c1">// 列表初始化
@@ -2042,8 +2063,9 @@
 <span class="c1">// set_name2包含来自c的不重复元素，且从小到大进行排列
 </span><span class="n">set</span><span class="o">&lt;</span><span class="n">type</span><span class="o">&gt;</span> <span class="n">set_name3</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">cbegin</span><span class="p">(),</span> <span class="n">c</span><span class="p">.</span><span class="n">cend</span><span class="p">());</span> 
 <span class="c1">// 指定func_comp为set_name4关键字的排序算法
-</span><span class="n">set</span><span class="o">&lt;</span><span class="n">type</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">func_comp</span><span class="p">)</span><span class="o">*&gt;</span> <span class="n">set_name4</span><span class="p">(</span><span class="n">func_comp</span><span class="p">);</span>
-</code></pre></div>
+</span><span class="n">set</span><span class="o">&lt;</span><span class="n">type</span><span class="p">,</span> <span class="n">decltype</span><span class="p">(</span><span class="n">func_comp</span><span class="p">)</span><span class="o">*&gt;</span> <span class="n">set_name4</span><span class="p">(</span><span class="n">func_comp</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <h3 id="pair_type">pair 类型</h3>
 
@@ -2125,11 +2147,12 @@
 
 <p>向map添加元素：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">word_count</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">});</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">word_count</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">});</span>
 <span class="n">word_count</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
 <span class="n">word_count</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
 <span class="n">word_count</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>map类的下标操作：</p>
 
@@ -2235,7 +2258,7 @@
 
 <p>new: <code class="highlighter-rouge">bad_alloc</code>和<code class="highlighter-rouge">nothrow</code>定义于头文件<code class="highlighter-rouge">&lt;new&gt;</code>中。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="n">type</span><span class="p">;</span>                  <span class="c1">// 默认初始化，失败抛出std::bad_alloc
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="n">type</span><span class="p">;</span>                  <span class="c1">// 默认初始化，失败抛出std::bad_alloc
 </span><span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="n">type</span><span class="p">();</span>                <span class="c1">// 值初始化
 </span><span class="k">const</span> <span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="k">const</span> <span class="n">type</span><span class="p">(</span><span class="n">val</span><span class="p">);</span> <span class="c1">// const对象必须初始化，除非有默认构造函数
 </span><span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="n">nothrow</span><span class="p">)</span> <span class="n">type</span><span class="p">;</span>        <span class="c1">// 失败返回nullptr
@@ -2247,7 +2270,8 @@
 <span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="n">type</span><span class="p">[</span><span class="n">size</span><span class="p">]{</span> <span class="n">val0</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="p">...</span> <span class="p">};</span> <span class="c1">// 剩余值进行值初始化
 </span><span class="k">const</span> <span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="k">const</span> <span class="n">type</span><span class="p">[</span><span class="n">size</span><span class="p">](</span><span class="n">val</span><span class="p">);</span> 
 <span class="n">type</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="n">nothrow</span><span class="p">)</span> <span class="n">type</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>        
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>delete:</p>
 
@@ -2258,7 +2282,7 @@
   <li><strong>建议delete之后，赋值为nullptr</strong>；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">pi1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">pi2</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">pi1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">pi2</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
 <span class="kt">double</span> <span class="o">*</span><span class="n">pd1</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span><span class="p">(</span><span class="mi">33</span><span class="p">),</span> <span class="o">*</span><span class="n">pd2</span> <span class="o">=</span> <span class="n">pd1</span><span class="p">;</span>
 <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">pci</span> <span class="o">=</span> <span class="k">new</span> <span class="k">const</span> <span class="kt">int</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
 <span class="k">delete</span> <span class="n">i</span><span class="p">;</span>      <span class="c1">// 错误
@@ -2270,7 +2294,8 @@
 // 释放动态数组
 </span><span class="k">auto</span> <span class="o">*</span><span class="n">ip</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">10</span><span class="p">]();</span>
 <span class="k">delete</span> <span class="p">[]</span><span class="n">ip</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="smart_pointer">智能指针</h3>
 
@@ -2435,7 +2460,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>     <span class="c1">// 初始化
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>     <span class="c1">// 初始化
 </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">release</span><span class="p">());</span>    <span class="c1">// p1的所有权转移给p2，p1置为空
 </span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p3</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span> 
 <span class="n">p2</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">p3</span><span class="p">.</span><span class="n">release</span><span class="p">());</span>              <span class="c1">// 释放p2，将p3的所有权转移给p2
@@ -2443,7 +2468,8 @@
 </span><span class="n">p4</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
 <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sp</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">10</span><span class="p">](),</span> <span class="p">[](</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">){</span> <span class="k">delete</span> <span class="p">[]</span><span class="n">p</span><span class="p">;</span> <span class="p">});</span>
 <span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>               <span class="c1">// shared_ptr未定义下标运算符
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <table>
   <thead>
@@ -2493,7 +2519,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/03/01/C++-%E9%87%8A%E7%96%91-%E4%B8%80/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（一）">
+                        <a href="/2017/03/01/C++-basis-1/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（一）">
                         Previous<br>
                         <span>C++ 释疑（一）</span>
                         </a>
@@ -2501,7 +2527,7 @@
                     
                     
                     <li class="next">
-                        <a href="/2017/04/03/C++-%E9%87%8A%E7%96%91-%E4%B8%89/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（三）">
+                        <a href="/2017/04/03/C++-basis-3/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（三）">
                         Next<br>
                         <span>C++ 释疑（三）</span>
                         </a>
@@ -2613,13 +2639,12 @@
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/03/08/C++ 释疑（二）";
-    var disqus_url = "/2017/03/08/C++-%E9%87%8A%E7%96%91-%E4%BA%8C/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/03/08/C++-basis-2";
+    var disqus_url = "https://chorior.github.io/2017/03/08/C++-basis-2/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

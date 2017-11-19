@@ -12,7 +12,7 @@
 
     <title>Qt5 基础篇 - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/08/28/Qt5-%E5%9F%BA%E7%A1%80%E7%AF%87/">
+    <link rel="canonical" href="https://chorior.github.io/2017/08/28/Qt5-basis/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -201,7 +201,7 @@
 
 <p><strong>这篇文章的目的主要是我个人使用</strong>。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#overview">Qt 概述</a></li>
@@ -284,43 +284,48 @@
 
 <p>首先，我们创建一个文件夹，例如<code class="highlighter-rouge">E:\qt_practice</code>，然后创建一个main.cpp:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> 
 <span class="p">{</span>
     <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello QT."</span><span class="p">;</span>
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>然后打开 <strong>qt 命令行</strong>：</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd </span>E:<span class="se">\q</span>t_practice
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">cd </span>E:<span class="se">\q</span>t_practice
 <span class="gp">$ </span>qmake -project       <span class="c"># 生成 QT 工程文件</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这时会生成一个 <code class="highlighter-rouge">.pro</code> 文件：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>TEMPLATE = app
+<div class="highlighter-rouge"><pre class="highlight"><code>TEMPLATE = app
 TARGET = qt_practice
 INCLUDEPATH += .
 
 # Input
 SOURCES += main.cpp
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于我们需要在命令行上进行输出，所以在 <code class="highlighter-rouge">.pro</code> 文件末尾加上 <code class="highlighter-rouge">CONFIG += console</code>，然后执行：</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake          <span class="c"># 生成 makefile</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake          <span class="c"># 生成 makefile</span>
 <span class="gp">$ </span>mingw32-make   <span class="c"># 编译</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这里默认执行的是 <code class="highlighter-rouge">mingw32-make -f Makefile.Release</code>，你也可以手动执行 <code class="highlighter-rouge">mingw32-make -f Makefile.Debug</code>，然后你会在相应文件夹下看到可运行的 exe:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>release<span class="se">\q</span>t_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>release<span class="se">\q</span>t_practice.exe
 Hello QT.
 
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，qDebug 默认会输出换行，如果你了解输出缓冲和一些输出调试的知识的话，<strong>这个换行是为了调试正确而加上的</strong>。</p>
 
@@ -328,13 +333,15 @@ Hello QT.
 
 <p>所谓命令行参数，举一个简单的例子:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>prog -i file_in -o file_out
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>prog -i file_in -o file_out
+</code></pre>
+</div>
 
 <p>其中 <code class="highlighter-rouge">file_in</code> 和 <code class="highlighter-rouge">file_out</code> 就是<strong>命令行参数</strong>，而 <code class="highlighter-rouge">i</code> 和 <code class="highlighter-rouge">o</code> 被称为<strong>命令行选项</strong>，<strong>命令行选项通常用来表示后面命令行参数的类型</strong>，这意味着你可以修改命令行参数的顺序:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>prog -o file_out -i file_in
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>prog -o file_out -i file_in
+</code></pre>
+</div>
 
 <p>我知道 linux 下面有 <code class="highlighter-rouge">getopt</code> 函数可以获取命令行参数，但标准 C++ 似乎没有这种函数，所以一般我都是将命令行参数转化为 <code class="highlighter-rouge">std::string</code>，然后自行解析。你可以查看 <a href="https://stackoverflow.com/questions/865668/how-to-parse-command-line-arguments-in-c">stackoverflow</a> 获取如何在标准 C++ 中进行命令行参数解析。</p>
 
@@ -344,13 +351,14 @@ Hello QT.
 
 <p><strong>你可以使用等号或空格符为选项赋值</strong>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>-v<span class="o">=</span>value --verbose<span class="o">=</span>value
+<div class="highlighter-rouge"><pre class="highlight"><code>-v<span class="o">=</span>value --verbose<span class="o">=</span>value
 -v value --verbose value
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>我仿照官方示例做了一个演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QCoreApplication&gt;
 #include &lt;QCommandLineParser&gt;
 </span>
@@ -374,10 +382,10 @@ Hello QT.
 </span>	<span class="k">const</span> <span class="n">QStringList</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">positionalArguments</span><span class="p">();</span>
 
 	<span class="c1">// 检查命令行选项是否被指定，多个名字的话被认为是相等的
-</span>	<span class="kt">bool</span> <span class="n">showProgress</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"p"</span><span class="p">);</span>
-	<span class="kt">bool</span> <span class="n">force</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"f"</span><span class="p">);</span>
-	<span class="kt">bool</span> <span class="n">target</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"t"</span><span class="p">);</span>
-	<span class="kt">bool</span> <span class="n">dft</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"default"</span><span class="p">);</span>
+</span>	<span class="n">bool</span> <span class="n">showProgress</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"p"</span><span class="p">);</span>
+	<span class="n">bool</span> <span class="n">force</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"f"</span><span class="p">);</span>
+	<span class="n">bool</span> <span class="n">target</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"t"</span><span class="p">);</span>
+	<span class="n">bool</span> <span class="n">dft</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">isSet</span><span class="p">(</span><span class="s">"default"</span><span class="p">);</span>
 
 	<span class="c1">// 获取命令行选项对应的值，即命令行参数
 </span>	<span class="n">QString</span> <span class="n">targetDir</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">"t"</span><span class="p">);</span>
@@ -436,11 +444,12 @@ Hello QT.
 			<span class="n">QCoreApplication</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span> <span class="s">"untitled"</span><span class="p">)</span> <span class="p">}</span>
 	<span class="p">});</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>编译完成之后，首先查看 help:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe -h
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe -h
 Usage: release\qt_practice.exe [options] source destination
 Test helper
 
@@ -456,7 +465,8 @@ Arguments:
   source                                Source file to copy.
   destination                           Destination directory.
 
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这样就对上面的代码有了更深的了解了，接下来我们只需要按照 help 显示的那样进行测试即可：</p>
 
@@ -532,7 +542,7 @@ positionalArguments:
 
 <p>下面我们就来对 QString 的常用操作来做一个简单的演示，更多的操作你可以查看<a href="http://doc.qt.io/qt-5/qstring.html#details">说明文档</a>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;     // 标准字符串
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;     // 标准字符串
 </span>
 <span class="cp">#include &lt;QDebug&gt;
 #include &lt;QString&gt;
@@ -548,7 +558,7 @@ positionalArguments:
 </span>	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">str0</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">str1</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">str2</span><span class="p">;</span>
 
 	<span class="c1">// 访问
-</span>	<span class="kt">bool</span> <span class="n">isEmpty</span> <span class="o">=</span> <span class="n">str2</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">();</span>                  <span class="c1">// 是否为空
+</span>	<span class="n">bool</span> <span class="n">isEmpty</span> <span class="o">=</span> <span class="n">str2</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">();</span>                  <span class="c1">// 是否为空
 </span>	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">str0</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>                         <span class="c1">// 获取字符串大小
 </span>	<span class="n">str0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">QChar</span><span class="p">(</span><span class="sc">'E'</span><span class="p">);</span>                           <span class="c1">// 修改字符
 </span>	<span class="n">QChar</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">str1</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>                          <span class="c1">// at 用于只读
@@ -580,10 +590,10 @@ positionalArguments:
 	<span class="c1">// 比较
 </span>	<span class="n">QString</span> <span class="n">str5</span><span class="p">(</span><span class="s">"_raw.png"</span><span class="p">);</span>
 	<span class="n">QString</span> <span class="n">str6</span><span class="p">(</span><span class="s">"_RAW.png"</span><span class="p">);</span>
-	<span class="kt">bool</span> <span class="n">equal</span> <span class="o">=</span> <span class="p">(</span><span class="n">str5</span> <span class="o">==</span> <span class="n">str6</span><span class="p">);</span>                    <span class="c1">// 比较运算符
-</span>	<span class="kt">bool</span> <span class="n">startsWith</span> <span class="o">=</span> <span class="n">str5</span><span class="p">.</span><span class="n">startsWith</span><span class="p">(</span><span class="s">"_"</span><span class="p">);</span>         <span class="c1">// 是否以"_"开始
-</span>	<span class="kt">bool</span> <span class="n">endsWith</span> <span class="o">=</span> <span class="n">str5</span><span class="p">.</span><span class="n">endsWith</span><span class="p">(</span><span class="s">".png"</span><span class="p">);</span>          <span class="c1">// 是否以".png"结尾
-</span>	<span class="kt">bool</span> <span class="n">contains</span> <span class="o">=</span>
+	<span class="n">bool</span> <span class="n">equal</span> <span class="o">=</span> <span class="p">(</span><span class="n">str5</span> <span class="o">==</span> <span class="n">str6</span><span class="p">);</span>                    <span class="c1">// 比较运算符
+</span>	<span class="n">bool</span> <span class="n">startsWith</span> <span class="o">=</span> <span class="n">str5</span><span class="p">.</span><span class="n">startsWith</span><span class="p">(</span><span class="s">"_"</span><span class="p">);</span>         <span class="c1">// 是否以"_"开始
+</span>	<span class="n">bool</span> <span class="n">endsWith</span> <span class="o">=</span> <span class="n">str5</span><span class="p">.</span><span class="n">endsWith</span><span class="p">(</span><span class="s">".png"</span><span class="p">);</span>          <span class="c1">// 是否以".png"结尾
+</span>	<span class="n">bool</span> <span class="n">contains</span> <span class="o">=</span>
 		<span class="n">str5</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"RAW"</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">CaseInsensitive</span><span class="p">);</span>  <span class="c1">// 是否包含"raw",大小写无关
 </span>	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">equal</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">startsWith</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span>
 		<span class="o">&lt;&lt;</span> <span class="n">endsWith</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">contains</span><span class="p">;</span>
@@ -631,11 +641,12 @@ positionalArguments:
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">QString</span><span class="p">(</span><span class="s">"There are %1 spaces"</span><span class="p">).</span><span class="n">arg</span><span class="p">(</span><span class="n">spaces</span><span class="p">);</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">QString</span><span class="p">(</span><span class="s">"There are %1 punctuation characters"</span><span class="p">).</span><span class="n">arg</span><span class="p">(</span><span class="n">puncts</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 "H"   "Hello"   "World"
 "E"  size:  1
 "Hello" .at(1):  'e'
@@ -653,7 +664,8 @@ false   true   true   true
 "There are 2 digits"
 "There are 4 spaces"
 "There are 2 punctuation characters"
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>上面打印出来的字符串有引号，如果你觉得不爽的话，可以使用 <a href="http://doc.qt.io/qt-5/qtglobal.html#qPrintable">qPrintable</a> 全局函数将 QString 转换为 <code class="highlighter-rouge">const char *</code> 后再进行输出。</p>
 
@@ -667,7 +679,7 @@ false   true   true   true
 
 <p>演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QColor&gt;
 #include &lt;QString&gt;
 #include &lt;QVariant&gt;
@@ -675,8 +687,8 @@ false   true   true   true
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="n">QVariant</span> <span class="n">v</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
-	<span class="kt">bool</span> <span class="n">isInt</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">canConvert</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>        <span class="c1">// 能否转为 int
-</span>	<span class="kt">bool</span> <span class="n">isString</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">canConvert</span><span class="o">&lt;</span><span class="n">QString</span><span class="o">&gt;</span><span class="p">();</span> <span class="c1">// 能否转为 QString
+	<span class="n">bool</span> <span class="n">isInt</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">canConvert</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>        <span class="c1">// 能否转为 int
+</span>	<span class="n">bool</span> <span class="n">isString</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">canConvert</span><span class="o">&lt;</span><span class="n">QString</span><span class="o">&gt;</span><span class="p">();</span> <span class="c1">// 能否转为 QString
 </span>	<span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">toInt</span><span class="p">();</span>                       <span class="c1">// 转换到 int
 </span>	<span class="n">QString</span> <span class="n">str</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">toString</span><span class="p">();</span>              <span class="c1">// 转换到 QString
 </span>	<span class="n">QString</span> <span class="n">type</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">typeName</span><span class="p">();</span>             <span class="c1">// v 的类型
@@ -694,11 +706,12 @@ false   true   true   true
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"value: "</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">value</span><span class="o">&lt;</span><span class="n">QColor</span><span class="o">&gt;</span><span class="p">();</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"value: "</span> <span class="o">&lt;&lt;</span> <span class="n">qvariant_cast</span><span class="o">&lt;</span><span class="n">QColor</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 QVariant:  QVariant(int, 123)
 isInt:  true
 isString:  true
@@ -709,13 +722,14 @@ QVariant:  QVariant(QColor, QColor(ARGB 1, 1, 0, 0))
 typeName:  QColor
 value:  QColor(ARGB 1, 1, 0, 0)
 value:  QColor(ARGB 1, 1, 0, 0)
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="qdate_qtime_and_qdatetime">日期时间</h2>
 
 <p>熟悉 C 的兄弟们应该知道 <code class="highlighter-rouge">&lt;time.h&gt;</code> 是专门用来处理日期时间的，C++ 将该头文件放在命名空间 <code class="highlighter-rouge">std</code> 下，并重新构建了一个新的头文件 <code class="highlighter-rouge">&lt;ctime&gt;</code>，你可以使用该头文件来获取日期时间：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ctime&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ctime&gt;
 #include &lt;string&gt;
 #include &lt;iostream&gt;
 </span>
@@ -732,22 +746,24 @@ value:  QColor(ARGB 1, 1, 0, 0)
 		<span class="o">&lt;&lt;</span> <span class="s">"second: "</span> <span class="o">&lt;&lt;</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">tm_sec</span>
 		<span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 year: 2017
 month: 8
 day: 31
 hour: 15
 minute: 8
 second: 21
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>在 C++11 中还有头文件 <code class="highlighter-rouge">&lt;chrono&gt;</code> 中的 <code class="highlighter-rouge">system_clock</code> 也可以获取当前时间，因为它提供了向 <code class="highlighter-rouge">time_t</code> 的类型转换函数 <code class="highlighter-rouge">to_time_t</code>，另外它还支持<strong>超高精度的计时功能</strong>，而使用 <code class="highlighter-rouge">time_t</code> 你只能获取到精确到秒的计时功能：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ctime&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ctime&gt;
 #include &lt;thread&gt; // sleep_for
 #include &lt;chrono&gt;
 #include &lt;iostream&gt;
@@ -775,21 +791,23 @@ second: 21
 		<span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="o">&gt;</span><span class="p">(</span><span class="n">time_stop</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">).</span><span class="n">count</span><span class="p">()</span>
 		<span class="o">&lt;&lt;</span> <span class="s">" ms</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 Thu Aug 31 15:22:07 2017
 
 took 100.01 ms
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>在 Qt 中，处理日期可以使用 QDate，处理时间可以使用 QTime，日期、时间一起处理可以使用 QDateTime</strong>。</p>
 
 <h3 id="qdate">QDate</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDate&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDate&gt;
 #include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -823,13 +841,14 @@ took 100.01 ms
 		<span class="o">&lt;&lt;</span> <span class="n">d1</span><span class="p">.</span><span class="n">addYears</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
 		<span class="o">&lt;&lt;</span> <span class="n">d1</span><span class="p">.</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">" &gt; "</span>
 		<span class="o">&lt;&lt;</span> <span class="n">QDate</span><span class="o">::</span><span class="n">currentDate</span><span class="p">().</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span>
-		<span class="o">&lt;&lt;</span> <span class="s">" is "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d1</span> <span class="o">&gt;</span> <span class="n">QDate</span><span class="o">::</span><span class="n">currentDate</span><span class="p">());</span>
+		<span class="o">&lt;&lt;</span> <span class="s">" is "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d1</span> <span class="o">&gt;</span> <span class="n">QDate</span><span class="o">::</span><span class="n">currentDate</span><span class="p">());</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 year:  2017
 month:  8
 day:  31
@@ -849,7 +868,8 @@ RFC2822Date:  "31 Aug 2017"
 "2017-10-01"
 "2019-08-01"
 "2017-08-01"  &gt;  "2017-08-31"  is  false
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>除了使用 Qt 定义的格式进行输出和输入之外，你还可以自定义日期的格式</strong>：</p>
 
@@ -904,7 +924,7 @@ RFC2822Date:  "31 Aug 2017"
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDate&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDate&gt;
 #include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -920,21 +940,23 @@ RFC2822Date:  "31 Aug 2017"
 	<span class="n">QString</span> <span class="n">str</span><span class="p">(</span><span class="s">"2017-08-31"</span><span class="p">);</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">QDate</span><span class="o">::</span><span class="n">fromString</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">).</span><span class="n">toString</span><span class="p">(</span><span class="s">"yy/M/dd"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 Today is  "2017-08-31"
 Today is  "17/8/31"
 Today is  "31. 8. 2017"
 Today is  "31-八月-2017"
 "17/8/31"
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="qtime">QTime</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTime&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTime&gt;
 #include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -965,13 +987,14 @@ Today is  "31-八月-2017"
 		<span class="o">&lt;&lt;</span> <span class="n">t1</span><span class="p">.</span><span class="n">addSecs</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
 		<span class="o">&lt;&lt;</span> <span class="n">t1</span><span class="p">.</span><span class="n">addMSecs</span><span class="p">(</span><span class="mi">1000</span><span class="p">).</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
 		<span class="o">&lt;&lt;</span> <span class="n">t1</span><span class="p">.</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">" &gt; "</span> <span class="o">&lt;&lt;</span> <span class="n">t2</span><span class="p">.</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span>
-		<span class="o">&lt;&lt;</span> <span class="s">" is "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t1</span> <span class="o">&gt;</span> <span class="n">t2</span><span class="p">);</span>
+		<span class="o">&lt;&lt;</span> <span class="s">" is "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t1</span> <span class="o">&gt;</span> <span class="n">t2</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 hour:  16
 minute:  27
 second:  49
@@ -989,7 +1012,8 @@ RFC2822Date:  "16:27:49"
 "20:01:02"
 "20:01:01"
 "20:01:00"  &gt;  "20:02:20"  is  false
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>除了使用 Qt 定义的格式进行输出和输入之外，你还可以自定义时间的格式</strong>：</p>
 
@@ -1056,7 +1080,7 @@ RFC2822Date:  "16:27:49"
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTime&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTime&gt;
 #include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -1072,21 +1096,23 @@ RFC2822Date:  "16:27:49"
 	<span class="n">QString</span> <span class="n">str</span><span class="p">(</span><span class="s">"20:20:20.200"</span><span class="p">);</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">QTime</span><span class="o">::</span><span class="n">fromString</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">).</span><span class="n">toString</span><span class="p">(</span><span class="s">"h:m:s a"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 current time is  "16:32:43.386"
 current time is  "4:32:43 下午"
 current time is  "16:32:43 下午"
 current time is  "4:32 下午"
 "8:20:20 下午"
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>我们知道时间的计量就是<strong>计时</strong>，当然你可以自己编写函数进行计时，就像上面的 <code class="highlighter-rouge">system_clock</code> 一样，相减就可以，但 Qt 帮你实现了这个 API：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">QTime</span><span class="o">::</span><span class="n">start</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">QTime</span><span class="o">::</span><span class="n">start</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="n">currentTime</span><span class="p">();</span>
 <span class="p">}</span>
@@ -1108,11 +1134,12 @@ current time is  "4:32 下午"
 </span>        <span class="n">n</span> <span class="o">+=</span> <span class="mi">86400</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>根据上面的源码，你应该很容易进行理解和测试：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;  // sleep_for
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;  // sleep_for
 #include &lt;chrono&gt;
 </span>
 <span class="cp">#include &lt;QTime&gt;
@@ -1130,14 +1157,16 @@ current time is  "4:32 下午"
 		<span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">200</span><span class="p">));</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"took "</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">elapsed</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" ms"</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 took  100  ms
 took  206  ms
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>可以看到，其计时精度只到达毫秒，远不如 <code class="highlighter-rouge">chrono</code> 的精度高</strong>。</p>
 
@@ -1145,7 +1174,7 @@ took  206  ms
 
 <p><strong>你可以把 QDateTime 当做 QDate 和 QTime 的并集</strong>，使用时可以使用成员函数 <code class="highlighter-rouge">date()</code> 和 <code class="highlighter-rouge">time()</code> 来获取对应的 QDate 和 QTime，修改之后再通过成员函数 <code class="highlighter-rouge">setDate</code> 和 <code class="highlighter-rouge">setTime</code> 将修改合并到原 QDateTime 实例中；剩余比较独立的函数是 <code class="highlighter-rouge">toUTC </code>和 <code class="highlighter-rouge">toTime_t</code> ，其中 UTC 时间是世界标准时间，不随地区、季节的改变而改变，<code class="highlighter-rouge">time_t</code> 是 Unix 时间。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QDateTime&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -1164,11 +1193,12 @@ took  206  ms
 		<span class="o">&lt;&lt;</span> <span class="n">dt1</span><span class="p">.</span><span class="n">toUTC</span><span class="p">().</span><span class="n">toString</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">ISODate</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
 		<span class="o">&lt;&lt;</span> <span class="n">dt2</span><span class="p">.</span><span class="n">toTime_t</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 "2017-08-31T16:50:22"
 "2017-08-31T16:50:22"
 "2017-08-31T08:50:22Z"
@@ -1176,13 +1206,14 @@ took  206  ms
 "16:50:22"
 "2017-08-31T08:50:22Z"
 1504169422
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="qfile_qdir">文件输入输出</h2>
 
 <p>有些时候你可能需要对很多个文件执行相同的操作，比如对几十张图片进行一些算法处理。你当然可以手动将这些文件的名字一一写死到程序里面，但是如果有一天需要换一批文件，你是否又需要一个一个去写呢？遇到这种问题，我一般都是将所有文件放在同一个目录下，让程序去一个个读，然后进行操作。<strong>但 C++11 并没有读取目录的接口</strong>，你可以在 <a href="https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c">stackoverflow</a> 上找到如何在标准 C++ 里读取目录的方法。就我使用过的来说，<a href="https://github.com/tronkko/dirent"><code class="highlighter-rouge">dirent.h</code></a> 确实轻便又好用：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 </span>
 <span class="cp">#include "dirent.h"
 </span>
@@ -1212,11 +1243,12 @@ took  206  ms
 		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于新添加了一个头文件，所以需要在 <code class="highlighter-rouge">.pro</code> 文件中加上 <code class="highlighter-rouge">HEADERS += dirent.h</code>，然后重新生成 makefile 并编译：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ qmake
+<div class="highlighter-rouge"><pre class="highlight"><code>$ qmake
 $ mingw32-make
 $ release\qt_practice.exe
 .: DT_DIR
@@ -1230,7 +1262,8 @@ Makefile.Debug: DT_REG
 Makefile.Release: DT_REG
 qt_practice.pro: DT_REG
 release: DT_DIR
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>从结果中可以看出，有两个特殊的文件夹 <code class="highlighter-rouge">.</code> 和 <code class="highlighter-rouge">..</code>，它们分别代表当前目录与上一级目录。</p>
 
@@ -1240,15 +1273,16 @@ release: DT_DIR
 
 <p>我们首先在 <code class="highlighter-rouge">e:/qt_practice</code> 目录下创建一个 <code class="highlighter-rouge">test.txt</code>:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>line1 line1 line1
+<div class="highlighter-rouge"><pre class="highlight"><code>line1 line1 line1
 line2 line2 line2
 line3 line3 line3
 line4 line4 line4
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QFile&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QFile&gt;
 #include &lt;QDebug&gt;
 #include &lt;QString&gt;
 #include &lt;QTextStream&gt;
@@ -1306,11 +1340,12 @@ line4 line4 line4
 	<span class="c1">// 关闭文件
 </span>	<span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span> <span class="c1">// QFile 对象销毁时会自动调用
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 file.read(5):  "line1"
 file.readLine():  " line1 line1\n"
 file.readAll():
@@ -1329,17 +1364,19 @@ stream.pos():  81
 after seek(0):
 stream.pos():  0
 str:  "line1"
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>test.txt:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>line1 line1 line1
+<div class="highlighter-rouge"><pre class="highlight"><code>line1 line1 line1
 line2 line2 line2
 line3 line3 line3
 line4 line4 line4
 line5
 line6
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，<strong><code class="highlighter-rouge">\n</code> 被当做两个字符；QFile 的读写可能会影响流的读写，所以最好不要将它们混用</strong>。</p>
 
@@ -1349,27 +1386,27 @@ line6
 
 <p>查看其头文件，你会发现其实它能用的函数并不多：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QFileInfo</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QFileInfo</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="n">QFileInfo</span><span class="p">(</span><span class="k">const</span> <span class="n">QFile</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="n">QFileInfo</span><span class="p">(</span><span class="k">const</span> <span class="n">QDir</span> <span class="o">&amp;</span><span class="n">dir</span><span class="p">,</span> <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setFile</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setFile</span><span class="p">(</span><span class="k">const</span> <span class="n">QFile</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setFile</span><span class="p">(</span><span class="k">const</span> <span class="n">QDir</span> <span class="o">&amp;</span><span class="n">dir</span><span class="p">,</span> <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
-<span class="kt">bool</span> <span class="n">exists</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="k">static</span> <span class="kt">bool</span> <span class="n">exists</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
+<span class="n">bool</span> <span class="n">exists</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">bool</span> <span class="n">exists</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">refresh</span><span class="p">();</span> <span class="c1">// 刷新文件信息
 </span><span class="n">QString</span> <span class="n">fileName</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">filePath</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">absoluteFilePath</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">suffix</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// 返回最后一个后缀名
 </span><span class="n">QString</span> <span class="n">completeSuffix</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isReadable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isWritable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isExecutable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isHidden</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isFile</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isDir</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">isSymLink</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isReadable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isWritable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isExecutable</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isHidden</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isFile</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isDir</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">isSymLink</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">readLink</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">qint64</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QDateTime</span> <span class="n">created</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
@@ -1377,30 +1414,33 @@ line6
 <span class="n">QDateTime</span> <span class="n">lastRead</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">owner</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QString</span> <span class="n">group</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="kt">bool</span> <span class="n">permission</span><span class="p">(</span><span class="n">QFile</span><span class="o">::</span><span class="n">Permissions</span> <span class="n">permissions</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bool</span> <span class="n">permission</span><span class="p">(</span><span class="n">QFile</span><span class="o">::</span><span class="n">Permissions</span> <span class="n">permissions</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">QFile</span><span class="o">::</span><span class="n">Permissions</span> <span class="n">permissions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>其中 <code class="highlighter-rouge">owner</code>、<code class="highlighter-rouge">group</code>、<code class="highlighter-rouge">permissions</code> 在 NTFS 文件系统上的返回值是不准确的，因为 <strong>NTFS 系统默认禁用了所有权的权限的检查</strong>，要想启用它，你需要使用：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">extern</span> <span class="n">Q_CORE_EXPORT</span> <span class="kt">int</span> <span class="n">qt_ntfs_permission_lookup</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">extern</span> <span class="n">Q_CORE_EXPORT</span> <span class="kt">int</span> <span class="n">qt_ntfs_permission_lookup</span><span class="p">;</span>
 <span class="n">qt_ntfs_permission_lookup</span><span class="o">++</span><span class="p">;</span> <span class="c1">// turn checking on
 </span><span class="n">qt_ntfs_permission_lookup</span><span class="o">--</span><span class="p">;</span> <span class="c1">// turn it off again
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p>查看 <code class="highlighter-rouge">QFile::Permissions</code>:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Permission</span> <span class="p">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Permission</span> <span class="p">{</span>
 	<span class="n">ReadOwner</span> <span class="o">=</span> <span class="mh">0x4000</span><span class="p">,</span> <span class="n">WriteOwner</span> <span class="o">=</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="n">ExeOwner</span> <span class="o">=</span> <span class="mh">0x1000</span><span class="p">,</span>
 	<span class="n">ReadUser</span>  <span class="o">=</span> <span class="mh">0x0400</span><span class="p">,</span> <span class="n">WriteUser</span>  <span class="o">=</span> <span class="mh">0x0200</span><span class="p">,</span> <span class="n">ExeUser</span>  <span class="o">=</span> <span class="mh">0x0100</span><span class="p">,</span>
 	<span class="n">ReadGroup</span> <span class="o">=</span> <span class="mh">0x0040</span><span class="p">,</span> <span class="n">WriteGroup</span> <span class="o">=</span> <span class="mh">0x0020</span><span class="p">,</span> <span class="n">ExeGroup</span> <span class="o">=</span> <span class="mh">0x0010</span><span class="p">,</span>
 	<span class="n">ReadOther</span> <span class="o">=</span> <span class="mh">0x0004</span><span class="p">,</span> <span class="n">WriteOther</span> <span class="o">=</span> <span class="mh">0x0002</span><span class="p">,</span> <span class="n">ExeOther</span> <span class="o">=</span> <span class="mh">0x0001</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QFileInfo&gt;
 #include &lt;QDateTime&gt;
 </span>
@@ -1425,11 +1465,12 @@ line6
 
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 isRelative:  true
 filePath:  "main.cpp"
 absoluteFilePath:  "E:/qt_practice/main.cpp"
@@ -1440,7 +1481,8 @@ created:  "2017-08-28T09:32:21"
 lastModified:  "2017-09-01T17:13:44"
 owner:  "pengzhen"
 permissions:  QFlags(0x10|0x40|0x100|0x200|0x400|0x1000|0x2000|0x4000)
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>对照 <code class="highlighter-rouge">QFile::Permissions</code> 可以看到，该 <code class="highlighter-rouge">main.cpp</code> 的权限为其他人不可访问、组内可读可执行、用户或所有者可读可写可执行，即 Linux 下的 750。</p>
 
@@ -1503,7 +1545,7 @@ permissions:  QFlags(0x10|0x40|0x100|0x200|0x400|0x1000|0x2000|0x4000)
 
 <p>演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
 #include &lt;QDebug&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
@@ -1539,11 +1581,12 @@ permissions:  QFlags(0x10|0x40|0x100|0x200|0x400|0x1000|0x2000|0x4000)
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"after rmdir(dir): "</span>
 		<span class="o">&lt;&lt;</span> <span class="s">"dir exists?: "</span> <span class="o">&lt;&lt;</span> <span class="n">QDir</span><span class="p">(</span><span class="s">"dir"</span><span class="p">).</span><span class="n">exists</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 currentPath:  "E:/qt_practice"
 homePath:  "C:/Users/pengzhen"
 rootPath:  "C:/"
@@ -1566,7 +1609,8 @@ after mkdir(dir):  dir exists?:  true
 after cd(dir):  "E:/qt_practice/dir"
 after cd(..):  "E:/qt_practice"
 after rmdir(dir):  dir exists?:  false
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>为什么是12，因为包含了两个特殊文件夹 <code class="highlighter-rouge">.</code> 和 <code class="highlighter-rouge">..</code>。</p>
 
@@ -1621,17 +1665,19 @@ after rmdir(dir):  dir exists?:  false
 
 <p>另一种比较常用的信号槽连接方式是<a href="http://doc.qt.io/qt-5/designer-using-a-ui-file.html#automatic-connections">自动连接</a>，只要你在构造时执行(该语句在 <code class="highlighter-rouge">setupUi</code> 中会自动执行)：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QMetaObject</span><span class="o">::</span><span class="n">connectSlotsByName</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QMetaObject</span><span class="o">::</span><span class="n">connectSlotsByName</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>然后按如下命名规则命名槽函数，那么该槽函数就会根据自己的名字自动关联到相应的信号(其中 <code class="highlighter-rouge">object name</code> 可以通过 <code class="highlighter-rouge">QObject::setObjectName</code> 进行设置)：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">on_</span><span class="o">&lt;</span><span class="n">object</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">signal</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">signal</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">on_</span><span class="o">&lt;</span><span class="n">object</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">signal</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">signal</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>在没学习常见的 Qt 组件之前，这里只做一个简单的演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
 </span><span class="cp">#pragma once
 #include &lt;QObject&gt;
 </span>
@@ -1668,9 +1714,10 @@ after rmdir(dir):  dir exists?:  false
 		<span class="n">Q_EMIT</span> <span class="n">valueChanged</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include &lt;QDebug&gt;
 </span>
 <span class="cp">#include "Test.h"
@@ -1694,11 +1741,12 @@ after rmdir(dir):  dir exists?:  false
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"a: "</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"b: "</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 after init:
 a:  0
 b:  0
@@ -1708,7 +1756,8 @@ b:  1
 after b.setValue(2):
 a:  1
 b:  2
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="object_properties">对象属性</h3>
 
@@ -1716,7 +1765,7 @@ b:  2
 
 <p>要想声明一个属性，你只需在 QObject 的继承类中使用 <a href="http://doc.qt.io/qt-5/qobject.html#Q_PROPERTY"><code class="highlighter-rouge">Q_PROPERTY</code></a> 即可：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">type</span> <span class="n">name</span><span class="p">(</span><span class="n">type</span> <span class="n">name</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">type</span> <span class="n">name</span><span class="p">(</span><span class="n">type</span> <span class="n">name</span>
            <span class="p">(</span><span class="n">READ</span> <span class="n">getFunction</span> <span class="p">(</span><span class="n">READ</span> <span class="n">getFunction</span> <span class="p">[</span><span class="n">WRITE</span> <span class="n">setFunction</span><span class="p">]</span> <span class="o">|</span>
             <span class="n">MEMBER</span> <span class="n">memberName</span> <span class="p">[(</span><span class="n">READ</span> <span class="n">getFunction</span> <span class="n">READ</span> <span class="n">getFunction</span> <span class="o">|</span> <span class="n">WRITE</span> <span class="n">setFunction</span><span class="p">))])</span>
            
@@ -1729,16 +1778,18 @@ b:  2
            <span class="p">[</span><span class="n">USER</span> <span class="n">boolbool</span><span class="p">]</span>
            <span class="p">[</span><span class="n">CONSTANT</span><span class="p">]</span>
            <span class="p">[</span><span class="n">FINAL</span><span class="p">])</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>举两个简单的例子：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">Q_PROPERTY</span><span class="p">(</span><span class="kt">bool</span> <span class="n">focus</span> <span class="n">READ</span> <span class="n">hasFocus</span><span class="p">)</span>
-<span class="n">Q_PROPERTY</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enabled</span> <span class="n">READ</span> <span class="n">isEnabled</span> <span class="n">WRITE</span> <span class="n">setEnabled</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">bool</span> <span class="n">focus</span> <span class="n">READ</span> <span class="n">hasFocus</span><span class="p">)</span>
+<span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">bool</span> <span class="n">enabled</span> <span class="n">READ</span> <span class="n">isEnabled</span> <span class="n">WRITE</span> <span class="n">setEnabled</span><span class="p">)</span>
 <span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">QCursor</span> <span class="n">cursor</span> <span class="n">READ</span> <span class="n">cursor</span> <span class="n">WRITE</span> <span class="n">setCursor</span> <span class="n">RESET</span> <span class="n">unsetCursor</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code>	<span class="n">Q_PROPERTY</span><span class="p">((</span><span class="n">QColor</span> <span class="n">color</span> <span class="n">MEMBER</span> <span class="n">m_color</span> <span class="n">NOTIFY</span> <span class="n">colorChanged</span><span class="p">))</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="n">Q_PROPERTY</span><span class="p">((</span><span class="n">QColor</span> <span class="n">color</span> <span class="n">MEMBER</span> <span class="n">m_color</span> <span class="n">NOTIFY</span> <span class="n">colorChanged</span><span class="p">))</span>
     <span class="n">Q_PROPERTY</span><span class="p">((</span><span class="n">qreal</span> <span class="n">spacing</span> <span class="n">MEMBER</span> <span class="n">m_spacing</span> <span class="n">NOTIFY</span> <span class="n">spacingChanged</span><span class="p">))</span>
     <span class="n">Q_PROPERTY</span><span class="p">(</span><span class="n">QString</span> <span class="n">text</span> <span class="n">MEMBER</span> <span class="n">m_text</span> <span class="n">NOTIFY</span> <span class="n">textChanged</span><span class="p">)</span>
     <span class="p">...</span>
@@ -1751,7 +1802,8 @@ b:  2
     <span class="n">QColor</span>  <span class="n">m_color</span><span class="p">;</span>
     <span class="n">qreal</span>   <span class="n">m_spacing</span><span class="p">;</span>
     <span class="n">QString</span> <span class="n">m_text</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>乍一看，这个属性系统不就声明了一个成员变量嘛，看上去没什么软用，但其实声明的属性比常规的成员变量多了一些额外的访问特性：</p>
 
@@ -1769,7 +1821,7 @@ b:  2
 
 <p><strong><code class="highlighter-rouge">Q_PROPERTY</code> 声明的属性可以使用通用函数 <a href="http://doc.qt.io/qt-5/qobject.html#property"><code class="highlighter-rouge">QObject::property()</code></a> 和 <a href="http://doc.qt.io/qt-5/qobject.html#setProperty"><code class="highlighter-rouge">QObject::setProperty()</code></a> 进行读写，只需知道该属性的名字即可</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
 </span><span class="cp">#pragma once
 #include &lt;QString&gt;
 #include &lt;QObject&gt;
@@ -1826,9 +1878,10 @@ b:  2
 		<span class="n">Q_EMIT</span> <span class="n">keyChanged</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QMetaProperty&gt;
 </span>
@@ -1863,11 +1916,12 @@ b:  2
 		<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\t</span><span class="s">"</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">": "</span> <span class="o">&lt;&lt;</span> <span class="n">value</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 after init:
         t.value:  0
         t.key:  ""
@@ -1880,7 +1934,8 @@ print all properties of t:
          objectName :  QVariant(QString, "")
          value :  QVariant(int, 2)
          key :  QVariant(QString, "pengzhen")
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，<strong>QObject 对象自带一个名为 <code class="highlighter-rouge">objectName</code> 的属性</strong>，该属性在自动信号槽连接时有用，可以通过 <code class="highlighter-rouge">QObject::setObjectName</code> 进行设置。</p>
 
@@ -1892,7 +1947,7 @@ print all properties of t:
 
 <p>常见的事件如鼠标事件，分为单击、双击、移动等事件类型；又比如键盘事件，分为按下、释放等事件类型。<strong>这些事件类型都有在 <a href="http://doc.qt.io/qt-5/qevent.html#Type-enum"><code class="highlighter-rouge">QEvent::Type</code></a>被定义，你可以通过不同的事件类型来快速的判断该事件的动态类型</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">event</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">bool</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">event</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">::</span><span class="n">KeyPress</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">QKeyEvent</span> <span class="o">*</span><span class="n">ke</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">QKeyEvent</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
@@ -1908,13 +1963,14 @@ print all properties of t:
 
     <span class="k">return</span> <span class="n">QWidget</span><span class="o">::</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>当一个事件发生后，Qt 构造一个合适的 QEvent 子类的对象来表示它，然后将其传递到一个特定的 QObject 或其子类的对象。</p>
 
 <p><strong>要想使 Qt 程序进入事件循环，即应用程序在运行时接收发生的各种事件，你必须调用 <code class="highlighter-rouge">QCoreApplication::exec()</code> 函数</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">QApplication</span><span class="o">::</span><span class="n">exec</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">QApplication</span><span class="o">::</span><span class="n">exec</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">return</span> <span class="n">QGuiApplication</span><span class="o">::</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
@@ -1926,7 +1982,8 @@ print all properties of t:
 <span class="cp">#endif
 </span>    <span class="k">return</span> <span class="n">QCoreApplication</span><span class="o">::</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>所有事件都要通过 <a href="http://doc.qt.io/qt-5/qcoreapplication.html#notify"><code class="highlighter-rouge">QCoreApplication::notify</code></a> 函数进行发送，其返回值为接收对象处理该事件后的结果。<strong>当接收对象所属类对该事件不感兴趣时(返回值为 false)，该事件会被传递到其父类进行处理</strong>。</p>
 
@@ -1944,7 +2001,7 @@ print all properties of t:
 
 <p>下面先来演示方法一四：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QEvent&gt;
@@ -1963,7 +2020,7 @@ print all properties of t:
 
 <span class="k">protected</span><span class="o">:</span>
 	<span class="c1">// QObject::event
-</span>	<span class="kt">bool</span> <span class="n">event</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span><span class="p">)</span>	<span class="n">override</span><span class="p">;</span>
+</span>	<span class="n">bool</span> <span class="n">event</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span><span class="p">)</span>	<span class="n">override</span><span class="p">;</span>
 
 	<span class="c1">// QWidget::wheelEvent
 </span>	<span class="kt">void</span> <span class="n">wheelEvent</span><span class="p">(</span><span class="n">QWheelEvent</span><span class="o">*</span><span class="p">)</span> <span class="n">override</span><span class="p">;</span>
@@ -1972,7 +2029,7 @@ print all properties of t:
 </span>	<span class="kt">void</span> <span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span><span class="o">*</span><span class="p">)</span> <span class="n">override</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="n">myWidget</span><span class="o">::</span><span class="n">event</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span> <span class="n">e</span><span class="p">)</span>
+<span class="kr">inline</span> <span class="n">bool</span> <span class="n">myWidget</span><span class="o">::</span><span class="n">event</span><span class="p">(</span><span class="n">QEvent</span><span class="o">*</span> <span class="n">e</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">::</span><span class="n">Wheel</span><span class="p">)</span> <span class="p">{</span>
 		<span class="n">QWheelEvent</span> <span class="o">*</span><span class="n">we</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">QWheelEvent</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
@@ -2001,9 +2058,10 @@ print all properties of t:
 
 	<span class="n">QWidget</span><span class="o">::</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include &lt;QApplication&gt;
 #include "myWidget.h"
 </span>
@@ -2020,24 +2078,26 @@ print all properties of t:
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span> <span class="c1">// 开始事件循环
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果是一个名为 event handlers 的空白窗口：</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake -project  <span class="c"># .pro 文件后手动加上 CONFIG += console 和 QT += widgets</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake -project  <span class="c"># .pro 文件后手动加上 CONFIG += console 和 QT += widgets</span>
 <span class="gp">$ </span>qmake
 <span class="gp">$ </span>mingw32-make
 <span class="gp">$ </span>release<span class="se">\q</span>t_practice.exe
 backward
 forward
 mousePressEvent called.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，当前后滚动滚轮时，并没有打印 <code class="highlighter-rouge">wheelEvent called.</code>，说明 <code class="highlighter-rouge">QObject::event</code> 确实比特定事件处理函数更早获取事件。</p>
 
 <p>我们再来实现方法五：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// mainWindow.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// mainWindow.h
 </span><span class="cp">#pragma once
 #include &lt;QMainWindow&gt;
 #include "myWidget.h"
@@ -2048,7 +2108,7 @@ mousePressEvent called.
 	<span class="n">mainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
 
 <span class="k">protected</span><span class="o">:</span>
-	<span class="kt">bool</span> <span class="n">eventFilter</span><span class="p">(</span><span class="n">QObject</span><span class="o">*</span><span class="p">,</span> <span class="n">QEvent</span><span class="o">*</span><span class="p">)</span> <span class="n">override</span><span class="p">;</span>
+	<span class="n">bool</span> <span class="n">eventFilter</span><span class="p">(</span><span class="n">QObject</span><span class="o">*</span><span class="p">,</span> <span class="n">QEvent</span><span class="o">*</span><span class="p">)</span> <span class="n">override</span><span class="p">;</span>
 
 <span class="k">private</span><span class="o">:</span>
 	<span class="n">myWidget</span> <span class="o">*</span><span class="n">w</span><span class="p">;</span>
@@ -2063,7 +2123,7 @@ mousePressEvent called.
 	<span class="n">w</span><span class="o">-&gt;</span><span class="n">installEventFilter</span><span class="p">(</span><span class="k">this</span><span class="p">);</span> <span class="c1">// 为 w 安装事件过滤器
 </span><span class="p">}</span>
 
-<span class="kt">bool</span> <span class="n">mainWindow</span><span class="o">::</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">QObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+<span class="n">bool</span> <span class="n">mainWindow</span><span class="o">::</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">QObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="o">==</span> <span class="n">w</span><span class="p">)</span>
 	<span class="p">{</span>
@@ -2076,17 +2136,19 @@ mousePressEvent called.
 		<span class="k">return</span> <span class="n">QMainWindow</span><span class="o">::</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 eventFilter: event is QWheelEvent.
 backward
 eventFilter: event is QWheelEvent.
 forward
 mousePressEvent called.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，<strong>父对象的事件过滤器比子对象的事件过滤器更早获取到事件</strong>。</p>
 
@@ -2101,7 +2163,7 @@ mousePressEvent called.
 
 <p>查看 <a href="http://doc.qt.io/qt-5/qapplication.html#qApp">qApp</a> 的说明文档，我们知道 qApp 是一个全局指针，指向当前 application 实例。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// QCoreApplication.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// QCoreApplication.h
 </span><span class="cp">#define qApp QCoreApplication::instance()
 </span><span class="k">static</span> <span class="n">QCoreApplication</span> <span class="o">*</span><span class="nf">instance</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">self</span><span class="p">;</span> <span class="p">}</span>
 <span class="k">static</span> <span class="n">QCoreApplication</span> <span class="o">*</span><span class="n">self</span><span class="p">;</span>
@@ -2117,7 +2179,8 @@ mousePressEvent called.
 #undef qApp
 #endif
 #define qApp (static_cast&lt;QApplication *&gt;(QCoreApplication::instance()))
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <h3 id="international_string">国际化字符串</h3>
 
@@ -2136,14 +2199,15 @@ mousePressEvent called.
   <li>最后在创建部件之前使用该 <code class="highlighter-rouge">.qm</code> 文件即可：</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTranslator&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QTranslator&gt;
 </span><span class="p">...</span>
 <span class="n">QApplication</span> <span class="n">app</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
 <span class="n">QTranslator</span> <span class="n">t</span><span class="p">;</span>
 <span class="n">t</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">"zh_CN.qm"</span><span class="p">);</span>
 <span class="n">qApp</span><span class="o">-&gt;</span><span class="n">installTranslator</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
 <span class="p">...</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>其实一般使用的翻译函数就两个，<code class="highlighter-rouge">tr()</code> 和 <code class="highlighter-rouge">QCoreApplication::translate</code></strong>，另外你还可以使用 <a href="http://doc.qt.io/qt-5/qtextcodec.html#details">QTextCodec</a> 来转换各种编码，另外如数字、日期、时间等的本地化还需使用 <a href="http://doc.qt.io/qt-5/qlocale.html#details">QLocal</a>，更多内容可以查看 <a href="http://doc.qt.io/qt-5/internationalization.html">http://doc.qt.io/qt-5/internationalization.html</a> 。</p>
 
@@ -2151,7 +2215,7 @@ mousePressEvent called.
 
 <p>如果你想周期性的执行某些任务时，在 C++11 里，代码很可能像下面这样：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;thread&gt;
 </span><span class="p">...</span>
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span>
 <span class="p">{</span>
@@ -2162,7 +2226,8 @@ mousePressEvent called.
 	<span class="n">task</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="p">...</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>当然我一开始没有想到线程的问题，不过 <a href="https://stackoverflow.com/questions/14650885/how-to-create-timer-events-using-c-11">stackoverflow</a> 总会给你一些不一样的灵感。</p>
 
@@ -2174,7 +2239,7 @@ mousePressEvent called.
   <li>销毁定时器调用 <a href="http://doc.qt.io/qt-5/qobject.html#killTimer">QObject::killTimer</a>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QObject&gt;
@@ -2222,11 +2287,12 @@ mousePressEvent called.
 		<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"timer3: "</span> <span class="o">&lt;&lt;</span> <span class="n">ID</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于 QTimerEvent 是一个事件，所以必须开始事件循环：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include &lt;QCoreApplication&gt;
 #include "Test.h"
 </span>
@@ -2238,11 +2304,12 @@ mousePressEvent called.
 	
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 timer1:  1
 timer2:  2
 timer1:  1
@@ -2258,7 +2325,8 @@ timer1:  1
 timer2:  2
 timer1:  1
 ^C
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>对于多线程应用程序，你可以使用 <a href="http://doc.qt.io/qt-5/qtimer.html">QTimer</a> 来创建一个定时器，只要该线程具有事件循环。对于 GUI 应用，调用 <code class="highlighter-rouge">QApplication::exec</code> 就能使所有线程开始事件循环了，但是<strong>对于非 GUI 应用，你需要调用 <a href="http://doc.qt.io/qt-5/qthread.html#exec"><code class="highlighter-rouge">QThread::exec</code></a> 来使该线程进入事件循环</strong>。</p>
 
@@ -2266,7 +2334,7 @@ timer1:  1
 
 <p>QTimer 演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QTimer&gt;
@@ -2302,17 +2370,19 @@ timer1:  1
 <span class="p">{</span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">__func__</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 update
 update
 update
 update
 ^C
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，由于 QTimer 使用了信号槽机制，可能会更加方便。</p>
 
@@ -2322,7 +2392,7 @@ update
 
 <p><strong>不管你的 QObject 对象创建在堆(heap)上还是栈(stack)上，对象树都能正常工作</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Test.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QObject&gt;
@@ -2364,9 +2434,10 @@ update
 <span class="k">private</span><span class="o">:</span>
 	<span class="n">myObject</span><span class="o">*</span> <span class="n">obj</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include "Test.h"
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -2382,11 +2453,12 @@ update
 	
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 (myObject(0x3c7858), myObject(0x3c78e0), myObject(0x3c7940))
 (myObject(0x3cbc38), myObject(0x3cbc68), myObject(0x3cbc80))
 delete  4
@@ -2395,13 +2467,14 @@ delete  6
 delete  1
 delete  2
 delete  3
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到对象树在堆栈上都能很好的工作，但是为了方便，<strong>一般子对象建立在堆上，顶层对象建立在栈上</strong>。</p>
 
 <p><strong>由于对象树的销毁特性，也可能造成析构函数被多次调用的危险</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "Test.h"
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "Test.h"
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
@@ -2411,16 +2484,18 @@ delete  3
 	
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>很显然 obj0 的析构函数被调用了两次：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 delete  2
 delete  1
 delete  1
 QObject: shared QObject was deleted directly. The program is malformed and may crash.
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="qpointer">QPointer</h3>
 
@@ -2432,7 +2507,7 @@ QObject: shared QObject was deleted directly. The program is malformed and may c
 
 <p><strong>QPointer 在销毁时不会对指针指向的对象做任何操作</strong>：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QPointer&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QPointer&gt;
 #include &lt;QSharedPointer&gt;
 #include "Test.h"
 </span>
@@ -2443,13 +2518,15 @@ QObject: shared QObject was deleted directly. The program is malformed and may c
 	
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 delete  2
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>QSharedPointer 与 <code class="highlighter-rouge">std::shared_ptr</code> 类似，在其生命周期结束且没有其它 QSharedPointer 对象引用其指针时，会自动销毁其存储的指针。<strong>介于标准智能指针比较通用，建议一律使用<a href="https://chorior.github.io/2017/03/08/C++-%E9%87%8A%E7%96%91-%E4%BA%8C/#smart_pointer">标准智能指针</a></strong>。</p>
 
@@ -2467,7 +2544,7 @@ delete  2
   <li>必须使用元对象编译器(moc)提供必要的实现元对象特性的代码，其结果一般是一个以 <code class="highlighter-rouge">moc</code> 开头的 cpp 文件，如 <code class="highlighter-rouge">E:\qt_practice\release\moc_Test.cpp</code>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include &lt;QMetaObject&gt;
 #include "Test.h"
 </span>
@@ -2490,16 +2567,18 @@ delete  2
 
 	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 is inherits from QObject:  true
 class name:  myObject
 qobject is a myObject pointer.
 delete  1
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>可以看到，转换为 QMetaObject 对象后，就能方便的使用元对象系统的特性了，动态转换也是一个非常不错的工具。</p>
 
@@ -2513,7 +2592,7 @@ delete  1
 
 <p>一些 GUI 应用提供特殊的批处理模式，如根据提供的命令行参数执行相关任务而不能人工干预，在这种非 GUI 模式下，<strong>只需要实例化一个简单的 QCoreApplication 就足够了</strong>，这避免了不必要的图形用户界面所需资源的初始化，官方示例如下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QCoreApplication</span><span class="o">*</span> <span class="nf">createApplication</span><span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QCoreApplication</span><span class="o">*</span> <span class="nf">createApplication</span><span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
 <span class="p">{</span>
 	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
 		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">qstrcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"-no-gui"</span><span class="p">))</span>
@@ -2534,7 +2613,8 @@ delete  1
 
 	<span class="k">return</span> <span class="n">app</span><span class="o">-&gt;</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>QApplication 的主要责任有：</p>
 
@@ -2558,8 +2638,9 @@ delete  1
 
 <p>查看其公有构造函数：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">explicit</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span><span class="p">());</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">explicit</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span><span class="p">());</span>
+</code></pre>
+</div>
 
 <ul>
   <li>当不传入参数或传入的第一个参数为空时，表示该部件是一个窗口，也被称为顶层部件(top-level widget)，顶层部件可以使用成员函数 <code class="highlighter-rouge">setWindowTitle</code> 来设置标题栏、<code class="highlighter-rouge">setWindowIcon</code> 来设置窗口图标；</li>
@@ -2572,7 +2653,7 @@ delete  1
 
 <p>查看 QMainWindow 和 QDialog 的公有构造函数：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QMainWindow</span><span class="o">::</span><span class="n">QMainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span> <span class="n">flags</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QMainWindow</span><span class="o">::</span><span class="n">QMainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowFlags</span> <span class="n">flags</span><span class="p">)</span>
     <span class="o">:</span> <span class="n">QWidget</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="k">new</span> <span class="n">QMainWindowPrivate</span><span class="p">()),</span> <span class="n">parent</span><span class="p">,</span> <span class="n">flags</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">::</span><span class="n">Window</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">d_func</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">();</span>
@@ -2583,15 +2664,16 @@ delete  1
               <span class="n">f</span> <span class="o">|</span> <span class="p">((</span><span class="n">f</span> <span class="o">&amp;</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowType_Mask</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">Qt</span><span class="o">::</span><span class="n">Dialog</span> <span class="o">:</span> <span class="n">Qt</span><span class="o">::</span><span class="n">WindowType</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
 <span class="p">{</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于它们分别指定了 <code class="highlighter-rouge">Qt::Window</code> 和 <code class="highlighter-rouge">Qt::Dialog</code> 作为 <code class="highlighter-rouge">Qt::WindowFlags</code> 的默认值，并且分别在自己的窗口类型的基础上添加了相应的功能，所以 <strong>QMainWindow 和 QDialog 的各种子类是 Qt 中最常用的顶层部件类型</strong>。</p>
 
 <p>QWidget 包含<a href="http://doc.qt.io/qt-5/qwidget.html#groups-of-functions-and-properties">相当多的功能和属性</a>，其中包含大量的事件处理虚函数，这意味着你可以重新实现它们以完成自定义功能：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="nl">protected:</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nl">protected:</span>
     <span class="c1">// Event handlers
-</span>    <span class="kt">bool</span> <span class="n">event</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="n">Q_DECL_OVERRIDE</span><span class="p">;</span>
+</span>    <span class="n">bool</span> <span class="n">event</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="n">Q_DECL_OVERRIDE</span><span class="p">;</span>
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mouseReleaseEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
@@ -2628,11 +2710,12 @@ delete  1
 </span>
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">showEvent</span><span class="p">(</span><span class="n">QShowEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
     <span class="k">virtual</span> <span class="kt">void</span> <span class="n">hideEvent</span><span class="p">(</span><span class="n">QHideEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-    <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">nativeEvent</span><span class="p">(</span><span class="k">const</span> <span class="n">QByteArray</span> <span class="o">&amp;</span><span class="n">eventType</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span> <span class="kt">long</span> <span class="o">*</span><span class="n">result</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="n">bool</span> <span class="n">nativeEvent</span><span class="p">(</span><span class="k">const</span> <span class="n">QByteArray</span> <span class="o">&amp;</span><span class="n">eventType</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span> <span class="kt">long</span> <span class="o">*</span><span class="n">result</span><span class="p">);</span>
 
     <span class="c1">// Misc. protected functions
 </span>    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">changeEvent</span><span class="p">(</span><span class="n">QEvent</span> <span class="o">*</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="qsplashscreen">启动界面 QSplashScreen</h3>
 
@@ -2640,7 +2723,7 @@ delete  1
 
 <p>QSplashScreen 提供了启动界面的功能，它实现的启动界面位于屏幕中心：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QMainWindow&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QMainWindow&gt;
 #include &lt;QApplication&gt;
 #include &lt;QSplashScreen&gt;
 </span>
@@ -2673,7 +2756,8 @@ delete  1
 	<span class="n">splash</span><span class="p">.</span><span class="n">finish</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span> <span class="c1">// 待 window 显示之后关闭 splash
 </span>	<span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>如果你想自定义启动界面的话，重新实现 <a href="http://doc.qt.io/qt-5/qsplashscreen.html#drawContents"><code class="highlighter-rouge">QSplashScreen::drawContents</code></a></strong> 虚函数。</p>
 
@@ -2699,11 +2783,11 @@ delete  1
 
 <p><strong>我们常用的对话框一般是消息对话框、错误消息对话框、输入对话框、文件对话框、进度对话框、颜色对话框、字体对话框和向导对话框，它们在 Qt 中分别是 QMessageBox、QErrorMessage、QInputDialog、QFileDialog、QProcessDialog、QColorDialog、QFontDialog 和 QWizard，它们全都继承自 QDialog</strong>。</p>
 
-<h4 id="消息对话框-qmessagebox">消息对话框 QMessageBox</h4>
+<h4 id="qmessagebox">消息对话框 QMessageBox</h4>
 
 <p>QMessageBox 提供一个模态对话框，用来通知用户一些消息、或者向用户提出一个问题并获取答案，你可以很快速的查看 <a href="http://doc.qt.io/qt-5/qmessagebox.html">QMessageBox</a> 并获取其使用方式：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QMessageBox&gt;
 #include &lt;QApplication&gt;
 </span>
@@ -2735,25 +2819,27 @@ delete  1
 		<span class="k">break</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QMessageBox.png" alt="QMessageBox" /></p>
+<p><img src="https://chorior.github.io/img/QMessageBox.png" alt="QMessageBox" /></p>
 
 <p>比较简单的使用方式就是使用其静态函数，这样更加快速，但失去了灵活性。一共有四种类型–information、question、warning 和 critical，它们的接口一样，只是图标不同：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">information</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">tr</span><span class="p">(</span><span class="s">"My Application"</span><span class="p">),</span>     <span class="c1">// 标题
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">information</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">tr</span><span class="p">(</span><span class="s">"My Application"</span><span class="p">),</span>     <span class="c1">// 标题
 </span>				<span class="n">QMessageBox</span><span class="o">::</span><span class="n">tr</span><span class="p">(</span><span class="s">"The document has been modified.</span><span class="se">\n</span><span class="s">"</span>
 					<span class="s">"Do you want to save your changes?"</span><span class="p">),</span><span class="c1">// 信息文本
 </span>				<span class="n">QMessageBox</span><span class="o">::</span><span class="n">Save</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">Discard</span>
 				<span class="o">|</span> <span class="n">QMessageBox</span><span class="o">::</span><span class="n">Cancel</span><span class="p">,</span>                       <span class="c1">// 按键
 </span>				<span class="n">QMessageBox</span><span class="o">::</span><span class="n">Save</span><span class="p">);</span>                          <span class="c1">// 默认按键 
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
-<h4 id="错误消息对话框-qerrormessage">错误消息对话框 QErrorMessage</h4>
+<h4 id="qerrormessage">错误消息对话框 QErrorMessage</h4>
 
 <p>QErrorMessage 提供一个显示错误信息的非模态对话框，该对话框包含一个文本标签组件、一个复选框组件和一个 OK 按钮，其中文本标签组件用来显示错误信息、复选框组件用来控制是否显示相同的错误信息。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QApplication&gt;
 #include &lt;QErrorMessage&gt;
 </span>
@@ -2767,17 +2853,18 @@ delete  1
 	
 	<span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QErrorMessage.png" alt="QErrorMessage" /></p>
+<p><img src="https://chorior.github.io/img/QErrorMessage.png" alt="QErrorMessage" /></p>
 
-<h4 id="输入对话框-qinputdialog">输入对话框 QInputDialog</h4>
+<h4 id="qinputdialog">输入对话框 QInputDialog</h4>
 
 <p>QInputDialog 提供一个模态对话框，用来从用户那里获取一个单一的值，这个值可以是一个数字、一个字符串或者列表中的某个项目。</p>
 
 <p>你可以方便的使用其静态函数 <code class="highlighter-rouge">getText</code>、<code class="highlighter-rouge">getMultiLineText</code>、<code class="highlighter-rouge">getInt</code>、<code class="highlighter-rouge">getDouble</code> 和 <code class="highlighter-rouge">getItem</code> 来获取不同的值，它们的使用方式都一样：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
 #include &lt;QDebug&gt;
 #include &lt;QApplication&gt;
 #include &lt;QInputDialog&gt;
@@ -2786,7 +2873,7 @@ delete  1
 <span class="p">{</span>
 	<span class="n">QApplication</span> <span class="n">a</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
 
-	<span class="kt">bool</span> <span class="n">ok</span><span class="p">;</span>
+	<span class="n">bool</span> <span class="n">ok</span><span class="p">;</span>
     <span class="n">QString</span> <span class="n">text</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">::</span><span class="n">getText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>                                          <span class="c1">// 父组件
 </span>					<span class="n">QInputDialog</span><span class="o">::</span><span class="n">tr</span><span class="p">(</span><span class="s">"QInputDialog::getText()"</span><span class="p">),</span> <span class="c1">// 标题
 </span>					<span class="n">QInputDialog</span><span class="o">::</span><span class="n">tr</span><span class="p">(</span><span class="s">"User name:"</span><span class="p">),</span>              <span class="c1">// 输入提示
@@ -2796,15 +2883,16 @@ delete  1
 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">ok</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">text</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span>
         <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">text</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QInputDialog.png" alt="QInputDialog" /></p>
+<p><img src="https://chorior.github.io/img/QInputDialog.png" alt="QInputDialog" /></p>
 
-<h4 id="文件对话框-qfiledialog">文件对话框 QFileDialog</h4>
+<h4 id="qfiledialog">文件对话框 QFileDialog</h4>
 
 <p>QFileDialog 提供一个模态对话框，用来让用户选择文件或目录，你可以使用其方便的静态函数来快速的得到一个或多个文件或目录的名字或路径：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="n">QString</span> <span class="n">getOpenFileName</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">,</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="n">QString</span> <span class="n">getOpenFileName</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">,</span>
 				<span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">caption</span> <span class="o">=</span> <span class="n">QString</span><span class="p">(),</span>
 				<span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">dir</span> <span class="o">=</span> <span class="n">QString</span><span class="p">(),</span>
 				<span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">filter</span> <span class="o">=</span> <span class="n">QString</span><span class="p">(),</span>
@@ -2859,11 +2947,12 @@ delete  1
 					<span class="n">QString</span> <span class="o">*</span><span class="n">selectedFilter</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">,</span>
 					<span class="n">Options</span> <span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(),</span>
 					<span class="k">const</span> <span class="n">QStringList</span> <span class="o">&amp;</span><span class="n">supportedSchemes</span> <span class="o">=</span> <span class="n">QStringList</span><span class="p">());</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>演示：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDir&gt;
 #include &lt;QDebug&gt;
 #include &lt;QString&gt;
 #include &lt;QFileDialog&gt;
@@ -2880,13 +2969,14 @@ delete  1
 </span>	
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">filenames</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<h4 id="进度对话框-qprocessdialog">进度对话框 QProcessDialog</h4>
+<h4 id="qprocessdialog">进度对话框 QProcessDialog</h4>
 
 <p>QProcessDialog 提供一个可选但一般设置为模态的对话框，用来显示一个耗时较长的操作进度：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QApplication&gt;
 #include &lt;QProgressDialog&gt;
 </span>
@@ -2916,17 +3006,18 @@ delete  1
 </span>	<span class="p">}</span>
 	<span class="n">progress</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">numFiles</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QProgressDialog.png" alt="QProgressDialog" /></p>
+<p><img src="https://chorior.github.io/img/QProgressDialog.png" alt="QProgressDialog" /></p>
 
 <p>非模态进度对话框实现查看 <a href="http://doc.qt.io/qt-5/qprogressdialog.html#details">QProcessDialog</a>。</p>
 
-<h4 id="颜色对话框-qcolordialog">颜色对话框 QColorDialog</h4>
+<h4 id="qcolordialog">颜色对话框 QColorDialog</h4>
 
 <p>QColorDialog 提供一个模态对话框，用来获取一个指定的颜色。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QApplication&gt;
 #include &lt;QColorDialog&gt;
 </span>
@@ -2941,15 +3032,16 @@ delete  1
 </span>
 	<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">color</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QColorDialog.png" alt="QColorDialog" /></p>
+<p><img src="https://chorior.github.io/img/QColorDialog.png" alt="QColorDialog" /></p>
 
-<h4 id="字体对话框-qfontdialog">字体对话框 QFontDialog</h4>
+<h4 id="qfontdialog">字体对话框 QFontDialog</h4>
 
 <p>QFontDialog 提供一个模态对话框，用来获取一个指定的字体。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QMessageBox&gt;
 #include &lt;QFontDialog&gt;
 #include &lt;QApplication&gt;
@@ -2958,7 +3050,7 @@ delete  1
 <span class="p">{</span>
 	<span class="n">QApplication</span> <span class="n">a</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
 
-	<span class="kt">bool</span> <span class="n">ok</span><span class="p">;</span> <span class="c1">// 用户是否确认
+	<span class="n">bool</span> <span class="n">ok</span><span class="p">;</span> <span class="c1">// 用户是否确认
 </span>	<span class="n">QFont</span> <span class="n">font</span> <span class="o">=</span> <span class="n">QFontDialog</span><span class="o">::</span><span class="n">getFont</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ok</span><span class="p">);</span>
 
 	<span class="n">QMessageBox</span> <span class="n">msgBox</span><span class="p">;</span>
@@ -2973,17 +3065,18 @@ delete  1
 	<span class="n">msgBox</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 	<span class="c1">// return a.exec();
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QFontDialog.png" alt="QFontDialog" /></p>
+<p><img src="https://chorior.github.io/img/QFontDialog.png" alt="QFontDialog" /></p>
 
-<h4 id="向导对话框-qwizard">向导对话框 QWizard</h4>
+<h4 id="qwizard">向导对话框 QWizard</h4>
 
 <p>QWizard 提供一个模态对话框，用以引导用户一步一步完成某个操作。</p>
 
 <p>你可以使用 QWizardPage 来创建一个向导页面，然后使用 <code class="highlighter-rouge">QWizard::addPage</code> 将其添加到 QWizard 对象中，你可以参考<a href="http://doc.qt.io/qt-5/qwizard.html#details">官方文档</a>来设计向导页面。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QDebug&gt;
 #include &lt;QWizard&gt;
 #include &lt;QWizardPage&gt;
 #include &lt;QApplication&gt;
@@ -3008,9 +3101,10 @@ delete  1
 	<span class="n">wizard</span><span class="p">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">"QWizard"</span><span class="p">);</span>
 	<span class="n">wizard</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QWizard.png" alt="QWizard" /></p>
+<p><img src="https://chorior.github.io/img/QWizard.png" alt="QWizard" /></p>
 
 <h3 id="qmainwindow">主程序窗口 QMainWindow</h3>
 
@@ -3032,17 +3126,18 @@ delete  1
 
 <p><strong>操作列表(action item)包含四种类型：分割线(separator)、子菜单(QMenu)、部件(QWidgetAction)或触发某个命令的操作(QAction)</strong>。其中 QWidgetAction 继承自 QAction，你可以继承并重新实现 <code class="highlighter-rouge">QWidgetAction::createWidget</code> 或使用 <code class="highlighter-rouge">QWidgetAction::setDefaultWidget(QWidget*)</code>，然后再使用 <code class="highlighter-rouge">QMenu::addAction(QAction*)</code> 添加一个自定义组件到某个菜单；QAction 包含图标(QIcon)、菜单文本(menu text)、快捷键(shortcut)、状态栏文本(status text)、”What’s this” 文本和工具提示文本(tooltip)，这些内容都可以使用如下函数进行设置：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setIcon</span><span class="p">(</span><span class="k">const</span> <span class="n">QIcon</span> <span class="o">&amp;</span><span class="n">icon</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setIcon</span><span class="p">(</span><span class="k">const</span> <span class="n">QIcon</span> <span class="o">&amp;</span><span class="n">icon</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setText</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setShortcut</span><span class="p">(</span><span class="k">const</span> <span class="n">QKeySequence</span> <span class="o">&amp;</span><span class="n">shortcut</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setStatusTip</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">statusTip</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setWhatsThis</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">what</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">setToolTip</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">tip</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你可以使用如下函数来对 QMenuBar 进行操作：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QAction</span> <span class="o">*</span><span class="n">addAction</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QAction</span> <span class="o">*</span><span class="n">addAction</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">addAction</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">,</span> <span class="k">const</span> <span class="n">QObject</span> <span class="o">*</span><span class="n">receiver</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">member</span><span class="p">);</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="n">QMenu</span> <span class="o">*</span><span class="n">menu</span><span class="p">);</span>
 <span class="n">QMenu</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">title</span><span class="p">);</span>
@@ -3051,11 +3146,12 @@ delete  1
 <span class="n">QAction</span> <span class="o">*</span><span class="n">insertSeparator</span><span class="p">(</span><span class="n">QAction</span> <span class="o">*</span><span class="n">before</span><span class="p">);</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">insertMenu</span><span class="p">(</span><span class="n">QAction</span> <span class="o">*</span><span class="n">before</span><span class="p">,</span> <span class="n">QMenu</span> <span class="o">*</span><span class="n">menu</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">clear</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你也可以使用如下函数来对 QMenu 进行操作：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QAction</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="n">QMenu</span> <span class="o">*</span><span class="n">menu</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QAction</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="n">QMenu</span> <span class="o">*</span><span class="n">menu</span><span class="p">);</span>
 <span class="n">QMenu</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">title</span><span class="p">);</span>
 <span class="n">QMenu</span> <span class="o">*</span><span class="n">addMenu</span><span class="p">(</span><span class="k">const</span> <span class="n">QIcon</span> <span class="o">&amp;</span><span class="n">icon</span><span class="p">,</span> <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">title</span><span class="p">);</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">addSeparator</span><span class="p">();</span>
@@ -3069,12 +3165,13 @@ delete  1
 <span class="n">QList</span><span class="o">&lt;</span><span class="n">QAction</span><span class="o">*&gt;</span> <span class="n">actions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="kt">void</span> <span class="n">clear</span><span class="p">();</span>
 <span class="c1">// 使能撕下菜单
-</span><span class="kt">void</span> <span class="n">setTearOffEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="p">);</span>
+</span><span class="kt">void</span> <span class="n">setTearOffEnabled</span><span class="p">(</span><span class="n">bool</span><span class="p">);</span>
 <span class="c1">// 要想QMenu可见，必须调用popup或exec而不是show
 </span><span class="kt">void</span> <span class="n">popup</span><span class="p">(</span><span class="k">const</span> <span class="n">QPoint</span> <span class="o">&amp;</span><span class="n">pos</span><span class="p">,</span> <span class="n">QAction</span> <span class="o">*</span><span class="n">at</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">);</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">exec</span><span class="p">();</span>
 <span class="n">QAction</span> <span class="o">*</span><span class="n">exec</span><span class="p">(</span><span class="k">const</span> <span class="n">QPoint</span> <span class="o">&amp;</span><span class="n">pos</span><span class="p">,</span> <span class="n">QAction</span> <span class="o">*</span><span class="n">at</span> <span class="o">=</span> <span class="n">Q_NULLPTR</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>我们一般会使用 Alt 加一个字母键来快速打开某个菜单、或者使用 Ctrl 加某些键来快速执行某个操作，你可以分别通过在字符串名中使用 <code class="highlighter-rouge">&amp;</code> 加一个字母来设置菜单 Alt 快捷键、使用 <code class="highlighter-rouge">QAction::setShortcut(const QKeySequence &amp;shortcut)</code> 来设置动作快捷键。</p>
 
@@ -3082,7 +3179,7 @@ delete  1
 
 <p>一个简单的菜单栏示例如下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QIcon&gt;
 #include &lt;QDebug&gt;
@@ -3149,9 +3246,10 @@ delete  1
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "myWidget.h"
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "myWidget.h"
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
 
@@ -3165,9 +3263,10 @@ delete  1
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QMenuBar.png" alt="QMenuBar" /></p>
+<p><img src="https://chorior.github.io/img/QMenuBar.png" alt="QMenuBar" /></p>
 
 <h4 id="qtoolbar">QToolBar</h4>
 
@@ -3179,7 +3278,7 @@ delete  1
 
 <p><strong>由于 QToolBar 很多特性都是基于 QMainWindow 的，所以如果你要使用 QToolBar 的话，建议一致使用 QMainWindow</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QIcon&gt;
 #include &lt;QMenu&gt;
@@ -3240,9 +3339,10 @@ delete  1
 		<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"new"</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QToolBar.png" alt="QToolBar" /></p>
+<p><img src="https://chorior.github.io/img/QToolBar.png" alt="QToolBar" /></p>
 
 <h4 id="qdockwidget">QDockWidget</h4>
 
@@ -3254,7 +3354,7 @@ delete  1
 
 <p>你可以通过 <code class="highlighter-rouge">setFeatures</code> 来设置是否允许悬浮、关闭、或移动，你还可以使用 <code class="highlighter-rouge">setAllowedAreas</code> 来设置可以停靠的区域。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QString&gt;
@@ -3282,9 +3382,10 @@ delete  1
 		<span class="n">addDockWidget</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">RightDockWidgetArea</span><span class="p">,</span> <span class="n">dock</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QDockWidget.png" alt="QDockWidget" /></p>
+<p><img src="https://chorior.github.io/img/QDockWidget.png" alt="QDockWidget" /></p>
 
 <h4 id="qstatusbar">QStatusBar</h4>
 
@@ -3298,7 +3399,7 @@ delete  1
 
 <p>当 QMainWindow 实例的 QStatusBar 不存在时，调用 <code class="highlighter-rouge">QMainWindow::statusBar()</code> 会创建并返回一个空的状态栏，否则返回已存在的 QStatusBar。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QLabel&gt;
@@ -3323,9 +3424,10 @@ delete  1
 		<span class="n">statusbar</span><span class="o">-&gt;</span><span class="n">showMessage</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s">"temporary"</span><span class="p">),</span> <span class="mi">2000</span><span class="p">);</span> <span class="c1">// 2s
 </span>	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QStatusBar.png" alt="QStatusBar" /></p>
+<p><img src="https://chorior.github.io/img/QStatusBar.png" alt="QStatusBar" /></p>
 
 <h3 id="qt_common_widgets">常用小部件</h3>
 
@@ -3333,7 +3435,7 @@ delete  1
 
 <p>这些小部件非常简单：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QLabel&gt;
 #include &lt;QSlider&gt;
@@ -3487,15 +3589,16 @@ delete  1
 	<span class="n">setCentralWidget</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
 	<span class="n">statusBar</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">showMessage</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s">"QPlainTextEdit"</span><span class="p">),</span> <span class="mi">2000</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/common_widgets.png" alt="common_widgets" /></p>
+<p><img src="https://chorior.github.io/img/common_widgets.png" alt="common_widgets" /></p>
 
 <h3 id="progressbar">进度条 QProgressBar</h3>
 
 <p>QProgressBar 是Qt中用来显示进度的组件，其使用非常简单，只要设置好最小最大值，然后再设置当前值即可。一个简单的示例如下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QProgressBar&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QProgressBar&gt;
 #include &lt;QApplication&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
@@ -3509,13 +3612,14 @@ delete  1
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>优秀的gui应用都是立即响应的，这意味着当用户做完某个操作时，可以立即做下一个操作。如果某个操作特别耗时，应用就会卡住，所以一般耗时的操作都是交给另一个线程去做的，主线程只需要显示操作的进度即可。</p>
 
 <p>Qt 中的线程类是 QThread，你可以参照<a href="http://doc.qt.io/qt-5/qthread.html#details">官网</a>进行简单的使用:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">WorkerThread</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QThread</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">WorkerThread</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QThread</span>
 <span class="p">{</span>
 	<span class="n">Q_OBJECT</span>
 	<span class="kt">void</span> <span class="n">run</span><span class="p">()</span> <span class="n">Q_DECL_OVERRIDE</span> <span class="p">{</span>
@@ -3534,11 +3638,12 @@ delete  1
 	<span class="n">connect</span><span class="p">(</span><span class="n">workerThread</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WorkerThread</span><span class="o">::</span><span class="n">finished</span><span class="p">,</span> <span class="n">workerThread</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">QObject</span><span class="o">::</span><span class="n">deleteLater</span><span class="p">);</span>
 	<span class="n">workerThread</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>由于 QThread 的实例是在主线程，run 函数是在新线程，我们的进度条也是在主线程，所以 QProgressBar 实例应该在主线程创建，run 函数要想改变进度值，只能使用指针来实现，所以工作线程大体应该长这样：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;thread&gt; // slepp_for
 #include &lt;QThread&gt;
 #include &lt;QPointer&gt;
@@ -3575,11 +3680,12 @@ delete  1
 	<span class="kt">void</span> <span class="n">begin</span><span class="p">();</span>
 	<span class="kt">void</span> <span class="n">end</span><span class="p">();</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>我们来测试一下：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QApplication&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QApplication&gt;
 #include "WorkerThread.h"
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
@@ -3599,7 +3705,8 @@ delete  1
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
@@ -3612,7 +3719,7 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 
 <p>由于 QThread 只有两个信号–<code class="highlighter-rouge">started</code> 和 <code class="highlighter-rouge">finished</code>，所以我们再添加一个信号 <code class="highlighter-rouge">update</code>，并添加一个 value 信息，用于传递进度值:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;thread&gt; // slepp_for
 #include &lt;QThread&gt;
 </span>
@@ -3639,11 +3746,12 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 	<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
 	<span class="kt">void</span> <span class="n">end</span><span class="p">();</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>修改 main.cpp:</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QProgressBar&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;QProgressBar&gt;
 #include &lt;QApplication&gt;
 </span>
 <span class="cp">#include "WorkerThread.h"
@@ -3666,9 +3774,10 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QProgressBar.png" alt="QProgressBar" /></p>
+<p><img src="https://chorior.github.io/img/QProgressBar.png" alt="QProgressBar" /></p>
 
 <p>结果没有任何问题，同时工作线程也显得特别干净，这正是我们想要的。</p>
 
@@ -3691,7 +3800,7 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 
 <p><strong>对于子组件来说，其没有框架</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// mainWindow.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// mainWindow.h
 </span><span class="cp">#pragma once
 #include &lt;QDebug&gt;
 #include &lt;QMainWindow&gt;
@@ -3708,9 +3817,10 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 		<span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"width: "</span> <span class="o">&lt;&lt;</span> <span class="n">width</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">"height: "</span> <span class="o">&lt;&lt;</span> <span class="n">height</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// main.cpp
 </span><span class="cp">#include "mainWindow.h"
 #include &lt;QApplication&gt;
 </span>
@@ -3726,18 +3836,20 @@ QObject::setParent: Cannot set parent, new parent is in a different thread
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>结果：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
+<div class="highlighter-rouge"><pre class="highlight"><code>$ release\qt_practice.exe
 pos:  QPoint(300,300)
 rect:  QRect(0,0 250x200)
 geometry:  QRect(300,300 250x200)
 frameGeometry:  QRect(292,270 266x238)
 x:  292 y:  270
 width:  250 height:  200
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="layout">布局管理</h3>
 
@@ -3745,13 +3857,14 @@ width:  250 height:  200
 
 <p><strong>Qt 提供了五种布局方式：垂直布局(QVBoxLayout)、水平布局(QHBoxLayout)、网格布局(QGridLayout)、表单布局(QFormLayout)和堆栈布局(QStackedLayout)</strong>。其中表单布局由输入型控件和关联的标签组成，其布局就像你注册账号时的表单差不多，左边一列标签，右边一列输入；堆栈布局即只能显示其中一个部件的布局。</p>
 
-<h4 id="垂直水平布局">垂直水平布局</h4>
+<h4 id="section-1">垂直水平布局</h4>
 
 <p><strong>QVBoxLayout 和 QHBoxLayout 都是 QBoxLayout 的子类</strong>，它们只是分别在构造时强制了项目排列的方向，QVBoxLayout 是 TopToBottom、QHBoxLayout 是 LeftToRight，所以如果你想布置一个水平或者垂直的布局，你也可以直接使用 QBoxLayout，其支持的排列方向包括：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Direction</span> <span class="p">{</span> <span class="n">LeftToRight</span><span class="p">,</span> <span class="n">RightToLeft</span><span class="p">,</span> <span class="n">TopToBottom</span><span class="p">,</span> <span class="n">BottomToTop</span><span class="p">,</span> 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">enum</span> <span class="n">Direction</span> <span class="p">{</span> <span class="n">LeftToRight</span><span class="p">,</span> <span class="n">RightToLeft</span><span class="p">,</span> <span class="n">TopToBottom</span><span class="p">,</span> <span class="n">BottomToTop</span><span class="p">,</span> 
 				<span class="n">Down</span> <span class="o">=</span> <span class="n">TopToBottom</span><span class="p">,</span> <span class="n">Up</span> <span class="o">=</span> <span class="n">BottomToTop</span> <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>QBoxLayout 可以添加四种项目：</p>
 
@@ -3764,7 +3877,7 @@ width:  250 height:  200
 
 <p>如果你想要移除布局中某个部件，你可以使用成员函数 <code class="highlighter-rouge">removeWidget</code>，或者你也可以调用 <code class="highlighter-rouge">QWidget::hide()</code> 来隐藏(且不占用绘制空间)这个插件直到 <code class="highlighter-rouge">QWidget::show()</code> 被调用。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QLabel&gt;
 #include &lt;QWidget&gt;
 #include &lt;QLineEdit&gt;
@@ -3811,15 +3924,16 @@ width:  250 height:  200
 		<span class="n">label3</span><span class="o">-&gt;</span><span class="n">hide</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QBoxLayout.png" alt="QBoxLayout" /></p>
+<p><img src="https://chorior.github.io/img/QBoxLayout.png" alt="QBoxLayout" /></p>
 
-<h4 id="网格布局">网格布局</h4>
+<h4 id="section-2">网格布局</h4>
 
 <p>QGridLayout 与 QBoxLayout 类似，你可以使用 <code class="highlighter-rouge">addWidget</code>、<code class="highlighter-rouge">addLayout</code> 或 <code class="highlighter-rouge">addItem</code> 来添加部件或子布局并指定行列位置和行列大小，你还可以使用 <code class="highlighter-rouge">removeWidget</code> 彻底删除某个部件或使用 <code class="highlighter-rouge">QWidget::hide()</code> 来隐藏(但不占用绘制空间)某个部件。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QLabel&gt;
 #include &lt;QWidget&gt;
 #include &lt;QString&gt;
@@ -3862,17 +3976,18 @@ width:  250 height:  200
 		<span class="n">setLayout</span><span class="p">(</span><span class="n">gl</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QGridLayout.png" alt="QGridLayout" /></p>
+<p><img src="https://chorior.github.io/img/QGridLayout.png" alt="QGridLayout" /></p>
 
-<h4 id="表单布局">表单布局</h4>
+<h4 id="section-3">表单布局</h4>
 
 <p>QFormLayout 只有两列，它最初被设计出来就是为了写表单用的，<strong>其表单与 QGridLayout 设计出来的表单相比，其左右两列具有一一对应的关系，如果你在标签列设置了快捷键，那么快捷键会使光标跳到对应的右侧组件上</strong>，另外使用 QFormLayout 会比使用 QGridLayout 制作表单更为方便(代码量更小)。</p>
 
 <p>你可以使用如下函数对 QFormLayout 进行操作：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">addRow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">label</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">*</span><span class="n">field</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">addRow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">label</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">*</span><span class="n">field</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">addRow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">label</span><span class="p">,</span> <span class="n">QLayout</span> <span class="o">*</span><span class="n">field</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">addRow</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">labelText</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">*</span><span class="n">field</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">addRow</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">labelText</span><span class="p">,</span> <span class="n">QLayout</span> <span class="o">*</span><span class="n">field</span><span class="p">);</span>
@@ -3889,11 +4004,12 @@ width:  250 height:  200
 <span class="kt">void</span> <span class="n">removeRow</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">removeRow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">widget</span><span class="p">);</span>
 <span class="kt">void</span> <span class="n">removeRow</span><span class="p">(</span><span class="n">QLayout</span> <span class="o">*</span><span class="n">layout</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>简单示例：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QWidget&gt;
 #include &lt;QSpinBox&gt;
 #include &lt;QLineEdit&gt;
@@ -3920,15 +4036,16 @@ width:  250 height:  200
 </span>		<span class="n">setLayout</span><span class="p">(</span><span class="n">formLayout</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QFormLayout.png" alt="QFormLayout" /></p>
+<p><img src="https://chorior.github.io/img/QFormLayout.png" alt="QFormLayout" /></p>
 
-<h4 id="堆栈布局">堆栈布局</h4>
+<h4 id="section-4">堆栈布局</h4>
 
 <p>QStackedLayout 同一时间只能显示其中一个部件，一般与 QComboBox 或其它单选部件合并使用：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QWidget&gt;
 #include &lt;QComboBox&gt;
 #include &lt;QTextEdit&gt;
@@ -3966,15 +4083,16 @@ width:  250 height:  200
 		<span class="n">setLayout</span><span class="p">(</span><span class="n">mainLayout</span><span class="p">);</span>		
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/QStackedLayout.png" alt="QStackedLayout" /></p>
+<p><img src="https://chorior.github.io/img/QStackedLayout.png" alt="QStackedLayout" /></p>
 
 <h3 id="widget_containers">部件容器</h3>
 
 <p>部件容器是为了让一些部件组合在一起，并且拥有一些共有的属性，常用的如 QFrame、QToolBox、QGroupBox、QMdiArea、QScrollArea 等，这些类都非常简单：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QFrame&gt;
 #include &lt;QToolBox&gt;
 #include &lt;QGroupBox&gt;
@@ -4117,9 +4235,10 @@ width:  250 height:  200
 	<span class="n">setCentralWidget</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
 	<span class="n">statusBar</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">showMessage</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s">"QScrollArea"</span><span class="p">),</span> <span class="mi">2000</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/widgetContainers.png" alt="widgetContainers" /></p>
+<p><img src="https://chorior.github.io/img/widgetContainers.png" alt="widgetContainers" /></p>
 
 <h3 id="model_view">模型/视图(model/view)</h3>
 
@@ -4137,7 +4256,7 @@ width:  250 height:  200
 
 <p>有关模型/视图的底层知识，我们将在高级篇进行讲解。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma once
 #include &lt;QListWidget&gt;
 #include &lt;QTreeWidget&gt;
 #include &lt;QTableWidget&gt;
@@ -4253,9 +4372,10 @@ width:  250 height:  200
 	<span class="n">setCentralWidget</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
 	<span class="n">statusBar</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">showMessage</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s">"QTableWidget"</span><span class="p">),</span> <span class="mi">2000</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<p><img src="/img/itemBasedViews.png" alt="itemBasedViews" /></p>
+<p><img src="https://chorior.github.io/img/itemBasedViews.png" alt="itemBasedViews" /></p>
 
 <h2 id="interface_appearance">界面外观</h2>
 
@@ -4269,13 +4389,15 @@ width:  250 height:  200
 
 <p>你可以使用 <code class="highlighter-rouge">QApplication::setStyle()</code> 或 <code class="highlighter-rouge">QWidget::setStyle()</code> 来为整个应用或单个组件设置风格，当前环境支持的风格可以使用 <code class="highlighter-rouge">QStyleFactory::keys()</code> 进行查看：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>("Windows", "WindowsXP", "WindowsVista", "Fusion")
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>("Windows", "WindowsXP", "WindowsVista", "Fusion")
+</code></pre>
+</div>
 
 <p>你也可以在运行时指定风格选项：</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./myApp -style windowsxp
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>./myApp -style windowsxp
+</code></pre>
+</div>
 
 <p>你还可以使用 QStyle 对自定义组件进行绘制，你甚至可以创建自定义风格类型，具体查看 <a href="http://doc.qt.io/qt-5/qstyle.html#developing-style-aware-custom-widgets">QStyle</a>。</p>
 
@@ -4295,7 +4417,7 @@ width:  250 height:  200
 
 <p>当你修改应用的调色板或某个组件的调色板时，<strong>建议使用 <code class="highlighter-rouge">QGuiApplication::palette()</code> 或 <code class="highlighter-rouge">QWidget::palette()</code> 获取原有的调色板，然后再进行更改</strong>，这样会保留原有的未更改的设置，最后再调用 <code class="highlighter-rouge">QGuiApplication::setPalette</code> 或 <code class="highlighter-rouge">QWidget::setPalette</code> 来使用修改后的调色板。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QPalette&gt;
 #include &lt;QMainWindow&gt;
@@ -4312,7 +4434,8 @@ width:  250 height:  200
 		<span class="n">setPalette</span><span class="p">(</span><span class="n">palette</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="qstylesheet">样式表</h3>
 
@@ -4322,26 +4445,29 @@ width:  250 height:  200
 
 <p>当你学完下面的样式表语法之后，<strong>查看 <a href="http://doc.qt.io/qt-5/stylesheet-customizing.html">Customizing Qt Widgets Using Style Sheets</a> 了解如何使用样式表自定义组件外观</strong>。</p>
 
-<h4 id="样式规则">样式规则</h4>
+<h4 id="section-5">样式规则</h4>
 
 <p>Qt 样式表的术语和语法规则与 HTML CSS 基本相同，<strong>一个样式规则由一个选择符(selector)和一个声明(declaration)组成，其中选择符指定改规则形象的组件，声明指定影响该组件的那个属性</strong>，如：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>你可以为多个组件设置相同的属性，只需使用逗号将组件名分隔即可：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="o">,</span> <span class="nt">QLineEdit</span><span class="o">,</span> <span class="nt">QComboBox</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="o">,</span> <span class="nt">QLineEdit</span><span class="o">,</span> <span class="nt">QComboBox</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>多个属性之间使用分号进行分隔：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span> <span class="nl">background-color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>查看 <a href="http://doc.qt.io/qt-5/stylesheet-reference.html#list-of-properties">List of Properties</a> 获取支持的样式表属性列表。</p>
 
-<h4 id="选择符类型">选择符类型</h4>
+<h4 id="section-6">选择符类型</h4>
 
 <table>
   <thead>
@@ -4390,82 +4516,92 @@ width:  250 height:  200
   </tbody>
 </table>
 
-<h4 id="子控件">子控件</h4>
+<h4 id="section-7">子控件</h4>
 
 <p>对于某些复杂的部件，可能需要访问它们的子控件(subcontrol)，如 QComboBox 的下拉按钮或 QSpinBox 的上下箭头等，可以通过选择符来访问这些子控件：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QComboBox</span><span class="nd">::drop-down</span> <span class="p">{</span> <span class="py">image</span><span class="p">:</span> <span class="sx">url(dropdown.png)</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QComboBox</span><span class="nd">::drop-down</span> <span class="p">{</span> <span class="py">image</span><span class="p">:</span> <span class="sx">url(dropdown.png)</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>查看 <a href="http://doc.qt.io/qt-5/stylesheet-reference.html#list-of-sub-controls">List of Sub-Controls</a> 获取支持的子控件列表。</p>
 
-<h4 id="伪状态">伪状态</h4>
+<h4 id="section-8">伪状态</h4>
 
 <p>伪状态被选择符用来指定某个部件在某个特定状态时的风格，它出现在选择符的末尾，并使用冒号分隔：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="nd">:hover</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="nd">:hover</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>上面的规则代表当鼠标悬停在 QPushButton 上时，QPushButton 的文字颜色变为白色。</p>
 
 <p>伪状态支持使用感叹号来表示否定：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="o">:!</span><span class="nt">hover</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="o">:!</span><span class="nt">hover</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>伪状态还支持伪状态链，即将多个伪状态以链的形式结合在一起，以达到逻辑与的效果：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QCheckBox</span><span class="nd">:hover:checked</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QCheckBox</span><span class="nd">:hover:checked</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
 <span class="nt">QPushButton</span><span class="nd">:hover</span><span class="o">:!</span><span class="nt">pressed</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你也可以使用逗号来达到逻辑或的效果：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QCheckBox</span><span class="nd">:hover</span><span class="o">,</span> <span class="nt">QCheckBox</span><span class="nd">:checked</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QCheckBox</span><span class="nd">:hover</span><span class="o">,</span> <span class="nt">QCheckBox</span><span class="nd">:checked</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">white</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>伪状态还可以与子控件联合使用：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QComboBox</span><span class="nd">::drop-down:hover</span> <span class="p">{</span> <span class="py">image</span><span class="p">:</span> <span class="sx">url(dropdown_bright.png)</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QComboBox</span><span class="nd">::drop-down:hover</span> <span class="p">{</span> <span class="py">image</span><span class="p">:</span> <span class="sx">url(dropdown_bright.png)</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>查看 <a href="http://doc.qt.io/qt-5/stylesheet-reference.html#list-of-pseudo-states">List of Pseudo-States</a> 获取支持的伪状态列表。</p>
 
-<h4 id="冲突解决">冲突解决</h4>
+<h4 id="section-9">冲突解决</h4>
 
 <p>如果有多个规则对相同的属性指定了不同的值，就会造成冲突，如：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="nf">#okButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">gray</span> <span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span><span class="nf">#okButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">gray</span> <span class="p">}</span>
 <span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>解决这个冲突的原则是：<strong>越特殊的规则优先级越高，如果特殊性一致则越靠后的规则优先级越高，所有的选择符特殊性都一样，不管继承关系如何</strong>。</p>
 
 <p>下面两个规则的特殊性一致，虽然 QPushButton 继承自 QAbstractButton：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QPushButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span> <span class="p">}</span>
 <span class="nt">QAbstractButton</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">gray</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>更详细的确定规则特殊性的规范查看 <a href="http://doc.qt.io/qt-5/stylesheet-syntax.html#conflict-resolution">Conflict Resolution</a>。</p>
 
-<h4 id="层叠与继承">层叠与继承</h4>
+<h4 id="section-10">层叠与继承</h4>
 
 <p><strong>部件有效的样式表是通过合并该组件所有祖先的样式表、当前设置的样式表和 QApplication 设置的样式表来得到的，如果发生冲突的话，不管特殊性如何，低层级的规则优先</strong>。</p>
 
 <p><strong>部件并不会自动继承其父组件的 font 和 color 样式表属性</strong>，如果你想要达到这个效果的话，局部可以类似使用：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">QGroupBox</span><span class="o">,</span> <span class="nt">QGroupBox</span> <span class="o">*</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span> <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">QGroupBox</span><span class="o">,</span> <span class="nt">QGroupBox</span> <span class="o">*</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span> <span class="p">}</span>
+</code></pre>
+</div>
 
 <p>整体可以使用：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">QCoreApplication</span><span class="o">::</span><span class="n">setAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">AA_UseStyleSheetPropagationInWidgetStyles</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">QCoreApplication</span><span class="o">::</span><span class="n">setAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">AA_UseStyleSheetPropagationInWidgetStyles</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</code></pre>
+</div>
 
-<h4 id="命名空间与-q_property">命名空间与 Q_PROPERTY</h4>
+<h4 id="qproperty">命名空间与 Q_PROPERTY</h4>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">ns</span> <span class="p">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">ns</span> <span class="p">{</span>
     <span class="k">class</span> <span class="nc">MyPushButton</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QPushButton</span> <span class="p">{</span>
         <span class="c1">// ...
 </span>    <span class="p">}</span>
@@ -4473,14 +4609,16 @@ width:  250 height:  200
 
 <span class="c1">// ...
 </span><span class="n">qApp</span><span class="o">-&gt;</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s">"ns--MyPushButton { background: yellow; }"</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>对象属性值可以使用 <code class="highlighter-rouge">qproperty-&lt;property name&gt;</code> 进行设置：</p>
 
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">MyLabel</span> <span class="p">{</span> <span class="py">qproperty-pixmap</span><span class="p">:</span> <span class="sx">url(pixmap.png)</span><span class="p">;</span> <span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">MyLabel</span> <span class="p">{</span> <span class="py">qproperty-pixmap</span><span class="p">:</span> <span class="sx">url(pixmap.png)</span><span class="p">;</span> <span class="p">}</span>
 <span class="nt">MyGroupBox</span> <span class="p">{</span> <span class="py">qproperty-titleColor</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">200</span><span class="p">,</span> <span class="m">100</span><span class="p">);</span> <span class="p">}</span>
 <span class="nt">QPushButton</span> <span class="p">{</span> <span class="py">qproperty-iconSize</span><span class="p">:</span> <span class="m">20px</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="resource">资源管理</h2>
 
@@ -4490,59 +4628,65 @@ width:  250 height:  200
 
 <p>Qt 的资源文件使用 <code class="highlighter-rouge">.qrc</code> 为后缀，如果你要将某个资源文件应用到项目中，需要向 <code class="highlighter-rouge">.pro</code> 文件中添加：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>RESOURCES += myqrc.qrc
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>RESOURCES += myqrc.qrc
+</code></pre>
+</div>
 
 <p>资源文件的格式是基于 XML 的：</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;RCC&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;RCC&gt;</span>
     <span class="nt">&lt;qresource&gt;</span>
         <span class="nt">&lt;file&gt;</span>images/new.png<span class="nt">&lt;/file&gt;</span>
 		<span class="nt">&lt;file&gt;</span>images/open.png<span class="nt">&lt;/file&gt;</span>
 		<span class="nt">&lt;file&gt;</span>E:/qt_practice/image/quit.png<span class="nt">&lt;/file&gt;</span>
     <span class="nt">&lt;/qresource&gt;</span>
 <span class="nt">&lt;/RCC&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>其中文件的路径可以是绝对的，也可以是相对 <code class="highlighter-rouge">.qrc</code> 文件所在目录的</strong>。默认情况下你可以使用如下两种方式访问其中的文件：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>:/images/new.png
+<div class="highlighter-rouge"><pre class="highlight"><code>:/images/new.png
 qrc:///images/new.png
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你可以为这些文件指定一个路径前缀：</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;qresource</span> <span class="na">prefix=</span><span class="s">"/myresources"</span><span class="nt">&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;qresource</span> <span class="na">prefix=</span><span class="s">"/myresources"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;file&gt;</span>images/new.png<span class="nt">&lt;/file&gt;</span>
 	<span class="nt">&lt;file&gt;</span>images/open.png<span class="nt">&lt;/file&gt;</span>
 	<span class="nt">&lt;file&gt;</span>E:/qt_practice/image/quit.png<span class="nt">&lt;/file&gt;</span>
 <span class="nt">&lt;/qresource&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这样使用时就需要以 <code class="highlighter-rouge">:/myresources/images/new.png</code> 的形式进行使用了。</p>
 
 <p>你还可以为某个文件指定一个别名：</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;file</span> <span class="na">alias=</span><span class="s">"new.png"</span><span class="nt">&gt;</span>images/new.png<span class="nt">&lt;/file&gt;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;file</span> <span class="na">alias=</span><span class="s">"new.png"</span><span class="nt">&gt;</span>images/new.png<span class="nt">&lt;/file&gt;</span>
+</code></pre>
+</div>
 
 <p>这样就能使用别名访问对应的文件了：<code class="highlighter-rouge">:/myresources/new.png</code>。</p>
 
 <p>如果你需要根据系统语言环境使用不同的资源文件，使用 <code class="highlighter-rouge">lang</code>：</p>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;qresource&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;qresource&gt;</span>
     <span class="nt">&lt;file&gt;</span>cut.jpg<span class="nt">&lt;/file&gt;</span>
 <span class="nt">&lt;/qresource&gt;</span>
 <span class="nt">&lt;qresource</span> <span class="na">lang=</span><span class="s">"fr"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;file</span> <span class="na">alias=</span><span class="s">"cut.jpg"</span><span class="nt">&gt;</span>cut_fr.jpg<span class="nt">&lt;/file&gt;</span>
 <span class="nt">&lt;/qresource&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>这样当系统语言为法语时，将使用 <code class="highlighter-rouge">cut_fr.jpg</code>，否则使用 <code class="highlighter-rouge">cut.png</code>。</p>
 
 <p>示例：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>qt_practice
+<div class="highlighter-rouge"><pre class="highlight"><code>qt_practice
 ├── main.cpp
 ├── myWidget.h
 ├── resource.qrc
@@ -4550,9 +4694,10 @@ qrc:///images/new.png
     ├── new.png
     ├── open.png
     └── quit.png
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--&gt;resource.qrc&lt;--&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--&gt;resource.qrc&lt;--&gt;</span>
 <span class="nt">&lt;RCC&gt;</span>
     <span class="nt">&lt;qresource&gt;</span>
         <span class="nt">&lt;file</span> <span class="na">alias=</span><span class="s">"new"</span><span class="nt">&gt;</span>images/new.png<span class="nt">&lt;/file&gt;</span>
@@ -4560,9 +4705,10 @@ qrc:///images/new.png
 		<span class="nt">&lt;file</span> <span class="na">alias=</span><span class="s">"quit"</span><span class="nt">&gt;</span>E:/qt_practice/images/quit.png<span class="nt">&lt;/file&gt;</span>
     <span class="nt">&lt;/qresource&gt;</span>
 <span class="nt">&lt;/RCC&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// myWidget.h
 </span><span class="cp">#pragma once
 #include &lt;QIcon&gt;
 #include &lt;QAction&gt;
@@ -4594,9 +4740,10 @@ qrc:///images/new.png
 		<span class="n">menu</span><span class="o">-&gt;</span><span class="n">insertSeparator</span><span class="p">(</span><span class="n">quitAction</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "myWidget.h"
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "myWidget.h"
 #include &lt;QApplication&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
@@ -4611,13 +4758,15 @@ qrc:///images/new.png
 
 	<span class="k">return</span> <span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake -project <span class="c"># 生成 .pro 文件，添加 QT += widgets</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>qmake -project <span class="c"># 生成 .pro 文件，添加 QT += widgets</span>
 <span class="gp">$ </span>qmake
 <span class="gp">$ </span>mingw32-make
 <span class="gp">$ </span>release<span class="se">\q</span>t_practice.exe
-</code></pre></div>
+</code></pre>
+</div>
 
 
                 <hr>
@@ -4627,7 +4776,7 @@ qrc:///images/new.png
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/07/06/C++-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%94%E7%94%A8%E7%AF%87/" data-toggle="tooltip" data-placement="top" title="C++ 多线程应用篇">
+                        <a href="/2017/07/06/C++-thread-application/" data-toggle="tooltip" data-placement="top" title="C++ 多线程应用篇">
                         Previous<br>
                         <span>C++ 多线程应用篇</span>
                         </a>
@@ -4740,13 +4889,12 @@ qrc:///images/new.png
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/08/28/Qt5 基础篇";
-    var disqus_url = "/2017/08/28/Qt5-%E5%9F%BA%E7%A1%80%E7%AF%87/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/08/28/Qt5-basis";
+    var disqus_url = "https://chorior.github.io/2017/08/28/Qt5-basis/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

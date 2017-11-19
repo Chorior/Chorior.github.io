@@ -12,7 +12,7 @@
 
     <title>Markdown 基础语法 - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/02/27/Markdown-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+    <link rel="canonical" href="https://chorior.github.io/2017/02/27/Markdown-basis-syntax/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 <p>学习一门语法时，建议按照教程自己手动操作一下。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#introduction">Markdown简介</a></li>
@@ -255,19 +255,21 @@
 
 <p>段落是一个或多个连续的文本行，由一个或多个空白行分隔。（空白行是看起来像空行的任何行，即只包含空格或制表符的行被视为空白。）正常段落不应缩进空格或制表符：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>this is a paragraph
+<div class="highlighter-rouge"><pre class="highlight"><code>this is a paragraph
 
 this is another paragraph
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="breaks">换行</h3>
 
 <p>行尾使用两个或更多空格，然后enter; 或者直接使用HTML <code class="highlighter-rouge">&lt;br&gt;</code>标签：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>line 1  
+<div class="highlighter-rouge"><pre class="highlight"><code>line 1  
 line 2 &lt;br&gt;
 line 3
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="title">标题</h3>
 
@@ -275,61 +277,67 @@ line 3
 
 <p>Setext样式标题使用等号（对于第一级标题）和破折号（对于第二级标题）标注，任何数量得等号或破折号都可以正常工作，一般写三个:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>This is an H1
+<div class="highlighter-rouge"><pre class="highlight"><code>This is an H1
 =============
 
 This is an H2
 -------------
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>Atx风格的标题在行的开头使用1-6个#字符，对应于标题级别1-6:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code># title1
+<div class="highlighter-rouge"><pre class="highlight"><code># title1
 ## title2
 ### title3
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你可以选择封闭式的Atx标题，只要在后面加上任意个数的#符号即可，虽然这没什么软用，但有些人觉得挺好看的：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code># title1 #
+<div class="highlighter-rouge"><pre class="highlight"><code># title1 #
 ## title2 ##
 ### title3 ###
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="blockquotes">块引用</h3>
 
 <p>Markdown使用电子邮件样式&gt;字符进行块引用，在每行前加上&gt;即可：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
 &gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
 &gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 &gt;
 &gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
 &gt; id sem consectetuer libero luctus adipiscing.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果你懒得话，Markdown也允许你只在段落的第一行加上&gt;</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
 consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
 Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 
 &gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
 id sem consectetuer libero luctus adipiscing
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>块引用允许嵌套，只要添加相应个数个&gt;即可：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>&gt; This is the first level of quoting.
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; This is the first level of quoting.
 &gt;
 &gt; &gt; This is nested blockquote.
 &gt;
 &gt; Back to the first level.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>块引用还可以包含其他Markdown元素，包括头，列表和代码块</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>&gt; ## This is a header.
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; ## This is a header.
 &gt; 
 &gt; 1.   This is the first list item.
 &gt; 2.   This is the second list item.
@@ -348,7 +356,8 @@ id sem consectetuer libero luctus adipiscing
 &gt;   return 0;
 &gt; }
 &gt; ```
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="lists">列表</h3>
 
@@ -356,30 +365,33 @@ id sem consectetuer libero luctus adipiscing
 
 <p>无序列表使用<code class="highlighter-rouge">*</code>号或<code class="highlighter-rouge">+</code>号或<code class="highlighter-rouge">-</code>号（可互换）作为列表标记。列表标记左侧最多缩进三个空格；列表标记右侧必须跟有一个或多个空格或制表符，建议使用制表符（当列表后跟缩进代码块时比较好看）：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*   Red
+<div class="highlighter-rouge"><pre class="highlight"><code>*   Red
 *   Green
 *   Blue
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>有序列表使用数字后跟英文句点，但用于标记的数字对Markdown生成的HTML并没用什么软用，建议都写1比较方便</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1.  Bird
+<div class="highlighter-rouge"><pre class="highlight"><code>1.  Bird
 2.  McHale
 3.  Parish
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果列表文字较多，建议每行加个缩进，这样会比较好看：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+<div class="highlighter-rouge"><pre class="highlight"><code>*   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
     Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
     viverra nec, fringilla in, laoreet vitae, risus.
 *   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
     Suspendisse id sem consectetuer libero luctus adipiscing.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果列表项中间有空行,那么在输出 HTML 时 Markdown 就会将项目内容用<code class="highlighter-rouge">&lt;p&gt;</code>标签包起来：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>markdown:
+<div class="highlighter-rouge"><pre class="highlight"><code>markdown:
 
 *   Bird
 *   Magic
@@ -403,11 +415,12 @@ html:
 &lt;li&gt;&lt;p&gt;Bird&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Magic&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>列表项可以由多个段落组成。列表项中的每个后续段落必须缩进为4个空格或一个制表符，如果你懒得话，也可以只缩进每段第一行：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1.  This is a list item with two paragraphs. Lorem ipsum dolor
+<div class="highlighter-rouge"><pre class="highlight"><code>1.  This is a list item with two paragraphs. Lorem ipsum dolor
     sit amet, consectetuer adipiscing elit. Aliquam hendrerit
     mi posuere lectus.
 
@@ -416,19 +429,21 @@ html:
     sit amet velit.
 
 2.  Suspendisse id sem consectetuer libero luctus adipiscing.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>要在列表项中放置块引用，&gt;分隔符需要缩进：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*   A list item with a blockquote:
+<div class="highlighter-rouge"><pre class="highlight"><code>*   A list item with a blockquote:
 
     &gt; This is a blockquote
     &gt; inside a list item.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>要将缩进代码块放在列表项中，代码块需要缩进两次 - 8个空格或2个制表符（但是github版用反引号标记的代码块却不需要）：</strong></p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*   A list item with a code block:
+<div class="highlighter-rouge"><pre class="highlight"><code>*   A list item with a code block:
 
         &lt;code goes here&gt;
 
@@ -437,71 +452,80 @@ html:
 ```text
     I'm a code. 
 ```
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果你有一句话以数字结尾，那么可能触发一个有序列表:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1986. What a great season.
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>1986. What a great season.
+</code></pre>
+</div>
 
 <p>解决方法是使用反斜杠转义句点：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>1986\. What a great season.
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>1986\. What a great season.
+</code></pre>
+</div>
 
 <h3 id="code-blocks">代码块</h3>
 
 <p>如果要标记一小段行内代码，你可以用反引号把它包起来:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>Use the `printf()` function.
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>Use the `printf()` function.
+</code></pre>
+</div>
 
 <p>要在代码范围内包含文字反引号字符，可以使用多个反引号作为开始和结束分隔符：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>``There is a literal backtick (`) here.``
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>``There is a literal backtick (`) here.``
+</code></pre>
+</div>
 
 <p>要在Markdown中生成代码块，只需将该块的每一行缩进至少4个空格或1个制表符：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>This is a normal paragraph:
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a normal paragraph:
 
     This is a code block.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>记住，要将缩进代码块放在列表项中，代码块需要缩进两次 - 8个空格或2个制表符。</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*   A list item with a code block:
+<div class="highlighter-rouge"><pre class="highlight"><code>*   A list item with a code block:
 
         &lt;code goes here&gt;
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>代码块继续，直到它到达没有缩进的行（或到达文章结尾）。</p>
 
 <p>github版的代码块支持使用反引号标记，并且可以选择添加语言标识ID将代码块高亮显示，支持的语言可以在<a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml">这里</a>找到:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>```ruby
+<div class="highlighter-rouge"><pre class="highlight"><code>```ruby
 require 'redcarpet'
 markdown = Redcarpet.new("Hello World!")
 puts markdown.to_html
 ```
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果你要在代码块中插入多个反引号（如Python的多行注释标记），那么用于Markdown代码块的反引号个数必须要多于代码块中的反引号个数:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>`````text
+<div class="highlighter-rouge"><pre class="highlight"><code>`````text
 ```ruby
 require 'redcarpet'
 markdown = Redcarpet.new("Hello World!")
 puts markdown.to_html
 ```
 `````
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="split-lines">分割线</h3>
 
 <p>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>* * *
+<div class="highlighter-rouge"><pre class="highlight"><code>* * *
 
 ***
 
@@ -510,7 +534,8 @@ puts markdown.to_html
 - - -
 
 ---------------------------------------
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="links">链接</h3>
 
@@ -520,24 +545,27 @@ puts markdown.to_html
 
 <p>圆括号包含链接的URL:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>This is [an example](http://example.com/ "Title") inline link.
+<div class="highlighter-rouge"><pre class="highlight"><code>This is [an example](http://example.com/ "Title") inline link.
 
 [This link](http://example.net/) has no title attribute.
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="link-reference">参考式</h4>
 
 <p>参考式链接使用两组方括号，第二组方括号放置您选择的标签以标识链接；方括号间可以用空格分割:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>This is [an example][id] reference-style link.
+<div class="highlighter-rouge"><pre class="highlight"><code>This is [an example][id] reference-style link.
 
 This is [an example] [id] reference-style link.
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>然后，在文档中的任何位置（建议放在段落下方，这样比较好管理），您可以这样定义您的链接标签：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>[id]: http://example.com/  "Optional Title Here"
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>[id]: http://example.com/  "Optional Title Here"
+</code></pre>
+</div>
 
 <p>链接内容定义的形式为：</p>
 
@@ -551,28 +579,32 @@ This is [an example] [id] reference-style link.
 
 <p>链接URL可以可选地用尖括号括起来：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>[id]: &lt;http://example.com/&gt;  "Optional Title Here"
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>[id]: &lt;http://example.com/&gt;  "Optional Title Here"
+</code></pre>
+</div>
 
 <p>链接标识符可以由字母，数字，空格和标点符号组成，<strong>但它们不区分大小写</strong>，下面这两个链接是一样的</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>[link text][a]
+<div class="highlighter-rouge"><pre class="highlight"><code>[link text][a]
 [link text][A]
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>隐含链接可以省略链接标识符，这时链接文本本身被用作链接标识符，然后使用一组空的方括号：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>[Google][]
+<div class="highlighter-rouge"><pre class="highlight"><code>[Google][]
 
 [Google]: http://google.com/
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>隐含链接还可以使用多个单词的链接文本：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>Visit [Daring Fireball][] for more information.
+<div class="highlighter-rouge"><pre class="highlight"><code>Visit [Daring Fireball][] for more information.
 
 [Daring Fireball]: http://daringfireball.net/
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>使用Markdown的参考链接，使得源文档更像是在浏览器中呈现的最终输出。通过允许您将与标记相关的元数据移出段落，您可以添加链接，而不会中断文章的叙述流程。</p>
 
@@ -582,31 +614,35 @@ This is [an example] [id] reference-style link.
 
 <p>用一个*或_包含的文本在HTML输出中会发生倾斜:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>*single asterisks*
+<div class="highlighter-rouge"><pre class="highlight"><code>*single asterisks*
 
 _single underscores_
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>用两个*或_包含的文本在HTML输出中会被加粗：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>**double asterisks**
+<div class="highlighter-rouge"><pre class="highlight"><code>**double asterisks**
 
 __double underscores__
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>你可以使用任何你喜欢的风格; 唯一的限制是，你必须在前后使用使用相同的字符。</p>
 
 <p>强调还可以在单词的中间使用：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>un*frigging*believable
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>un*frigging*believable
+</code></pre>
+</div>
 
 <p>如果不需要强调，或强调的文本中含有星号或下划线，那么需要使用\进行反斜杠转义：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>\*this text is surrounded by literal asterisks\*
+<div class="highlighter-rouge"><pre class="highlight"><code>\*this text is surrounded by literal asterisks\*
 
 *\*this text is surrounded by literal asterisks\**
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="pictures">图片</h3>
 
@@ -614,17 +650,19 @@ __double underscores__
 
 <h4 id="picture-inline">行内式</h4>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>![Alt text](/path/to/img.jpg)
+<div class="highlighter-rouge"><pre class="highlight"><code>![Alt text](/path/to/img.jpg)
 
 ![Alt text](/path/to/img.jpg "Optional title")
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="picture-reference">参考式</h4>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>![Alt text][id]
+<div class="highlighter-rouge"><pre class="highlight"><code>![Alt text][id]
 
 [id]: url/to/image  "Optional title attribute"
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>Markdown没有用于指定图像尺寸的语法; 如果这对你很重要，你可以使用HTML的<code class="highlighter-rouge">&lt;img&gt;</code>标签。</p>
 
@@ -634,15 +672,16 @@ __double underscores__
 
 <p>Markdown支持为URL和电子邮件地址创建“自动”链接的快捷方式，只需用尖括号括起来即可：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>&lt;http://example.com/&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;http://example.com/&gt;
 &lt;address@example.com&gt;
-</code></pre></div>
+</code></pre>
+</div>
 
 <h4 id="backslash-escapes">反斜杠转义</h4>
 
 <p>Markdown为以下字符提供反斜杠转义：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>\   反斜线
+<div class="highlighter-rouge"><pre class="highlight"><code>\   反斜线
 `   反引号
 *   星号
 _   底线
@@ -654,7 +693,8 @@ _   底线
 -   减号
 .   英文句点
 !   惊叹号
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="github-style">github扩展</h2>
 
@@ -662,32 +702,36 @@ _   底线
 
 <p>要创建任务列表，先列出列表项[ ]。要将任务标记为完成，请使用[x]。</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>- [x] Finish my changes
+<div class="highlighter-rouge"><pre class="highlight"><code>- [x] Finish my changes
 - [ ] Push my commits to GitHub
 - [ ] Open a pull request
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果任务列表项描述以括号开头，则需要使用反斜杠进行转义：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>- [ ] \(Optional) Open a followup issue
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>- [ ] \(Optional) Open a followup issue
+</code></pre>
+</div>
 
 <h3 id="emojis">表情符号</h3>
 
 <p>您可以通过键入支持的表情符号代码添加emoji，支持的表情符号可以在<a href="http://www.webpagefx.com/tools/emoji-cheat-sheet/">这里</a>找到。</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>:+1: This PR looks great - it's ready to merge! :shipit:
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>:+1: This PR looks great - it's ready to merge! :shipit:
+</code></pre>
+</div>
 
 <h3 id="tables">表格</h3>
 
 <p>您可以通过组合单词列表​​并用连字符-（对于第一行）分隔，然后用管道符号|分隔每个列来创建表，github会自动控制长宽：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>First Header | Second Header
+<div class="highlighter-rouge"><pre class="highlight"><code>First Header | Second Header
 ------------ | -------------
 Content from cell 1 | Content from cell 2
 Content in the first column | Content in the second column
-</code></pre></div>
+</code></pre>
+</div>
 
 <table>
   <thead>
@@ -714,7 +758,7 @@ Content in the first column | Content in the second column
 
 <p>推荐一个不错的Markdown文章书写格式：</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>#   标题
+<div class="highlighter-rouge"><pre class="highlight"><code>#   标题
 
 ##  本文结构
 
@@ -750,7 +794,8 @@ Content in the first column | Content in the second column
 
 开始使用Markdown写文章吧！
 
-</code></pre></div>
+</code></pre>
+</div>
 
 
                 <hr>
@@ -760,7 +805,7 @@ Content in the first column | Content in the second column
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/02/25/python%E7%9F%A5%E8%AF%86%E8%A6%81%E7%82%B9/" data-toggle="tooltip" data-placement="top" title="Python 知识要点">
+                        <a href="/2017/02/25/python-basis/" data-toggle="tooltip" data-placement="top" title="Python 知识要点">
                         Previous<br>
                         <span>Python 知识要点</span>
                         </a>
@@ -768,7 +813,7 @@ Content in the first column | Content in the second column
                     
                     
                     <li class="next">
-                        <a href="/2017/03/01/C++-%E9%87%8A%E7%96%91-%E4%B8%80/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（一）">
+                        <a href="/2017/03/01/C++-basis-1/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（一）">
                         Next<br>
                         <span>C++ 释疑（一）</span>
                         </a>
@@ -880,13 +925,12 @@ Content in the first column | Content in the second column
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/02/27/Markdown 基础语法";
-    var disqus_url = "/2017/02/27/Markdown-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/02/27/Markdown-basis-syntax";
+    var disqus_url = "https://chorior.github.io/2017/02/27/Markdown-basis-syntax/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>

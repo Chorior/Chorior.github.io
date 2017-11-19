@@ -12,7 +12,7 @@
 
     <title>C++ 释疑（三） - 彭侦的博客 | PengZhen's Blog</title>
 
-    <link rel="canonical" href="/2017/04/03/C++-%E9%87%8A%E7%96%91-%E4%B8%89/">
+    <link rel="canonical" href="https://chorior.github.io/2017/04/03/C++-basis-3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -199,7 +199,7 @@
 
 				<p>本文是我重温《C++ Primer 5》第三部分类设计者的工具时，摘录的一些要点，适合初级程序员食用。</p>
 
-<h1 id="本文结构">本文结构</h1>
+<h1 id="section">本文结构</h1>
 
 <ul>
   <li><a href="#copy_control">拷贝控制</a>
@@ -265,7 +265,7 @@
 
 <p><strong>通常一个类是不需要移动操作和拷贝操作的</strong>，可以通过继承如下类或<a href="http://www.boost.org/doc/libs/1_63_0/boost/core/noncopyable.hpp">noncopyable.hpp</a>来达到这个需求</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">noncopyable</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">noncopyable</span>
 <span class="p">{</span>
 <span class="k">protected</span><span class="o">:</span>
 	<span class="n">noncopyable</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>           <span class="c1">// 默认构造函数不可访问
@@ -274,7 +274,8 @@
 	<span class="n">noncopyable</span><span class="p">(</span><span class="k">const</span> <span class="n">noncopyable</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 	<span class="n">noncopyable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">noncopyable</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="copy_constructor">拷贝构造函数</h3>
 
@@ -284,13 +285,14 @@
 
 <p><strong>如果类的某个成员的拷贝构造函数是删除的或不可访问的（如private），则合成的拷贝构造函数被定义为删除的</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="n">FOO</span><span class="p">();</span>            <span class="c1">// 默认构造函数
 </span>	<span class="n">FOO</span><span class="p">(</span><span class="k">const</span> <span class="n">FOO</span><span class="o">&amp;</span><span class="p">);</span>  <span class="c1">// 拷贝构造函数
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="copy_assignment_operator">拷贝赋值运算符</h3>
 
@@ -304,13 +306,14 @@
 
 <p><strong>通过先拷贝右侧运算对象，可以处理自赋值情况，且能在异常发生时将左侧运算对象置于一个有意义的状态</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="n">FOO</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">FOO</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// 拷贝赋值运算符
 </span>	<span class="n">FOO</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">FOO</span><span class="p">);</span>  <span class="c1">// 异常安全，能正确处理自赋值，且能用作移动赋值
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="destructor">析构函数</h3>
 
@@ -322,21 +325,22 @@
 
 <p><strong>如果类的某个成员的析构函数是删除的或不可访问的（如private)，则合成的析构函数和拷贝构造函数被定义为删除的</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="o">~</span><span class="n">FOO</span><span class="p">();</span> <span class="c1">// 析构函数
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p><strong>如果一个类需要定义析构函数，那么你需要删除或重定义拷贝构造函数和拷贝赋值运算符</strong>，因为如果该类有一个指针成员，默认的拷贝构造函数和拷贝赋值运算符会直接拷贝该指针成员，当拷贝的对象被销毁时，原对象的指针成员也被销毁了</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
 <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
 	<span class="kt">int</span> <span class="o">*</span><span class="n">pi</span><span class="p">;</span>
 <span class="k">public</span><span class="o">:</span>
-	<span class="n">FOO</span><span class="p">()</span> <span class="o">:</span> <span class="n">pi</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">)</span> <span class="p">{}</span>
+	<span class="n">FOO</span><span class="p">()</span> <span class="o">:</span> <span class="n">pi</span><span class="p">(</span><span class="n">nullptr</span><span class="p">)</span> <span class="p">{}</span>
 	<span class="n">FOO</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="o">:</span> <span class="n">pi</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="p">{}</span>
 	<span class="o">~</span><span class="n">FOO</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span> <span class="n">pi</span><span class="p">;</span> <span class="p">}</span> 
 <span class="p">}</span>
@@ -346,7 +350,8 @@
 	<span class="n">FOO</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
 	<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>    <span class="c1">// ret和foo中的pi都被delete了，返回的pi指向无效内存！
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="rvalue_reference">右值引用</h3>
 
@@ -379,12 +384,13 @@
   <li>声明和定义都需要指定<code class="highlighter-rouge">noexcept</code>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FOO</span>
 <span class="p">{</span>
-	<span class="n">FOO</span><span class="p">(</span><span class="n">FOO</span> <span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>            <span class="c1">// 移动构造函数
-</span>	<span class="n">FOO</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">FOO</span> <span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span> <span class="c1">// 移动赋值运算符，需要考虑自赋值
+	<span class="n">FOO</span><span class="p">(</span><span class="n">FOO</span> <span class="o">&amp;&amp;</span><span class="p">)</span> <span class="n">noexcept</span><span class="p">;</span>            <span class="c1">// 移动构造函数
+</span>	<span class="n">FOO</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">FOO</span> <span class="o">&amp;&amp;</span><span class="p">)</span> <span class="n">noexcept</span><span class="p">;</span> <span class="c1">// 移动赋值运算符，需要考虑自赋值
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <ul>
   <li><strong>如果一个类定义了自己的拷贝构造函数、拷贝赋值运算符或析构函数，编译器就不会为它合成移动构造函数和移动赋值运算符了，此时对应的移动操作会被转换为相应的拷贝操作</strong>；</li>
@@ -396,7 +402,7 @@
 
 <p>如果一个类需要与重排元素顺序的算法一起使用，因为这类算法会在交换两个元素时调用<code class="highlighter-rouge">swap</code>，若该类自定义了自己的swap，那么算法将使用类自定义版本，否则使用<code class="highlighter-rouge">std::swap</code>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Ty</span><span class="p">,</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Ty</span><span class="p">,</span>
 	<span class="k">class</span><span class="o">&gt;</span> <span class="kr">inline</span>
 	<span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">_Left</span><span class="p">,</span> <span class="n">_Ty</span><span class="o">&amp;</span> <span class="n">_Right</span><span class="p">)</span>
 		<span class="n">_NOEXCEPT_OP</span><span class="p">(</span><span class="n">is_nothrow_move_constructible</span><span class="o">&lt;</span><span class="n">_Ty</span><span class="o">&gt;::</span><span class="n">value</span>
@@ -406,13 +412,15 @@
 	<span class="n">_Left</span> <span class="o">=</span> <span class="n">_STD</span> <span class="n">move</span><span class="p">(</span><span class="n">_Right</span><span class="p">);</span>
 	<span class="n">_Right</span> <span class="o">=</span> <span class="n">_STD</span> <span class="n">move</span><span class="p">(</span><span class="n">_Tmp</span><span class="p">);</span>
 	<span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>如果成员m有自定义的swap函数，那么使用方式是</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">swap</span><span class="p">;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">swap</span><span class="p">;</span>
 <span class="n">swap</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">m</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>因为对于一个调用，<strong>如果一个非函数模板与一个函数模板提供同样好的匹配，则选择非模板版本</strong>。</p>
 
@@ -420,9 +428,10 @@
 
 <p>区分移动和拷贝的重载函数通常有一个版本接受一个<code class="highlighter-rouge">const T&amp;</code>，而另一个版本接受一个<code class="highlighter-rouge">T&amp;&amp;</code>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">example</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// 拷贝元素
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">example</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// 拷贝元素
 </span><span class="kt">void</span> <span class="n">example</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span><span class="p">);</span>      <span class="c1">// 移动元素
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p>引用限定符类似const限定符，分为<code class="highlighter-rouge">&amp;</code>和<code class="highlighter-rouge">&amp;&amp;</code>，分别指出this可以指向一个左值或右值</p>
 
@@ -436,14 +445,15 @@
   <li><strong>没什么特别要求的话，不要使用引用限定符</strong>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">FOO</span> <span class="o">&amp;</span><span class="n">retFOO</span><span class="p">();</span> <span class="c1">// 返回一个引用，retFOO调用是一个左值
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">FOO</span> <span class="o">&amp;</span><span class="n">retFOO</span><span class="p">();</span> <span class="c1">// 返回一个引用，retFOO调用是一个左值
 </span><span class="n">FOO</span> <span class="n">retVal</span><span class="p">();</span>  <span class="c1">// 返回一个值，retval调用是一个右值
 </span><span class="n">FOO</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>      <span class="c1">// i, j是左值
 </span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>         <span class="c1">// 正确
 </span><span class="n">retFOO</span><span class="p">()</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>  <span class="c1">// 正确
 </span><span class="n">retVal</span><span class="p">()</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>  <span class="c1">// 错误，retval()返回一个右值
 </span><span class="n">i</span> <span class="o">=</span> <span class="n">retVal</span><span class="p">();</span>  <span class="c1">// 正确
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <h2 id="operator_overload">重载运算与类型转换</h2>
 
@@ -462,27 +472,30 @@
 
 <p>可以被重载的运算符</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>+ 		-		*		/		%		^
+<div class="highlighter-rouge"><pre class="highlight"><code>+ 		-		*		/		%		^
 &amp;		|		~		!		,		=
 &lt;		&gt;		&lt;=		&gt;=		++		--
 &lt;&lt;		&gt;&gt;		==		!=		&amp;&amp;		||
 +=		-=		/=		%=		^=		&amp;=
 |=		*=		&lt;&lt;=		&gt;&gt;=		[]		()
 -&gt;		-&gt;*		new		new[]		delete		delete[]
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>不能被重载的运算符</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="o">::</span>		<span class="p">.</span><span class="o">*</span>		<span class="p">.</span>		<span class="o">?:</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">::</span>		<span class="p">.</span><span class="o">*</span>		<span class="p">.</span>		<span class="o">?:</span>
+</code></pre>
+</div>
 
 <p>可以像调用普通函数一样调用运算符函数</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">data1</span> <span class="o">+</span> <span class="n">data2</span><span class="p">;</span>           <span class="c1">// 普通表达式
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">data1</span> <span class="o">+</span> <span class="n">data2</span><span class="p">;</span>           <span class="c1">// 普通表达式
 </span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">);</span> <span class="c1">// 等价的函数调用
 </span><span class="n">data1</span><span class="p">.</span><span class="k">operator</span><span class="o">++</span><span class="p">();</span>      <span class="c1">// 前置版本
 </span><span class="n">data1</span><span class="p">.</span><span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>     <span class="c1">// 后置版本
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
 <p><strong>重载的逻辑与运算符<code class="highlighter-rouge">&amp;&amp;</code>、逻辑或运算符<code class="highlighter-rouge">||</code>和逗号运算符<code class="highlighter-rouge">,</code>无法保留运算对象的求值顺序，重载的<code class="highlighter-rouge">&amp;&amp;</code>和<code class="highlighter-rouge">||</code>还无法保留内置运算符的短路求值属性，因此不建议重载它们，另外取地址运算符<code class="highlighter-rouge">&amp;</code>也不建议重载</strong>。</p>
 
@@ -503,8 +516,8 @@
   <li><strong>输入输出运算符必须是非成员函数，因为左侧运算符对象是一个iostream对象而非类对象</strong>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
-<span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">);</span> <span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+<span class="n">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">);</span> <span class="p">}</span>
 <span class="n">CLASS_NAME</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
 <span class="n">CLASS_NAME</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
 <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">CLASS_NAME</span> <span class="o">&amp;</span><span class="n">item</span><span class="p">);</span> <span class="c1">// 尽可能减少格式化操作
@@ -520,12 +533,14 @@
 	<span class="n">TYPE</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="o">&amp;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="k">operator</span><span class="o">*</span><span class="p">();</span> <span class="p">}</span>
 	<span class="n">TYPE</span> <span class="k">operator</span><span class="p">()(</span><span class="n">args</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// 函数调用运算符
 </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="arrow_operator_execution">箭头运算符的执行过程</h3>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">point</span><span class="o">-&gt;</span><span class="n">mem</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">point</span><span class="o">-&gt;</span><span class="n">mem</span><span class="p">;</span>
+</code></pre>
+</div>
 
 <ol>
   <li>如果point是指针，则表达式等价于<code class="highlighter-rouge">(*point).mem</code>;</li>
@@ -559,7 +574,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;algorithm&gt;
 #include &lt;iterator&gt;
@@ -579,7 +594,8 @@
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="callable_object">可调用对象</h3>
 
@@ -636,7 +652,7 @@
   </tbody>
 </table>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;string&gt;
 #include &lt;functional&gt;
@@ -670,14 +686,16 @@
 	<span class="n">getchar</span><span class="p">();</span>
 	<span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="type_conversion">类型转换运算符</h3>
 
 <p>转换构造函数和类型转换运算符共同定义了类类型转换；类型转换函数的一般形式如下</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">operator</span> <span class="n">type</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">operator</span> <span class="n">type</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</code></pre>
+</div>
 
 <p><strong>类型转换函数必须是类的成员函数</strong>，没有返回类型，形参列表为空。</p>
 
@@ -733,7 +751,7 @@
   <li><strong>可以使用using声明改变可访问成员的可访问性，using声明可以把名字(包含除默认构造函数、拷贝和移动构造函数之外的构造函数)对应的所有可访问重载添加到派生类作用域中，重定义的版本将覆盖基类版本</strong>。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 	<span class="kt">void</span> <span class="n">func</span><span class="p">(){}</span>
@@ -749,7 +767,8 @@
 </span><span class="nl">protected:</span>
 	<span class="k">using</span> <span class="n">A</span><span class="o">::</span><span class="n">n</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="virtual_function">虚函数</h3>
 
@@ -797,7 +816,7 @@
   <li><strong>显式实例化会实例化所有成员</strong>；</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="o">&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="o">&gt;</span>
 <span class="kr">inline</span> <span class="n">T</span> <span class="n">foo</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">T</span> <span class="n">tmp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
@@ -824,7 +843,8 @@
 </span><span class="k">extern</span> <span class="k">template</span> <span class="k">class</span> <span class="nc">Example</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="k">template</span> <span class="kt">int</span> <span class="n">foo</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span> <span class="n">p</span><span class="p">);</span> <span class="c1">// 实例化定义
 </span><span class="k">template</span> <span class="k">class</span> <span class="nc">Example</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h3 id="template_specialization">模板特例化</h3>
 
@@ -834,11 +854,12 @@
 
 <p><strong>在任何使用模板实例的代码之前，特例化版本的声明也必须在作用域中</strong>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;&gt;</span>
 <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">){</span>
 	<span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>默认情况下，无序容器使用<code class="highlighter-rouge">hash&lt;key_type&gt;</code>来组织元素，为使自己的数据类型也能使用无序容器，必须定义一个hash模板的特例化版本。</p>
 
@@ -850,7 +871,7 @@
   <li>默认构造函数和拷贝赋值运算符（可以隐式定义）。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">point3d</span><span class="p">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">point3d</span><span class="p">{</span>
 	<span class="kt">float</span> <span class="n">a</span><span class="p">;</span>
 	<span class="kt">float</span> <span class="n">b</span><span class="p">;</span>
 	<span class="kt">float</span> <span class="n">c</span><span class="p">;</span>
@@ -873,7 +894,8 @@
 		<span class="k">return</span> <span class="n">hash</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()(</span><span class="n">n</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">^</span> <span class="n">hash</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()(</span><span class="n">n</span><span class="p">.</span><span class="n">b</span><span class="p">)</span> <span class="o">^</span> <span class="n">hash</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()(</span><span class="n">n</span><span class="p">.</span><span class="n">c</span><span class="p">);</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 
 
@@ -884,7 +906,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/03/08/C++-%E9%87%8A%E7%96%91-%E4%BA%8C/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（二）">
+                        <a href="/2017/03/08/C++-basis-2/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（二）">
                         Previous<br>
                         <span>C++ 释疑（二）</span>
                         </a>
@@ -892,7 +914,7 @@
                     
                     
                     <li class="next">
-                        <a href="/2017/04/20/C++-%E9%87%8A%E7%96%91-%E5%9B%9B/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（四）">
+                        <a href="/2017/04/20/C++-basis-4/" data-toggle="tooltip" data-placement="top" title="C++ 释疑（四）">
                         Next<br>
                         <span>C++ 释疑（四）</span>
                         </a>
@@ -1004,13 +1026,12 @@
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "chorior";
-    var disqus_identifier = "/2017/04/03/C++ 释疑（三）";
-    var disqus_url = "/2017/04/03/C++-%E9%87%8A%E7%96%91-%E4%B8%89/";
-
-    (function() { // DON'T EDIT BELOW THIS LINE
+    var disqus_shortname = "blog-pengzhen";
+    var disqus_identifier = "/2017/04/03/C++-basis-3";
+    var disqus_url = "https://chorior.github.io/2017/04/03/C++-basis-3/";
+    (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        s.src = 'https://chorior.disqus.com/embed.js';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>
