@@ -5,9 +5,295 @@
     <description>学习使我快乐</description>
     <link>https://chorior.github.io/</link>
     <atom:link href="https://chorior.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 13 Jan 2018 18:08:43 -0800</pubDate>
-    <lastBuildDate>Sat, 13 Jan 2018 18:08:43 -0800</lastBuildDate>
+    <pubDate>Sun, 17 Feb 2019 15:56:34 +0800</pubDate>
+    <lastBuildDate>Sun, 17 Feb 2019 15:56:34 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Git 工作流</title>
+        <description>&lt;h2 id=&quot;section&quot;&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#version_control&quot;&gt;版本管理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#git_install&quot;&gt;git 安装&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#git_config&quot;&gt;git 配置&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#create_repository&quot;&gt;创建仓库&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#gitignore&quot;&gt;管理类型&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#basic_process&quot;&gt;基本流程&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#basic_operation&quot;&gt;基本操作&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#branch_operation&quot;&gt;分支操作&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#remote_repository&quot;&gt;远程仓库&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#common_operation&quot;&gt;常用操作&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;version_control&quot;&gt;版本管理&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;版本控制是一种记录若干文件内容变化，以便将来查阅特定版本修订情况的系统&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;最开始的版本管理系统是 CVCS(Centralized Version Control Systems)，即集中式版本管理系统，该系统将所有版本的历史记录保存在单一的位置，类似于我们常说的备份，这种版本管理最大的缺点就是：&lt;strong&gt;一旦保存记录的磁盘发生损坏，就可能丢失所有历史更新信息&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;后来 linus 大神团队花两三个月开发了 git，其系统为 DVCS(Distributed Version Control System)，即分布式管理系统，该系统不只提取最新版本的文件快照，而且把原始的代码仓库都完整地镜像下来，这意味着&lt;strong&gt;只要有一个镜像没有损坏，那么所有的历史记录都能完整的恢复出来&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;git 除了具有 DVCS 的特点外，还有相当多的优点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;git 只关心文件数据的整体是否发生变化，而大多数其他系统则只关心文件内容的具体差异；&lt;/li&gt;
+  &lt;li&gt;git 中的绝大多数操作都只需要访问本地文件和资源，不用连网；&lt;/li&gt;
+  &lt;li&gt;git 使用 SHA-1 算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个 SHA-1 哈希值作为指纹字符串，所有保存在 git 数据库中的东西都是用此哈希值来作索引的，而不是靠文件名。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;git_install&quot;&gt;git 安装&lt;/h2&gt;
+
+&lt;h3 id=&quot;linux&quot;&gt;linux&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Fedora: &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo yum install git-core&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Debian: &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt-get install git-core&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;windows&quot;&gt;Windows&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://git-for-windows.github.io/&quot;&gt;https://git-for-windows.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;git_config&quot;&gt;git 配置&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;配置个人用户名和电子邮件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config --global user.name pengzhen
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config --global user.email pengzhen@example.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;配置文本编辑器（可选）&lt;/h3&gt;
+
+&lt;p&gt;git 在需要你输入一些信息的时候,会调用一个文本编译器，如果不设置的话，可能默认调用 nano 编辑器(linux)，一般使用 vi 或者 vim 会比较方便，所以配置编辑器为 vim：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config --global core.editor vim
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;配置自动换行符转换（可选）&lt;/h3&gt;
+
+&lt;p&gt;如果你在 windows 上修改 linux 上使用的文件，那么需要将 windows 的 CRLF 转换为 LF：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config --global core.autocrlf input
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;查看配置信息&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config -l
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;提示&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;如果忘记配置的话，git 不会让你提交任何东西&lt;/strong&gt;。仔细看，你会发现上面所有的配置都包含有 &lt;code class=&quot;highlighter-rouge&quot;&gt;--global&lt;/code&gt; 选项，这表明所有的配置都是全局的，以后你再新建项目时，就不用再重新配置了，当然你也可以不用该选项。&lt;/p&gt;
+
+&lt;p&gt;另外，添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;--global&lt;/code&gt; 选项修改的是用户目录下的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitconfig&lt;/code&gt; 文件，例如 windows 下我的就是 &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Users\pengzhen\.gitconfig&lt;/code&gt;，linux 下为 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.gitconfig&lt;/code&gt;；不添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;--global&lt;/code&gt; 选项修改的是项目目录下的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git/config&lt;/code&gt;，&lt;strong&gt;该配置文件的变量会覆盖全局的同名变量&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;create_repository&quot;&gt;创建仓库&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;仓库分为远程仓库和本地仓库&lt;/strong&gt;，我们一般在本地仓库上进行修改，然后再将本地仓库合并到远程仓库。&lt;/p&gt;
+
+&lt;p&gt;有两种创建本地仓库的方法：&lt;/p&gt;
+
+&lt;p&gt;在现存目录下，通过初始化创建新的 git 仓库，结束之后会在当前目录下生成一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git&lt;/code&gt; 隐藏目录：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;dir
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git init
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;克隆 github 上 git 组织开源的 git 仓库到本地仓库 mygit：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git clone git://github.com/git/git.git mygit
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;所有 git 需要的数据和资源都存放在 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git&lt;/code&gt; 目录下&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;gitignore&quot;&gt;管理类型&lt;/h2&gt;
+
+&lt;p&gt;有时候仓库里有一些不必要加入版本管理的文件，如代码编译生成的中间文件，这时候就需要控制管理文件的类型了。&lt;/p&gt;
+
+&lt;p&gt;git 使用工作目录下一个名为 &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; 的文件来忽略掉一些不想被 git 管理的文件，该文件是不会自动生成的，需要你自己创建。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; 文件支持正则表达式：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;以井号“#”开头代表注释；&lt;/li&gt;
+  &lt;li&gt;以斜杠“/”结尾表示目录；&lt;/li&gt;
+  &lt;li&gt;以星号“*”通配多个字符；&lt;/li&gt;
+  &lt;li&gt;以问号“?”通配单个字符；&lt;/li&gt;
+  &lt;li&gt;以方括号“[]”包含单个字符的匹配列表；&lt;/li&gt;
+  &lt;li&gt;以叹号“!”表示不忽略匹配到的文件或目录。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;举个简单的例子：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.[oa]      &lt;span class=&quot;c&quot;&gt;# 忽略所有后缀为 .o 或者 .a 的文件&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Dd]ebug/  &lt;span class=&quot;c&quot;&gt;# 忽略 Debug 或 debug 目录&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;basic_process&quot;&gt;基本流程&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;任何一个文件，在 git 中都只有三种状态&lt;/strong&gt;：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;已提交(committed)：该文件已经被安全地保存在本地数据库中；&lt;/li&gt;
+  &lt;li&gt;已修改(modified)：修改了某个文件，但还没有提交保存；&lt;/li&gt;
+  &lt;li&gt;已暂存(staged)：把已修改的文件放在下次提交时要保存的清单中。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Git 管理项目时，文件会流转三个区域：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;本地数据库：保存元数据和对象数据库的地方，即 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git&lt;/code&gt; 目录；&lt;/li&gt;
+  &lt;li&gt;工作目录：从项目中取出某个版本的所有文件和目录，用以开始后续工作，即 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git&lt;/code&gt; 所在的目录；&lt;/li&gt;
+  &lt;li&gt;暂存区域：顾名思义，暂时存放修改文件的地方；&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以管理 git 的基本流程就是：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在工作目录中修改某些文件；&lt;/li&gt;
+  &lt;li&gt;对这些修改了的文件作快照，并保存到暂存区域；&lt;/li&gt;
+  &lt;li&gt;提交更新，将保存在暂存区域的文件快照转储到本地数据库。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;basic_operation&quot;&gt;基本操作&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git status                  &lt;span class=&quot;c&quot;&gt;# 查看当前文件的状态&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git add file                &lt;span class=&quot;c&quot;&gt;# 添加 file 到暂存区域&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git add .                   &lt;span class=&quot;c&quot;&gt;# 添加当前目录下的所有修改到暂存区域&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git reset file              &lt;span class=&quot;c&quot;&gt;# 移除暂存区域内的 file&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git reset                   &lt;span class=&quot;c&quot;&gt;# 移除暂存区域内的所有文件&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git diff                    &lt;span class=&quot;c&quot;&gt;# 查看暂存区域文件与工作目录文件的差异&lt;/span&gt;
+                              &lt;span class=&quot;c&quot;&gt;# 若无暂存则为当前版本数据库文件与工作目录文件的差异&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git diff --staged           &lt;span class=&quot;c&quot;&gt;# 查看暂存区域文件与当前版本数据库文件的差异&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git checkout -- file        &lt;span class=&quot;c&quot;&gt;# 取消对 file 的修改&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git commit -m &lt;span class=&quot;s2&quot;&gt;&quot;1.0&quot;&lt;/span&gt;         &lt;span class=&quot;c&quot;&gt;# 将暂存区域内的文件提交到数据库，提交说明为 1.0&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git commit --amend -m &lt;span class=&quot;s2&quot;&gt;&quot;1.0&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 撤销上次的提交并重新开始新的提交&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log                     &lt;span class=&quot;c&quot;&gt;# 查看提交历史&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;关于提交历史：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一行为对应提交的 SHA-1 校验和；&lt;/li&gt;
+  &lt;li&gt;第二行为作者姓名和邮件地址；&lt;/li&gt;
+  &lt;li&gt;第三行为提交时间；&lt;/li&gt;
+  &lt;li&gt;第四行缩进一个段落显示提交说明。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://chorior.github.io/img/gitlog.png&quot; alt=&quot;git log&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;branch_operation&quot;&gt;分支操作&lt;/h2&gt;
+
+&lt;p&gt;有时候一个功能可以使用多种方法进行实现，可能需要对各种方法进行性能评估，这时候就可以在当前版本的基础上建立多个分支，用以不同的实现方式。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git branch -a                        &lt;span class=&quot;c&quot;&gt;# 查看所有分支列表&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git branch &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]             &lt;span class=&quot;c&quot;&gt;# 建立当前版本的一个新分支 branch_name&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git checkout &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]           &lt;span class=&quot;c&quot;&gt;# 切换到 branch_name 分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git checkout -b &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]        &lt;span class=&quot;c&quot;&gt;# 新建并切换到 branch_name 分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log                              &lt;span class=&quot;c&quot;&gt;# 查看提交历史 SHA-1 校验和&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git checkout SHA-1 -b &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]  &lt;span class=&quot;c&quot;&gt;# 为校验和为 SHA-1 的历史版本建立一个新分支 branch_name&lt;/span&gt;
+                                       &lt;span class=&quot;c&quot;&gt;# SHA-1 不必写全，只要唯一即可，一般写6位&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git branch -d &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]          &lt;span class=&quot;c&quot;&gt;# 删除 branch_name 分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git branch -D &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]          &lt;span class=&quot;c&quot;&gt;# 强制删除 branch_name 分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git merge &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]              &lt;span class=&quot;c&quot;&gt;# 将 branch_name 分支合并到当前分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;remote_repository&quot;&gt;远程仓库&lt;/h2&gt;
+
+&lt;p&gt;当本地仓库修改完之后，可能需要合并到远程仓库：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git remote -v                       &lt;span class=&quot;c&quot;&gt;# 查看远程分支列表&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git remote add &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;url]    &lt;span class=&quot;c&quot;&gt;# 添加远程仓库，远程仓库名为 shortname，地址为 url&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git remote rm &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname]           &lt;span class=&quot;c&quot;&gt;# 删除名为 shortname 的远程仓库&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git remote rename &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;old] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;new]       &lt;span class=&quot;c&quot;&gt;# 修改远程仓库 old 的名字为 new&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git fetch &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name] &lt;span class=&quot;c&quot;&gt;# 抓取远程仓库 shortname 的 branch_name 分支到本地数据库，checkout 切换到该分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git pull &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name]  &lt;span class=&quot;c&quot;&gt;# 抓取远程仓库 shortname 的 branch_name 数据并合并到当前分支&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git push &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname] HEAD           &lt;span class=&quot;c&quot;&gt;# 推送当前分支到远程仓库 shortname 的同名分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;common_operation&quot;&gt;常用操作&lt;/h2&gt;
+
+&lt;p&gt;生成 ssh 公匙：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;ssh-keygen -t rsa -C pengzhen@example.com &lt;span class=&quot;c&quot;&gt;# 后面一直回车即可&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat /c/Users/pengzhen/.ssh/id_rsa.pub     &lt;span class=&quot;c&quot;&gt;# 查看生成的密匙&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;回退版本：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log                                    &lt;span class=&quot;c&quot;&gt;# 查看要回退的版本 SHA-1&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git reset --hard SHA-1                     &lt;span class=&quot;c&quot;&gt;# 回退到 SHA-1&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git reset --hard HEAD~[num]                &lt;span class=&quot;c&quot;&gt;# 回退到当前提交前的第 num 个提交&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git push &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;shortname] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;branch_name] --force &lt;span class=&quot;c&quot;&gt;# 强制推送到远端&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;清理当前目录下的所有修改和临时文件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git reset         &lt;span class=&quot;c&quot;&gt;# 移除暂存区域内的所有文件&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git clean -dfx    &lt;span class=&quot;c&quot;&gt;# 删除当前目录下所有未被 git 跟踪的文件或文件夹&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git checkout -- . &lt;span class=&quot;c&quot;&gt;# 移除当前目录下所有文件的修改&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;查询提交信息（下面的选项可以合并使用）：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log --author&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;pengzhen  &lt;span class=&quot;c&quot;&gt;# 查询特定作者的提交记录&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log --oneline          &lt;span class=&quot;c&quot;&gt;# 显示提交记录时，只显示一行&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log --name-only        &lt;span class=&quot;c&quot;&gt;# 查询提交记录时，同时显示修改的文件列表&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;查询一个文件的某个改动：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git blame -L &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;start],[end] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;filename]  &lt;span class=&quot;c&quot;&gt;# 查看 filename 从 start 到 end 行的最近的修改记录&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log -L &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;filename],[end]:[filename] &lt;span class=&quot;c&quot;&gt;# 查看 filename 从 start 到 end 行的所有修改记录&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git log -S &lt;span class=&quot;s2&quot;&gt;&quot;[string]&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;filename]       &lt;span class=&quot;c&quot;&gt;# 查看 string 被添加到 filename 的记录&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;取消当前修改，但是后面又想做一样的修改：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git stash        &lt;span class=&quot;c&quot;&gt;# 将当前修改储藏起来，并返回到原来未修改的状态&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git stash list   &lt;span class=&quot;c&quot;&gt;# 查看储藏列表&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git stash pop    &lt;span class=&quot;c&quot;&gt;# 应用最近的储藏，并删除堆栈&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git stash clear  &lt;span class=&quot;c&quot;&gt;# 删除所有储藏&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;其它：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/0616--ataozhijia/p/3709917.html&quot;&gt;git revert&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.yiibai.com/git/git_rebase.html&quot;&gt;git rebase&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 16 Feb 2019 20:20:00 +0800</pubDate>
+        <link>https://chorior.github.io/2019/02/16/git-work-flow/</link>
+        <guid isPermaLink="true">https://chorior.github.io/2019/02/16/git-work-flow/</guid>
+        
+        <category>git</category>
+        
+        
+      </item>
     
       <item>
         <title>Qt5 基础篇</title>
@@ -4582,7 +4868,7 @@ qrc:///images/new.png
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Mon, 28 Aug 2017 05:20:00 -0700</pubDate>
+        <pubDate>Mon, 28 Aug 2017 20:20:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/08/28/Qt5-basis/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/08/28/Qt5-basis/</guid>
         
@@ -8161,7 +8447,7 @@ thread interrupted.
 
 &lt;p&gt;&lt;strong&gt;你至少需要在一个单处理器系统和一个多处理器系统上进行测试&lt;/strong&gt;。&lt;/p&gt;
 </description>
-        <pubDate>Thu, 06 Jul 2017 05:20:00 -0700</pubDate>
+        <pubDate>Thu, 06 Jul 2017 20:20:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/07/06/C++-thread-application/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/07/06/C++-thread-application/</guid>
         
@@ -9778,7 +10064,7 @@ thread interrupted.
 
 &lt;p&gt;无锁数据结构太难了，上面是最简单的数据结构，还没设计完！其实后面还有一些分析，你可以自行查看《C++ Concurrency in Action》7.2.2节及其后面的内容。我自认为如果让我自己构建的话，我是绝对想不到这么多的，在工作中需要经常调试又很难找出错误的代码是不允许出现的，我还是比较适合带锁的数据结构，当然这只是安慰自己的借口而已，后面会跳过无锁数据结构的设计，开始并发代码设计、管理和调试的学习！&lt;/p&gt;
 </description>
-        <pubDate>Thu, 08 Jun 2017 05:20:00 -0700</pubDate>
+        <pubDate>Thu, 08 Jun 2017 20:20:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/06/08/C++-thread-design-2/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/06/08/C++-thread-design-2/</guid>
         
@@ -11157,7 +11443,7 @@ empty stack.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 24 May 2017 05:20:00 -0700</pubDate>
+        <pubDate>Wed, 24 May 2017 20:20:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/05/24/C++-thread-design-1/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/05/24/C++-thread-design-1/</guid>
         
@@ -14547,7 +14833,7 @@ Please enter your card (I)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Mon, 24 Apr 2017 05:20:00 -0700</pubDate>
+        <pubDate>Mon, 24 Apr 2017 20:20:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/04/24/C++-thread-basis/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/04/24/C++-thread-basis/</guid>
         
@@ -14956,9 +15242,9 @@ Please enter your card (I)
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Thu, 20 Apr 2017 23:28:00 -0700</pubDate>
-        <link>https://chorior.github.io/2017/04/20/C++-basis-4/</link>
-        <guid isPermaLink="true">https://chorior.github.io/2017/04/20/C++-basis-4/</guid>
+        <pubDate>Fri, 21 Apr 2017 14:28:00 +0800</pubDate>
+        <link>https://chorior.github.io/2017/04/21/C++-basis-4/</link>
+        <guid isPermaLink="true">https://chorior.github.io/2017/04/21/C++-basis-4/</guid>
         
         <category>C++</category>
         
@@ -15670,9 +15956,9 @@ Please enter your card (I)
 &lt;/div&gt;
 
 </description>
-        <pubDate>Mon, 03 Apr 2017 23:28:00 -0700</pubDate>
-        <link>https://chorior.github.io/2017/04/03/C++-basis-3/</link>
-        <guid isPermaLink="true">https://chorior.github.io/2017/04/03/C++-basis-3/</guid>
+        <pubDate>Tue, 04 Apr 2017 14:28:00 +0800</pubDate>
+        <link>https://chorior.github.io/2017/04/04/C++-basis-3/</link>
+        <guid isPermaLink="true">https://chorior.github.io/2017/04/04/C++-basis-3/</guid>
         
         <category>C++</category>
         
@@ -17997,7 +18283,7 @@ Please enter your card (I)
 &lt;/table&gt;
 
 </description>
-        <pubDate>Wed, 08 Mar 2017 04:00:00 -0800</pubDate>
+        <pubDate>Wed, 08 Mar 2017 20:00:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/03/08/C++-basis-2/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/03/08/C++-basis-2/</guid>
         
@@ -18833,626 +19119,13 @@ Please enter your card (I)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 01 Mar 2017 04:00:00 -0800</pubDate>
+        <pubDate>Wed, 01 Mar 2017 20:00:00 +0800</pubDate>
         <link>https://chorior.github.io/2017/03/01/C++-basis-1/</link>
         <guid isPermaLink="true">https://chorior.github.io/2017/03/01/C++-basis-1/</guid>
         
         <category>C++</category>
         
         <category>C++ primer</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Markdown 基础语法</title>
-        <description>&lt;p&gt;本文参考自&lt;a href=&quot;http://daringfireball.net/projects/markdown/syntax&quot;&gt;daringfireball&lt;/a&gt;，加了一些自己使用markdown时的经验。&lt;/p&gt;
-
-&lt;p&gt;学习一门语法时，建议按照教程自己手动操作一下。&lt;/p&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;本文结构&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Markdown简介&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#editor&quot;&gt;Markdown编辑器&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#basic-syntax&quot;&gt;Markdown基础语法&lt;/a&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#paragraphs&quot;&gt;段落&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#breaks&quot;&gt;换行&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#title&quot;&gt;标题&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#blockquotes&quot;&gt;块引用&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#lists&quot;&gt;列表&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#code-blocks&quot;&gt;代码块&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#split-lines&quot;&gt;分割线&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#links&quot;&gt;链接&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#emphasis&quot;&gt;强调&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#pictures&quot;&gt;图片&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#basic-others&quot;&gt;其它&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#github-style&quot;&gt;github扩展&lt;/a&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#task-lists&quot;&gt;任务列表&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#emojis&quot;&gt;表情符号&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#tables&quot;&gt;表格&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#summary&quot;&gt;Markdown总结&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;introduction&quot;&gt;Markdown简介&lt;/h2&gt;
-
-&lt;p&gt;Markdown的优点是易读和易写，它的语法借鉴了一些已存在的text-to-HTML过滤器(包括Setext, atx, Textile, reStructuredText, Grutatext, and EtText)，它设计的最大灵感来源于纯文本邮件格式，它的主要意图是被用以网络格式的编写，它的语法可以说是HTML的子集，但HTML是发布的格式，Markdown是写的格式，如果有Markdown没有包含的语法,你可以直接使用HTML语法。&lt;/p&gt;
-
-&lt;p&gt;在HTML中，有两个字符需要特殊处理：&amp;lt;和&amp;amp;。左尖括号用于启动标签; ＆符号用于表示HTML实体。如果要将它们用作文字字符，则必须将它们转义为实体，例如&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;lt;&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;amp;&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;Markdown允许你自然地使用这两个字符，照顾所有必要的转义。如果使用＆符作为HTML实体的一部分，则它保持不变; 否则会被翻译成&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;amp;&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;但是在链接或代码中，&amp;lt;和&amp;amp;总是自动编码，这使得Markdown很容易进行HTML代码的编写。&lt;/p&gt;
-
-&lt;h2 id=&quot;editor&quot;&gt;Markdown编辑器&lt;/h2&gt;
-
-&lt;h3 id=&quot;editor-linux&quot;&gt;Linux&lt;/h3&gt;
-
-&lt;p&gt;ReText, Atom, vs code&lt;/p&gt;
-
-&lt;h3 id=&quot;editor-windows&quot;&gt;Windows&lt;/h3&gt;
-
-&lt;p&gt;MarkdownPad, MarkPad, MarkEditor, vs code&lt;/p&gt;
-
-&lt;h2 id=&quot;basic-syntax&quot;&gt;Markdown基础语法&lt;/h2&gt;
-
-&lt;h3 id=&quot;paragraphs&quot;&gt;段落&lt;/h3&gt;
-
-&lt;p&gt;段落是一个或多个连续的文本行，由一个或多个空白行分隔。（空白行是看起来像空行的任何行，即只包含空格或制表符的行被视为空白。）正常段落不应缩进空格或制表符：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;this is a paragraph
-
-this is another paragraph
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;breaks&quot;&gt;换行&lt;/h3&gt;
-
-&lt;p&gt;行尾使用两个或更多空格，然后enter; 或者直接使用HTML &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;br&amp;gt;&lt;/code&gt;标签：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;line 1  
-line 2 &amp;lt;br&amp;gt;
-line 3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;title&quot;&gt;标题&lt;/h3&gt;
-
-&lt;p&gt;Markdown支持两种样式的头文件，&lt;a href=&quot;http://docutils.sourceforge.net/mirror/setext.html&quot;&gt;Setext&lt;/a&gt; 和 &lt;a href=&quot;http://www.aaronsw.com/2002/atx/&quot;&gt;atx&lt;/a&gt;;&lt;/p&gt;
-
-&lt;p&gt;Setext样式标题使用等号（对于第一级标题）和破折号（对于第二级标题）标注，任何数量得等号或破折号都可以正常工作，一般写三个:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This is an H1
-=============
-
-This is an H2
--------------
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Atx风格的标题在行的开头使用1-6个#字符，对应于标题级别1-6:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# title1
-## title2
-### title3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;你可以选择封闭式的Atx标题，只要在后面加上任意个数的#符号即可，虽然这没什么软用，但有些人觉得挺好看的：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# title1 #
-## title2 ##
-### title3 ###
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;blockquotes&quot;&gt;块引用&lt;/h3&gt;
-
-&lt;p&gt;Markdown使用电子邮件样式&amp;gt;字符进行块引用，在每行前加上&amp;gt;即可：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-&amp;gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-&amp;gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-&amp;gt;
-&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-&amp;gt; id sem consectetuer libero luctus adipiscing.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果你懒得话，Markdown也允许你只在段落的第一行加上&amp;gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;块引用允许嵌套，只要添加相应个数个&amp;gt;即可：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; This is the first level of quoting.
-&amp;gt;
-&amp;gt; &amp;gt; This is nested blockquote.
-&amp;gt;
-&amp;gt; Back to the first level.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;块引用还可以包含其他Markdown元素，包括头，列表和代码块&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; ## This is a header.
-&amp;gt; 
-&amp;gt; 1.   This is the first list item.
-&amp;gt; 2.   This is the second list item.
-&amp;gt; 
-&amp;gt; Here&#39;s some example code:
-&amp;gt; 
-&amp;gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
-&amp;gt;
-&amp;gt; github style: 
-&amp;gt;
-&amp;gt; ```c++
-&amp;gt; #include &amp;lt;iostream&amp;gt;
-&amp;gt; int main()
-&amp;gt; {
-&amp;gt;   std::cout &amp;lt;&amp;lt; &quot;Hello World!\n&quot;;
-&amp;gt;   return 0;
-&amp;gt; }
-&amp;gt; ```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;lists&quot;&gt;列表&lt;/h3&gt;
-
-&lt;p&gt;Markdown支持有序（编号）和无序（项目符号）列表。&lt;/p&gt;
-
-&lt;p&gt;无序列表使用&lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt;号或&lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt;号或&lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt;号（可互换）作为列表标记。列表标记左侧最多缩进三个空格；列表标记右侧必须跟有一个或多个空格或制表符，建议使用制表符（当列表后跟缩进代码块时比较好看）：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*   Red
-*   Green
-*   Blue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;有序列表使用数字后跟英文句点，但用于标记的数字对Markdown生成的HTML并没用什么软用，建议都写1比较方便&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.  Bird
-2.  McHale
-3.  Parish
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果列表文字较多，建议每行加个缩进，这样会比较好看：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
-    viverra nec, fringilla in, laoreet vitae, risus.
-*   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
-    Suspendisse id sem consectetuer libero luctus adipiscing.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果列表项中间有空行,那么在输出 HTML 时 Markdown 就会将项目内容用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;p&amp;gt;&lt;/code&gt;标签包起来：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;markdown:
-
-*   Bird
-*   Magic
-
-html:
-
-&amp;lt;ul&amp;gt;
-&amp;lt;li&amp;gt;Bird&amp;lt;/li&amp;gt;
-&amp;lt;li&amp;gt;Magic&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
-
-markdown:
-
-*   Bird
-
-*   Magic
-
-html:
-
-&amp;lt;ul&amp;gt;
-&amp;lt;li&amp;gt;&amp;lt;p&amp;gt;Bird&amp;lt;/p&amp;gt;&amp;lt;/li&amp;gt;
-&amp;lt;li&amp;gt;&amp;lt;p&amp;gt;Magic&amp;lt;/p&amp;gt;&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;列表项可以由多个段落组成。列表项中的每个后续段落必须缩进为4个空格或一个制表符，如果你懒得话，也可以只缩进每段第一行：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.  This is a list item with two paragraphs. Lorem ipsum dolor
-    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
-    mi posuere lectus.
-
-    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
-    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
-    sit amet velit.
-
-2.  Suspendisse id sem consectetuer libero luctus adipiscing.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;要在列表项中放置块引用，&amp;gt;分隔符需要缩进：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*   A list item with a blockquote:
-
-    &amp;gt; This is a blockquote
-    &amp;gt; inside a list item.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;要将缩进代码块放在列表项中，代码块需要缩进两次 - 8个空格或2个制表符（但是github版用反引号标记的代码块却不需要）：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*   A list item with a code block:
-
-        &amp;lt;code goes here&amp;gt;
-
-*   A list item with a github code block:
-
-```text
-    I&#39;m a code. 
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果你有一句话以数字结尾，那么可能触发一个有序列表:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1986. What a great season.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;解决方法是使用反斜杠转义句点：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1986\. What a great season.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;code-blocks&quot;&gt;代码块&lt;/h3&gt;
-
-&lt;p&gt;如果要标记一小段行内代码，你可以用反引号把它包起来:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Use the `printf()` function.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;要在代码范围内包含文字反引号字符，可以使用多个反引号作为开始和结束分隔符：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;``There is a literal backtick (`) here.``
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;要在Markdown中生成代码块，只需将该块的每一行缩进至少4个空格或1个制表符：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This is a normal paragraph:
-
-    This is a code block.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;记住，要将缩进代码块放在列表项中，代码块需要缩进两次 - 8个空格或2个制表符。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*   A list item with a code block:
-
-        &amp;lt;code goes here&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;代码块继续，直到它到达没有缩进的行（或到达文章结尾）。&lt;/p&gt;
-
-&lt;p&gt;github版的代码块支持使用反引号标记，并且可以选择添加语言标识ID将代码块高亮显示，支持的语言可以在&lt;a href=&quot;https://github.com/github/linguist/blob/master/lib/linguist/languages.yml&quot;&gt;这里&lt;/a&gt;找到:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```ruby
-require &#39;redcarpet&#39;
-markdown = Redcarpet.new(&quot;Hello World!&quot;)
-puts markdown.to_html
-```
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果你要在代码块中插入多个反引号（如Python的多行注释标记），那么用于Markdown代码块的反引号个数必须要多于代码块中的反引号个数:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;`````text
-```ruby
-require &#39;redcarpet&#39;
-markdown = Redcarpet.new(&quot;Hello World!&quot;)
-puts markdown.to_html
-```
-`````
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;split-lines&quot;&gt;分割线&lt;/h3&gt;
-
-&lt;p&gt;你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* * *
-
-***
-
-*****
-
-- - -
-
----------------------------------------
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;links&quot;&gt;链接&lt;/h3&gt;
-
-&lt;p&gt;Markdown 支持两种形式的链接语法： 行内式和参考式。两种样式的链接文本都由第一个[方括号]包含。&lt;/p&gt;
-
-&lt;h4 id=&quot;link-inline&quot;&gt;行内式&lt;/h4&gt;
-
-&lt;p&gt;圆括号包含链接的URL:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This is [an example](http://example.com/ &quot;Title&quot;) inline link.
-
-[This link](http://example.net/) has no title attribute.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;link-reference&quot;&gt;参考式&lt;/h4&gt;
-
-&lt;p&gt;参考式链接使用两组方括号，第二组方括号放置您选择的标签以标识链接；方括号间可以用空格分割:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This is [an example][id] reference-style link.
-
-This is [an example] [id] reference-style link.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然后，在文档中的任何位置（建议放在段落下方，这样比较好管理），您可以这样定义您的链接标签：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[id]: http://example.com/  &quot;Optional Title Here&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;链接内容定义的形式为：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;包含链接标识符的方括号（可选地使用最多三个空格从左边距缩进）;&lt;/li&gt;
-  &lt;li&gt;然后跟个冒号；&lt;/li&gt;
-  &lt;li&gt;后跟一个或多个空格（或制表符）；&lt;/li&gt;
-  &lt;li&gt;后面是链接的URL&lt;/li&gt;
-  &lt;li&gt;可选地后跟链接的标题属性，用双引号或单引号括起来、或括在括号中。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;链接URL可以可选地用尖括号括起来：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[id]: &amp;lt;http://example.com/&amp;gt;  &quot;Optional Title Here&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;链接标识符可以由字母，数字，空格和标点符号组成，&lt;strong&gt;但它们不区分大小写&lt;/strong&gt;，下面这两个链接是一样的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[link text][a]
-[link text][A]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;隐含链接可以省略链接标识符，这时链接文本本身被用作链接标识符，然后使用一组空的方括号：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[Google][]
-
-[Google]: http://google.com/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;隐含链接还可以使用多个单词的链接文本：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Visit [Daring Fireball][] for more information.
-
-[Daring Fireball]: http://daringfireball.net/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;使用Markdown的参考链接，使得源文档更像是在浏览器中呈现的最终输出。通过允许您将与标记相关的元数据移出段落，您可以添加链接，而不会中断文章的叙述流程。&lt;/p&gt;
-
-&lt;h3 id=&quot;emphasis&quot;&gt;强调&lt;/h3&gt;
-
-&lt;p&gt;Markdown将星号（*）和下划线（_）作为强调的标记符号。&lt;/p&gt;
-
-&lt;p&gt;用一个*或_包含的文本在HTML输出中会发生倾斜:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*single asterisks*
-
-_single underscores_
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;用两个*或_包含的文本在HTML输出中会被加粗：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;**double asterisks**
-
-__double underscores__
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;你可以使用任何你喜欢的风格; 唯一的限制是，你必须在前后使用使用相同的字符。&lt;/p&gt;
-
-&lt;p&gt;强调还可以在单词的中间使用：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;un*frigging*believable
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果不需要强调，或强调的文本中含有星号或下划线，那么需要使用\进行反斜杠转义：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\*this text is surrounded by literal asterisks\*
-
-*\*this text is surrounded by literal asterisks\**
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;pictures&quot;&gt;图片&lt;/h3&gt;
-
-&lt;p&gt;Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。&lt;/p&gt;
-
-&lt;h4 id=&quot;picture-inline&quot;&gt;行内式&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;![Alt text](/path/to/img.jpg)
-
-![Alt text](/path/to/img.jpg &quot;Optional title&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;picture-reference&quot;&gt;参考式&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;![Alt text][id]
-
-[id]: url/to/image  &quot;Optional title attribute&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Markdown没有用于指定图像尺寸的语法; 如果这对你很重要，你可以使用HTML的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;img&amp;gt;&lt;/code&gt;标签。&lt;/p&gt;
-
-&lt;h3 id=&quot;basic-others&quot;&gt;其它&lt;/h3&gt;
-
-&lt;h4 id=&quot;auto-link&quot;&gt;自动链接&lt;/h4&gt;
-
-&lt;p&gt;Markdown支持为URL和电子邮件地址创建“自动”链接的快捷方式，只需用尖括号括起来即可：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;http://example.com/&amp;gt;
-&amp;lt;address@example.com&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;backslash-escapes&quot;&gt;反斜杠转义&lt;/h4&gt;
-
-&lt;p&gt;Markdown为以下字符提供反斜杠转义：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\   反斜线
-`   反引号
-*   星号
-_   底线
-{}  花括号
-[]  方括号
-()  括弧
-#   井号
-+   加号
--   减号
-.   英文句点
-!   惊叹号
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;github-style&quot;&gt;github扩展&lt;/h2&gt;
-
-&lt;h3 id=&quot;task-lists&quot;&gt;任务列表&lt;/h3&gt;
-
-&lt;p&gt;要创建任务列表，先列出列表项[ ]。要将任务标记为完成，请使用[x]。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- [x] Finish my changes
-- [ ] Push my commits to GitHub
-- [ ] Open a pull request
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;如果任务列表项描述以括号开头，则需要使用反斜杠进行转义：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- [ ] \(Optional) Open a followup issue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;emojis&quot;&gt;表情符号&lt;/h3&gt;
-
-&lt;p&gt;您可以通过键入支持的表情符号代码添加emoji，支持的表情符号可以在&lt;a href=&quot;http://www.webpagefx.com/tools/emoji-cheat-sheet/&quot;&gt;这里&lt;/a&gt;找到。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:+1: This PR looks great - it&#39;s ready to merge! :shipit:
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;tables&quot;&gt;表格&lt;/h3&gt;
-
-&lt;p&gt;您可以通过组合单词列表​​并用连字符-（对于第一行）分隔，然后用管道符号|分隔每个列来创建表，github会自动控制长宽：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;First Header&lt;/th&gt;
-      &lt;th&gt;Second Header&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Content from cell 1&lt;/td&gt;
-      &lt;td&gt;Content from cell 2&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Content in the first column&lt;/td&gt;
-      &lt;td&gt;Content in the second column&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;更多github扩展请点击 &lt;a href=&quot;https://guides.github.com/features/mastering-markdown/&quot;&gt;https://guides.github.com/features/mastering-markdown/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;summary&quot;&gt;Markdown总结&lt;/h2&gt;
-
-&lt;p&gt;推荐一个不错的Markdown文章书写格式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#   标题
-
-##  本文结构
-
-*   [简介](#overview)
-*   [环境搭建](#environment)
-*   [操作流程](#operation)
-    *   [第一步](#step1)
-    *   [第二步](#step2)
-    。。。
-*   [总结](#summary)
-
-&amp;lt;h2 id=&quot;overview&quot;&amp;gt;简介&amp;lt;/h2&amp;gt;
-
-所有标题建议使用HTML手动设置标识ID，默认的ID是不支持中文的，跳转时会发生问题。
-
-&amp;lt;h2 id=&quot;environment&quot;&amp;gt;环境搭建&amp;lt;/h2&amp;gt;
-
-标识ID最好使用小写字母，多个单词使用下划线链接，这样复制粘贴导航栏时比较方便，也比较好改。
-
-&amp;lt;h2 id=&quot;operation&quot;&amp;gt;操作流程&amp;lt;/h2&amp;gt;
-
-&amp;lt;h3 id=&quot;step1&quot;&amp;gt;第一步&amp;lt;/h3&amp;gt;
-
-建议使用github版的Markdown.
-
-&amp;lt;h3 id=&quot;step2&quot;&amp;gt;第二步&amp;lt;/h3&amp;gt;
-
-你也可以使用其他格式书写Markdown文章。
-
-。。。
-
-&amp;lt;h2 id=&quot;summary&quot;&amp;gt;总结&amp;lt;/h2&amp;gt;
-
-开始使用Markdown写文章吧！
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Mon, 27 Feb 2017 04:00:00 -0800</pubDate>
-        <link>https://chorior.github.io/2017/02/27/Markdown-basis-syntax/</link>
-        <guid isPermaLink="true">https://chorior.github.io/2017/02/27/Markdown-basis-syntax/</guid>
-        
-        <category>Markdown</category>
         
         
       </item>
