@@ -420,7 +420,7 @@
 <p>回退版本：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git log                                    <span class="c"># 查看要回退的版本 SHA-1</span>
-<span class="gp">$ </span>git reset --hard SHA-1                     <span class="c"># 回退到 SHA-1</span>
+<span class="gp">$ </span>git reset --hard <span class="o">[</span>SHA-1]                   <span class="c"># 回退到 SHA-1</span>
 <span class="gp">$ </span>git reset --hard HEAD~[num]                <span class="c"># 回退到当前提交前的第 num 个提交</span>
 <span class="gp">$ </span>git push <span class="o">[</span>shortname] <span class="o">[</span>branch_name] --force <span class="c"># 强制推送到远端</span>
 </code></pre>
@@ -445,7 +445,7 @@
 <p>查询一个文件的某个改动：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git blame -L <span class="o">[</span>start],[end] <span class="o">[</span>filename]  <span class="c"># 查看 filename 从 start 到 end 行的最近的修改记录</span>
-<span class="gp">$ </span>git log -L <span class="o">[</span>filename],[end]:[filename] <span class="c"># 查看 filename 从 start 到 end 行的所有修改记录</span>
+<span class="gp">$ </span>git log -L <span class="o">[</span>start],[end]:[filename]    <span class="c"># 查看 filename 从 start 到 end 行的所有修改记录</span>
 <span class="gp">$ </span>git log -S <span class="s2">"[string]"</span> <span class="o">[</span>filename]       <span class="c"># 查看 string 被添加到 filename 的记录</span>
 </code></pre>
 </div>
@@ -459,6 +459,21 @@
 </code></pre>
 </div>
 
+<p>将其它分支的一个或多个commit合并到本分支：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git cherry-pick <span class="o">[</span>commit_id]                         <span class="c"># 合并单个 commit 到本分支</span>
+<span class="gp">$ </span>git cherry-pick <span class="o">[</span>commit_id1] <span class="o">[</span>commit_id2]           <span class="c"># 合并多个 commit 到本分支</span>
+<span class="gp">$ </span>git cherry-pick <span class="o">[</span>commit_id_start]..[commit_id_end]  <span class="c"># 合并连续的 commit 到本分支，前开后闭</span>
+</code></pre>
+</div>
+
+<p>查看commit修改或合并多个commit:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git show <span class="o">[</span>commit_id]      <span class="c"># 显示 commit_id 的修改</span>
+<span class="gp">$ </span>git rebase -i <span class="o">[</span>commit_id] <span class="c"># 合并 commit_id 之后的所有提交，将第二行后的所有 pick 改为 s</span>
+</code></pre>
+</div>
+
 <p>其它：</p>
 
 <ul>
@@ -467,6 +482,9 @@
   </li>
   <li>
     <p><a href="https://www.yiibai.com/git/git_rebase.html">git rebase</a></p>
+  </li>
+  <li>
+    <p><a href="https://blog.csdn.net/aixiaoyang168/article/details/77179008">git review</a></p>
   </li>
 </ul>
 
@@ -484,6 +502,13 @@
                         </a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2019/05/30/shell-common-skills/" data-toggle="tooltip" data-placement="top" title="Shell 常用技能">
+                        Next<br>
+                        <span>Shell 常用技能</span>
+                        </a>
+                    </li>
                     
                 </ul>
 
@@ -568,6 +593,18 @@
                             
                 				<a href="/tags/#git" title="git" rel="1">
                                     git
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#shell" title="shell" rel="1">
+                                    shell
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#algorithm" title="algorithm" rel="1">
+                                    algorithm
                                 </a>
                             
         				
